@@ -35,6 +35,8 @@ CREATE TABLE Rooms (
     Room_Location VARCHAR(50),
     id_categoryid INT NOT NULL,
     id_stateid VARCHAR(50) NOT NULL,
+    is_reserved BOOLEAN DEFAULT FALSE,
+    event_time TIMESTAMP,
     PRIMARY KEY(Id_room),
     FOREIGN KEY(id_categoryid) REFERENCES RoomCategory(id_categoryid),
     FOREIGN KEY(id_stateid) REFERENCES RoomStates(id_stateid)
@@ -65,4 +67,12 @@ CREATE TABLE Belong(
     PRIMARY KEY(Id_user, Id_group),
     FOREIGN KEY(Id_user) REFERENCES Users(Id_user),
     FOREIGN KEY(Id_group) REFERENCES Groups(Id_group)
+);
+
+CREATE TABLE Preferences (
+    Id_user INT,
+    Id_room INT,
+    PRIMARY KEY(Id_user, Id_room),
+    FOREIGN KEY(Id_user) REFERENCES Users(Id_user),
+    FOREIGN KEY(Id_room) REFERENCES Rooms(Id_room)
 );
