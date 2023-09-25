@@ -28,7 +28,7 @@ CREATE TABLE GroupStates(
 );
 
 CREATE TABLE Rooms (
-    Id_room INT,
+    Id_room VARCHAR(50),
     Room_Name INT,
     Room_Building VARCHAR(50),
     Room_Campus VARCHAR(50),
