@@ -32,7 +32,7 @@ CREATE TABLE GroupStates(
 
 -- @block
 CREATE TABLE Rooms (
-    id_room INT,
+    id_room VARCHAR(50),
     Room_Name INT,
     Room_Building VARCHAR(50),
     Room_Campus VARCHAR(50),
@@ -60,7 +60,7 @@ CREATE TABLE `Groups` (
 
 -- @block
 CREATE TABLE Reserve(
-    id_room INT,
+    id_room VARCHAR(50),
     id_user INT,
     PRIMARY KEY(id_room, id_user),
     FOREIGN KEY(id_room) REFERENCES Rooms(id_room),
@@ -79,7 +79,7 @@ CREATE TABLE Belong(
 -- @block
 CREATE TABLE Preferences (
     id_user INT,
-    id_room INT,
+    id_room VARCHAR(50),
     PRIMARY KEY(id_user, id_room),
     FOREIGN KEY(id_user) REFERENCES Users(id_user),
     FOREIGN KEY(id_room) REFERENCES Rooms(id_room)

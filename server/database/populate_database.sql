@@ -1,6 +1,6 @@
 INSERT INTO
     Users (
-        Id_user,
+        id_user,
         User_Name,
         User_Password,
         User_Class,
@@ -37,6 +37,7 @@ VALUES
         2026
     );
 
+-- @block
 INSERT INTO
     RoomCategory (id_categoryid, RoomCategory_name)
 VALUES
@@ -44,6 +45,7 @@ VALUES
     (2, 'Auditorium'),
     (3, 'Computer lab');
 
+-- @block
 INSERT INTO
     RoomStates (id_stateid, RoomState_name)
 VALUES
@@ -53,6 +55,7 @@ VALUES
     (4, 'Study session'),
     (5, 'Event');
 
+-- @block
 INSERT INTO
     GroupStates (id_groupstateid, GroupState_Name)
 VALUES
@@ -60,9 +63,10 @@ VALUES
     (2, 'Private'),
     (3, 'Full');
 
+-- @block
 INSERT INTO
     Rooms (
-        Id_room,
+        id_room,
         Room_Name,
         Room_Building,
         Room_Campus,
@@ -142,7 +146,7 @@ VALUES
 
 INSERT INTO
     Groups (
-        Id_group,
+        id_group,
         Group_Creation,
         Group_Password,
         Group_Name,
@@ -176,22 +180,29 @@ VALUES
     );
 
 INSERT INTO
-    Reserve (Id_room, Id_user)
+    Reserve (id_room, id_user)
 VALUES
     ('A101', 1),
     ('B110', 2),
     ('E001', 3);
 
 INSERT INTO
-    Belong (Id_user, Id_group)
+    Belong (id_user, id_group)
 VALUES
     (1, 1),
     (2, 2),
     (3, 3);
 
+-- @block
 INSERT INTO
-    Preferences (Id_user, Id_room)
+    Preferences (id_user, id_room)
 VALUES
     (1, 'A101'),
     (2, 'B110'),
-    (3, 'E001');
+    (3, 'E001'),
+    (1, 'K101'),
+    (2, 'K101'),
+    (3, 'K101'),
+    (1, 'M201'),
+    (2, 'M201'),
+    (3, 'M201');
