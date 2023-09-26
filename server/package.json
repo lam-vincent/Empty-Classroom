@@ -21,6 +21,9 @@
     "@types/mysql": "^2.15.21",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "vite-ssr-vue": "^1.0.5",
+    "vue": "^3.3.4",
+    "vue-server-renderer": "^2.7.14"
   }
 }
