@@ -33,10 +33,10 @@ CREATE TABLE Rooms (
     Room_Building VARCHAR(50) NOT NULL,
     Room_Campus VARCHAR(50) NOT NULL,
     Room_Location VARCHAR(50) NOT NULL,
+    Room_State VARCHAR(50) NOT NULL,
     id_category INT NOT NULL,
     is_reserved BOOLEAN DEFAULT FALSE,
     event_time TIMESTAMP,
-    Room_State VARCHAR(50) NOT NULL,, 
     PRIMARY KEY (id_room)
 );
 
