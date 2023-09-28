@@ -1,5 +1,1 @@
--- @block
-SELECT
-    *
-FROM
-    preferences;
+DROP TABLE IF EXISTS belong, Reserve, `Groups`, Rooms, GroupStates, RoomStates, RoomCategory, preferences, Users;
