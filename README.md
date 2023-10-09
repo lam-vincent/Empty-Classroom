@@ -62,7 +62,7 @@
 
 ## Contributors
 
-- Vincent LAM
+- Vincent LAM - Alexandre CHRISTINA
 
 ## License
 
