@@ -42,6 +42,19 @@ CREATE TABLE Rooms (
     PRIMARY KEY (id_room)
 );
 
+
+-- @block
+CREATE TABLE Equipments (
+    id_equipment INT AUTO_INCREMENT,
+    Equipment_Name VARCHAR(50) UNIQUE,
+    Equipment_Type VARCHAR(50) NOT NULL,
+    Equipment_Location VARCHAR(50) NOT NULL,
+    Equipment_Description TEXT,
+    Equipment_Status VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_equipment),
+    FOREIGN KEY (Room_Id) REFERENCES Rooms (id_room)
+);
+
 -- @block
 CREATE TABLE Reserve (
     id_room INT,
@@ -70,14 +83,10 @@ CREATE TABLE Preferences (
 );
 
 -- @block
-CREATE TABLE Classroom_Equipment (
-    id_equipment INT AUTO_INCREMENT,
-    Equipment_Name VARCHAR(50) UNIQUE,
-    Equipment_Type VARCHAR(50) NOT NULL,
-    Equipment_Location VARCHAR(50) NOT NULL,
-    Equipment_Description TEXT,
-    Equipment_Status VARCHAR(20) NOT NULL,
-    Room_Id INT, 
-    PRIMARY KEY (id_equipment),
-    FOREIGN KEY (Room_Id) REFERENCES Rooms (id_room)
+CREATE TABLE Room_Equipment (
+    id_room INT,
+    id_equipment INT,
+    PRIMARY KEY (id_room, id_equipment),
+    FOREIGN KEY (id_room) REFERENCES Rooms (id_room),
+    FOREIGN KEY (id_equipment) REFERENCES Classroom_Equipments (id_equipment)
 );
