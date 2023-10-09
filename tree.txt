@@ -1,0 +1,20 @@
+Structure du dossier pour le volume OS
+Le num�ro de s�rie du volume est 82FF-D91F
+C:.
++---.vscode
++---client
+|   +---.vscode
+|   +---public
+|   \---src
+|       +---assets
+|       +---components
+|       +---css
+|       +---layouts
+|       \---pages
+\---server
+    +---controllers
+    +---database
+    +---middleware
+    +---models
+    \---routes
+
