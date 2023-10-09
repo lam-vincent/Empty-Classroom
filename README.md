@@ -17,10 +17,6 @@
    - [Database Setup](#database-setup)
 5. [License](#license)
 
-## Introduction
-
-**Empty Classroom** is a web application designed to help students easily find and reserve empty classrooms within their school's campus.
-
 ## Tech Stack
 
 - **Frontend**: Vue, Vite, TypeScript, Vanilla CSS
@@ -62,7 +58,7 @@
 
 ## Contributors
 
-- Vincent LAM
+- Vincent LAM - Alexandre CHRISTINA
 
 ## License
 
