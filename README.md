@@ -60,6 +60,10 @@
 4. Configure environment variables: get the `.env` file.
 5. Start the backend server: `npm start`
 
+## Contributors
+
+- Vincent LAM
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
