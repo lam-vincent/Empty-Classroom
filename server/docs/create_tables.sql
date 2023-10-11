@@ -11,13 +11,6 @@ CREATE TABLE Users (
 );
 
 -- @block
-CREATE TABLE RoomCategories (
-    id_category INT AUTO_INCREMENT,
-    Category_Name VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id_category)
-);
-
--- @block
 CREATE TABLE `Groups` (
     id_group INT AUTO_INCREMENT,
     Group_Creation DATE NOT NULL,
@@ -36,10 +29,22 @@ CREATE TABLE Rooms (
     Room_Campus VARCHAR(50) NOT NULL,
     Room_Location VARCHAR(50) NOT NULL,
     Room_State VARCHAR(50) NOT NULL,
-    id_category INT NOT NULL,
-    is_reserved BOOLEAN DEFAULT FALSE,
-    event_time TIMESTAMP,
+    Room_Category VARCHAR(50) NOT NULL,
+    Is_Reserved BOOLEAN DEFAULT FALSE,
+    Event_Time TIMESTAMP,
     PRIMARY KEY (id_room)
+);
+
+
+-- @block
+CREATE TABLE Equipments (
+    id_equipment INT AUTO_INCREMENT,
+    Equipment_Name VARCHAR(50) UNIQUE,
+    Equipment_Type VARCHAR(50) NOT NULL,
+    Equipment_Location VARCHAR(50) NOT NULL,
+    Equipment_Description TEXT,
+    Equipment_Status VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_equipment)
 );
 
 -- @block
@@ -61,7 +66,7 @@ CREATE TABLE Belong (
 );
 
 -- @block
-CREATE TABLE Preferences (
+CREATE TABLE Prefer (
     id_user INT,
     id_room INT,
     PRIMARY KEY (id_user, id_room),
@@ -70,14 +75,10 @@ CREATE TABLE Preferences (
 );
 
 -- @block
-CREATE TABLE Classroom_Equipment (
-    id_equipment INT AUTO_INCREMENT,
-    Equipment_Name VARCHAR(50) UNIQUE,
-    Equipment_Type VARCHAR(50) NOT NULL,
-    Equipment_Location VARCHAR(50) NOT NULL,
-    Equipment_Description TEXT,
-    Equipment_Status VARCHAR(20) NOT NULL,
-    Room_Id INT, 
-    PRIMARY KEY (id_equipment),
-    FOREIGN KEY (Room_Id) REFERENCES Rooms (id_room)
+CREATE TABLE Is_Equiped (
+    id_room INT,
+    id_equipment INT,
+    PRIMARY KEY (id_room, id_equipment),
+    FOREIGN KEY (id_room) REFERENCES Rooms (id_room),
+    FOREIGN KEY (id_equipment) REFERENCES Equipments (id_equipment)
 );

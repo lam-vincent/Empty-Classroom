@@ -30,6 +30,18 @@ VALUES
     (3, '2023-09-17', 'AZEJOIJFZEF', 'Maths Group', 4, 'Full');
 
 -- @block
+INSERT INTO Equipment (Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status, Room_Id)
+VALUES
+    ('Projector', 'Projector', 'Ceiling mount', 'High-quality HD projector for presentations.', 'Operational', 97101),
+    ('Smartboard', 'Interactive Whiteboard', 'Front wall', 'Interactive whiteboard with touchscreen for interactive learning.', 'Operational', 98110),
+    ('AC Unit', 'Air Conditioner', 'Ceiling', 'Air conditioner for temperature control.', 'Operational', 101001),
+    ('Table', 'Table', 'Center', 'Standard classroom table for seating and workspace.', 'Operational', 99001),
+    ('Chair', 'Chair', 'Around tables', 'Comfortable chairs for students.', 'Operational', 107101),
+    ('Whiteboard', 'Whiteboard', 'Front wall', 'Traditional whiteboard for writing and drawing.', 'Operational', 97101),
+    ('Blackboard', 'Blackboard', 'Back wall', 'Traditional blackboard for writing with chalk.', 'Operational', 98110),
+    ('Markers Set', 'Markers Set', 'Teacher desk', 'Set of colorful markers for whiteboard.', 'Operational', 101001);
+
+-- @block
 INSERT INTO Reserve (id_room, id_user)
 VALUES
     (97101, 1),
@@ -44,7 +56,7 @@ VALUES
     (3, 3);
 
 -- @block
-INSERT INTO Preferences (id_user, id_room)
+INSERT INTO Prefer (id_user, id_room)
 VALUES
     (1, 97101),
     (2, 98110),
@@ -57,13 +69,13 @@ VALUES
     (3, 109201);
 
 -- @block
-INSERT INTO Classroom_Equipment (Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status, Room_Id)
+INSERT INTO Is_Equiped (id_room, id_equipment)
 VALUES
-    ('Projector', 'Projector', 'Ceiling mount', 'High-quality HD projector for presentations.', 'Operational', 97101),
-    ('Smartboard', 'Interactive Whiteboard', 'Front wall', 'Interactive whiteboard with touchscreen for interactive learning.', 'Operational', 98110),
-    ('AC Unit', 'Air Conditioner', 'Ceiling', 'Air conditioner for temperature control.', 'Operational', 101001),
-    ('Table', 'Table', 'Center', 'Standard classroom table for seating and workspace.', 'Operational', 99001),
-    ('Chair', 'Chair', 'Around tables', 'Comfortable chairs for students.', 'Operational', 107101),
-    ('Whiteboard', 'Whiteboard', 'Front wall', 'Traditional whiteboard for writing and drawing.', 'Operational', 97101),
-    ('Blackboard', 'Blackboard', 'Back wall', 'Traditional blackboard for writing with chalk.', 'Operational', 98110),
-    ('Markers Set', 'Markers Set', 'Teacher desk', 'Set of colorful markers for whiteboard.', 'Operational', 101001);
+    (97101, 1),
+    (98110, 2),
+    (101001, 3),
+    (99001, 4),
+    (107101, 5),
+    (97101, 6),
+    (98110, 7),
+    (101001, 8);

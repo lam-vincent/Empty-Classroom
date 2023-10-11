@@ -8,19 +8,19 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Tech Stack](#tech-stack)
-3. [Features](#features)
-4. [Getting Started](#getting-started)
+1. [Tech Stack](#tech-stack)
+2. [Features](#features)
+3. [Getting Started](#getting-started)
    - [Frontend Setup](#frontend-setup)
    - [Backend Setup](#backend-setup)
    - [Database Setup](#database-setup)
+4. [Contributors](#contributors)
 5. [License](#license)
 
 ## Tech Stack
 
 - **Frontend**: Vue, Vite, TypeScript, Vanilla CSS
-- **Backend**: Express, Node.js
+- **Backend**: Express, Node.js, TypeScript
 - **Database**: MySQL
 
 ## Features
