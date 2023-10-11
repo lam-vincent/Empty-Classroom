@@ -56,7 +56,7 @@ VALUES
     (3, 3);
 
 -- @block
-INSERT INTO Preferences (id_user, id_room)
+INSERT INTO Prefer (id_user, id_room)
 VALUES
     (1, 97101),
     (2, 98110),
@@ -69,7 +69,7 @@ VALUES
     (3, 109201);
 
 -- @block
-INSERT INTO Room_Equipment (id_room, id_equipment)
+INSERT INTO Is_Equiped (id_room, id_equipment)
 VALUES
     (97101, 1),
     (98110, 2),

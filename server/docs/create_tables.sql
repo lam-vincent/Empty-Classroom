@@ -66,7 +66,7 @@ CREATE TABLE Belong (
 );
 
 -- @block
-CREATE TABLE Preferences (
+CREATE TABLE Prefer (
     id_user INT,
     id_room INT,
     PRIMARY KEY (id_user, id_room),
@@ -75,7 +75,7 @@ CREATE TABLE Preferences (
 );
 
 -- @block
-CREATE TABLE Room_Equipment (
+CREATE TABLE Is_Equiped (
     id_room INT,
     id_equipment INT,
     PRIMARY KEY (id_room, id_equipment),
