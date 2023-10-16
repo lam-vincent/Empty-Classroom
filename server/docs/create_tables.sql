@@ -7,6 +7,7 @@ CREATE TABLE Users (
     User_Picture TEXT,
     User_Description TEXT,
     User_Promo INT NOT NULL,
+    User_Role VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_user)
 );
 

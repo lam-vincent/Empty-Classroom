@@ -1,9 +1,9 @@
 -- @block
-INSERT INTO Users (id_user, User_Name, User_Password, User_Class, User_Picture, User_Description, User_Promo)
+INSERT INTO Users (id_user, User_Name, User_Password, User_Class, User_Picture, User_Description, User_Promo, User_Role)
 VALUES
-    (1, 'Vincent', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'INT4', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'positive guy !', 2026),
-    (2, 'Alexandre', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'A', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'nicest guy !', 2026),
-    (3, 'Romain', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'B', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'funniest guy !', 2026);
+    (1, 'Vincent', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'INT4', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'positive guy !', 2026, 'moderator'),
+    (2, 'Alexandre', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'A', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'nicest guy !', 2026, 'moderator'),
+    (3, 'Romain', '$2b$10$nCuxogKInMDRJnOkv9N8X.W6xHBXH/.e4X/WVNpqgTxHplHXYc3IC', 'B', 'https://rubberduckvba.files.wordpress.com/2018/10/ducky-color.png', 'funniest guy !', 2026, 'user');
 
 -- @block
 INSERT INTO RoomCategories (id_category, Category_Name)
