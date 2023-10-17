@@ -36,6 +36,13 @@
             <label for="password">Password</label>
             <input type="password" id="password" v-model="registrationData.password" required />
           </div>
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select v-model="registrationData.role">
+              <option value="user">User</option>
+              <option value="admin">Moderator</option>
+            </select>
+          </div>
           <a href="/login">Already have an account? Sign in here.</a>
           <button type="submit">Sign Up</button>
         </form>
@@ -54,6 +61,7 @@ export default {
         username: "",
         email: "",
         password: "",
+        role: "user",
       },
     };
   },
