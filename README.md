@@ -14,8 +14,9 @@
    - [Frontend Setup](#frontend-setup)
    - [Backend Setup](#backend-setup)
    - [Database Setup](#database-setup)
-4. [Contributors](#contributors)
-5. [License](#license)
+4. [Sitemap](#sitemap)
+5. [Contributors](#contributors)
+6. [License](#license)
 
 ## Tech Stack
 
@@ -55,6 +56,19 @@
 3. Install dependencies: `npm install`
 4. Configure environment variables: get the `.env` file.
 5. Start the backend server: `npm start`
+
+## Sitemap
+
+On my computer it is `http://localhost:5173/`. Get the right information by following the instruction from the console after launching the client side.
+
+Then, specify the pages you want to access:
+
+- When you access `/dashboard`, it will render `Dashboard.vue`.
+- When you access `/find`, it will render `Find.vue`.
+- When you access `/group`, it will render `Group.vue`.
+- When you access `/login`, it will render `Login.vue`.
+- When you access `/register`, it will render `Register.vue`.
+- When you access `/reserve`, it will render `Reserve.vue`.
 
 ## Contributors
 

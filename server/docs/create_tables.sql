@@ -7,6 +7,7 @@ CREATE TABLE Users (
     User_Picture TEXT,
     User_Description TEXT,
     User_Promo INT NOT NULL,
+    User_Role VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_user)
 );
 
@@ -30,11 +31,8 @@ CREATE TABLE Rooms (
     Room_Location VARCHAR(50) NOT NULL,
     Room_State VARCHAR(50) NOT NULL,
     Room_Category VARCHAR(50) NOT NULL,
-    Is_Reserved BOOLEAN DEFAULT FALSE,
-    Event_Time TIMESTAMP,
     PRIMARY KEY (id_room)
 );
-
 
 -- @block
 CREATE TABLE Equipments (
@@ -49,12 +47,18 @@ CREATE TABLE Equipments (
 
 -- @block
 CREATE TABLE Reserve (
+    id_reserve INT AUTO_INCREMENT,
     id_room INT,
     id_user INT,
-    PRIMARY KEY (id_room, id_user),
+    Title VARCHAR(100) NOT NULL,
+    Description TEXT DEFAULT '',
+    Start_Time TIMESTAMP NOT NULL,
+    End_Time TIMESTAMP NOT NULL,
+    PRIMARY KEY (id_reserve),
     FOREIGN KEY (id_room) REFERENCES Rooms (id_room),
     FOREIGN KEY (id_user) REFERENCES Users (id_user)
 );
+
 
 -- @block
 CREATE TABLE Belong (
