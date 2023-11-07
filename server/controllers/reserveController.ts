@@ -26,8 +26,7 @@ export const getReservationByUser = async (req: Request, res: Response) => {
 export const updateReservation = async (req: Request, res: Response) => {
   try {
     const { room_id, user_id } = req.params;
-    const { new_user_id } = req.body;
-    await reserveService.updateReservation(room_id, user_id, new_user_id);
+    await reserveService.updateReservation(room_id, user_id);
     res.json({ message: "Reservation updated successfully" });
   } catch (error) {
     console.error("Error updating reservation:", error);
