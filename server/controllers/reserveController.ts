@@ -25,8 +25,9 @@ export const getReservationByUser = async (req: Request, res: Response) => {
 
 export const updateReservation = async (req: Request, res: Response) => {
   try {
-    const { room_id, user_id } = req.params;
-    await reserveService.updateReservation(room_id, user_id);
+    const reserveId = req.params.id_reserve;
+    const reservationData = req.body;
+    await reserveService.updateReservation(reserveId, reservationData);
     res.json({ message: "Reservation updated successfully" });
   } catch (error) {
     console.error("Error updating reservation:", error);
@@ -36,8 +37,8 @@ export const updateReservation = async (req: Request, res: Response) => {
 
 export const deleteReservation = async (req: Request, res: Response) => {
   try {
-    const { room_id, user_id } = req.params;
-    await reserveService.deleteReservation(room_id, user_id);
+    const reserveId = req.params.id_reserve;
+    await reserveService.deleteReservation(reserveId);
     res.json({ message: "Reservation deleted successfully" });
   } catch (error) {
     console.error("Error deleting reservation:", error);

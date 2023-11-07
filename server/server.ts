@@ -6,7 +6,7 @@ import authRoutes from "./routes/authRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import findRoutes from "./routes/findRoutes";
 import groupRoutes from "./routes/groupRoutes";
-// import reserveRoutes from "./routes/reserveRoutes";
+import reserveRoutes from "./routes/reserveRoutes";
 import { authMiddleware } from "./middlewares/authMiddleware";
 
 interface CustomRequest extends express.Request {
@@ -30,7 +30,7 @@ app.use(authMiddleware);
 app.use(dashboardRoutes);
 app.use(findRoutes);
 app.use(groupRoutes);
-// app.use(reserveRoutes);
+app.use(reserveRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
