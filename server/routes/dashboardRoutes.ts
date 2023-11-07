@@ -24,7 +24,7 @@ router.post(
 );
 
 // patch request to update a preferred classroom
-router.patch(
+router.put(
   "/dashboard/preferences/:userId",
   authMiddleware,
   updatePreferredClassroom

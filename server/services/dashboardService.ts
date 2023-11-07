@@ -4,8 +4,6 @@ const fetchPreferredClassrooms = async (userId: string) => {
   try {
     const query = "SELECT * FROM Prefer WHERE id_user = ?";
 
-    console.log("userId", userId);
-
     await pool.query(query, [userId], async (error, results, fields) => {
       if (error) throw error;
       console.log(results);
