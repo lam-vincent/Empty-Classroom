@@ -22,11 +22,67 @@ export const getRoomById = async (req: Request, res: Response) => {
   }
 };
 
-// for admin only
+export const getRoomByCategory = async (req: Request, res: Response) => {
+  try {
+    const { category } = req.params;
+    const room = await findService.fetchRoomByCategory(category);
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    res.status(500).json({ message: "Error fetching room" });
+  }
+};
+
+export const getRoomByBuilding = async (req: Request, res: Response) => {
+  try {
+    const { building } = req.params;
+    const room = await findService.fetchRoomByBuilding(building);
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    res.status(500).json({ message: "Error fetching room" });
+  }
+};
+
+export const getRoomByCampus = async (req: Request, res: Response) => {
+  try {
+    const { campus } = req.params;
+    const room = await findService.fetchRoomByCampus(campus);
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    res.status(500).json({ message: "Error fetching room" });
+  }
+};
+
+export const getRoomByLocation = async (req: Request, res: Response) => {
+  try {
+    const { location } = req.params;
+    const room = await findService.fetchRoomByLocation(location);
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    res.status(500).json({ message: "Error fetching room" });
+  }
+};
+
+export const getRoomByState = async (req: Request, res: Response) => {
+  try {
+    const { state } = req.params;
+    const room = await findService.fetchRoomByState(state);
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    res.status(500).json({ message: "Error fetching room" });
+  }
+};
+
+// for admin only --> TODO: add admin middleware
 
 export const createRoom = async (req: Request, res: Response) => {
   try {
     const roomData = req.body;
+
     const result = await findService.createRoom(roomData);
     res.json({ message: "Room created successfully" });
   } catch (error) {
@@ -55,5 +111,17 @@ export const deleteRoom = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error deleting room:", error);
     res.status(500).json({ message: "Error deleting room" });
+  }
+};
+
+export const addEquipment = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const equipmentData = req.body;
+    const result = await findService.addEquipment(id, equipmentData);
+    res.json({ message: "Equipment added successfully" });
+  } catch (error) {
+    console.error("Error adding equipment:", error);
+    res.status(500).json({ message: "Error adding equipment" });
   }
 };

@@ -15,7 +15,7 @@ router.post("/reserve", createReservation);
 router.get("/reserve/:user_id", getReservationByUser);
 
 // Update a reservation by room and user
-router.patch("/reserve/:room_id/:user_id", updateReservation);
+router.put("/reserve/:room_id/:user_id", updateReservation);
 
 // Delete a reservation by room and user
 router.delete("/reserve/:room_id/:user_id", deleteReservation);

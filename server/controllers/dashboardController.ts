@@ -4,8 +4,6 @@ import dashboardService from "../services/dashboardService";
 export const getPreferredClassrooms = async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
-  console.log("userId", userId);
-
   try {
     const preferredClassrooms = await dashboardService.fetchPreferredClassrooms(
       userId
@@ -34,6 +32,7 @@ export const addPreferredClassroom = async (req: Request, res: Response) => {
   }
 };
 
+// Duplicata du champ roomId dans la table Prefer --> Erreur
 export const updatePreferredClassroom = async (req: Request, res: Response) => {
   const { userId, roomId } = req.body;
 

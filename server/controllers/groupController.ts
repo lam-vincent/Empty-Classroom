@@ -14,6 +14,7 @@ export const getAllGroups = async (req: Request, res: Response) => {
 export const getGroupsByUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
+    console.log("userId", userId);
     const groups = await groupService.fetchGroupsByUser(userId);
     res.json(groups);
   } catch (error) {
@@ -69,8 +70,8 @@ export const deleteGroupById = async (req: Request, res: Response) => {
 
 export const joinGroup = async (req: Request, res: Response) => {
   try {
-    const { userId, groupId } = req.body;
-    await groupService.joinGroup(userId, groupId);
+    const { id_user, id_group } = req.body;
+    await groupService.joinGroup(id_user, id_group);
     res.json({ message: "Joined group successfully" });
   } catch (error) {
     console.error("Error joining group:", error);

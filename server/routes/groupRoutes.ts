@@ -7,25 +7,26 @@ import {
   deleteGroupById,
   joinGroup,
 } from "../controllers/groupController";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
 // Route to get groups by user
-router.get("/groups/user/:userId", getGroupsByUser);
+router.get("/groups/user/:userId", authMiddleware, getGroupsByUser);
 
 // Route to get groups by status
-router.get("/groups/status/:status", getGroupsByStatus);
+router.get("/groups/status/:status", authMiddleware, getGroupsByStatus);
 
 // Route to create a group
-router.post("/groups", createGroup);
+router.post("/groups", authMiddleware, createGroup);
 
 // Route to update a group by id
-router.put("/groups/:id", updateGroupById);
+router.put("/groups/:id", authMiddleware, updateGroupById);
 
 // Route to delete a group by id
-router.delete("/groups/:id", deleteGroupById);
+router.delete("/groups/:id", authMiddleware, deleteGroupById);
 
 // Route to join a group
-router.patch("/groups/:id", joinGroup);
+router.put("/groups", authMiddleware, joinGroup);
 
 export default router;
