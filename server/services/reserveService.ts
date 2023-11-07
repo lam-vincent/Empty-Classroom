@@ -20,21 +20,12 @@ const fetchReservationByUser = async (userId: string) => {
   });
 };
 
-const updateReservation = async (
-  roomId: string,
-  userId: string,
-  newUserId: string
-) => {
-  const query =
-    "UPDATE Reserve SET id_user = ? WHERE id_room = ? AND id_user = ?";
-  await pool.query(
-    query,
-    [newUserId, roomId, userId],
-    (error, results, fields) => {
-      if (error) throw error;
-      return results;
-    }
-  );
+const updateReservation = async (roomId: string, userId: string) => {
+  const query = "UPDATE Reserve WHERE id_room = ? AND id_user = ?";
+  await pool.query(query, [roomId, userId], (error, results, fields) => {
+    if (error) throw error;
+    return results;
+  });
 };
 
 const deleteReservation = async (roomId: string, userId: string) => {
