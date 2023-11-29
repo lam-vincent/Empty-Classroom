@@ -5,6 +5,16 @@ import AuthLayout from "./layouts/AuthLayout.vue";
 
 const routes = [
   {
+    path: "/",
+    component: DefaultLayout,
+    children: [
+      {
+        path: "",
+        component: () => import("./pages/Login.vue"),
+      },
+    ],
+  },
+  {
     path: "/dashboard",
     component: DefaultLayout,
     children: [

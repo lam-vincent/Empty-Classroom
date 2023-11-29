@@ -32,5 +32,6 @@ export const authMiddleware = (
   } catch (error) {
     console.error("Error verifying JWT:", error);
     res.status(401).json({ message: "Unauthorized" });
+    res.redirect("/login");
   }
 };

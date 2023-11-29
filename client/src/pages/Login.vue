@@ -63,13 +63,13 @@ export default {
     async loginUser() {
       if (this.loginData.username != null && this.loginData.password != null) {
         try {
-          const response = await axios.post(`http://localhost:3000/server/auth/login`,{
-            params:{
-            username:this.loginData.username,
-            password:this.loginData.password
-          },headers: {
-            'Content-Type': 'application/json'
-          }
+          const response = await axios.post(`http://localhost:3000/server/auth/login`, {
+            params: {
+              username: this.loginData.username,
+              password: this.loginData.password
+            }, headers: {
+              'Content-Type': 'application/json'
+            }
           });
           let posts = response.data;
         } catch (error) {
