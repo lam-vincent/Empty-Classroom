@@ -10,7 +10,7 @@ const secretKey: Secret = process.env.SECRET_KEY || "";
 const registerUser = async (username: string, password: string) => {
   try {
     const checkUsernameQuery = "SELECT * FROM users WHERE User_Name = ?";
-    const checkUsernameResult = await pool.query(
+    const checkUsernameResult = pool.query(
       checkUsernameQuery,
       [username],
       async (error, results, fields) => {
@@ -28,10 +28,7 @@ const registerUser = async (username: string, password: string) => {
     const insertUserQuery =
       "INSERT INTO users (User_Name, User_Password) VALUES (?, ?) ";
     const insertUserValues = [username, hashedPassword];
-    const insertUserResult = await pool.query(
-      insertUserQuery,
-      insertUserValues
-    );
+    const insertUserResult = pool.query(insertUserQuery, insertUserValues);
 
     return insertUserResult;
   } catch (error) {
