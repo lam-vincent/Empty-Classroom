@@ -6,7 +6,7 @@ import AuthLayout from "./layouts/AuthLayout.vue";
 const routes = [
   {
     path: "/",
-    component: DefaultLayout,
+    component: AuthLayout,
     children: [
       {
         path: "",
