@@ -1,11 +1,7 @@
 import { pool } from "../config/database";
 import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
-import { config } from "dotenv";
 import { User } from "../types/types";
-
-config();
-const secretKey: Secret = process.env.SECRET_KEY || "";
 
 const registerUser = async (username: string, password: string) => {
   try {

@@ -59,7 +59,6 @@ export default {
     };
   },
   methods: {
-
     async loginUser() {
       if (this.loginData.username != null && this.loginData.password != null) {
         try {
@@ -71,12 +70,21 @@ export default {
               'Content-Type': 'application/json'
             }
           });
-          let posts = response.data;
+          
+          // We set the cookie for the user and redirect him to the dashboard once logged in.
+          let postData = response.data;
+          document.cookie=`auth=${postData.authorization}`;
+          alert("Login succesful. redirecting...");
+          // setTimeout(() => { window.location = "/dashboard"; },5000);
+          this.$router.push("/dashboard")
+          
         } catch (error) {
           console.error(error);
+          alert("Login failed. Please check your username and password.");
         }
       } else {
-        alert("Login failed. Please check your username and password.");
+        // Ajouter autres validations ici
+        alert("Informations invalides.");
       }
 
       this.loginData = {

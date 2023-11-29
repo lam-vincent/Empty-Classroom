@@ -86,7 +86,12 @@
 </template>
   
 <script lang="ts">
+import { verifyToken } from "../utils/authUtils";
+
 export default {
+  beforeMount() {
+    verifyToken();
+  }
 };
 </script>
   

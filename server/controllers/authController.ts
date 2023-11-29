@@ -39,8 +39,8 @@ const login = async (req: Request, res: Response) => {
 
     console.info("Token : " + token);
 
-    res.cookie("jwt", token);
-    res.status(201).json({ message: "Login successful" });
+    res.json({ message: "Login sucessful", authorization: token });
+    res.status(201);
   } catch (error) {
     console.error("Login failed: ", error);
     res.status(500).json({ message: "Login failed" });
