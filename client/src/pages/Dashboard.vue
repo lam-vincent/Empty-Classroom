@@ -20,6 +20,7 @@
         </div>
       </router-link>
 
+      <!-- Categories Section -->
       <section class="categories">
 
         <div class="category" @click="redirectToFilteredRooms('classroom')">
@@ -51,6 +52,7 @@
 
       </section>
 
+      <!-- Recommendation Section -->
       <section class="recommendation">
 
         <div class="recommendation-title">
@@ -67,6 +69,16 @@
           </form>
         </div>
 
+        <!-- Equipment Section -->
+        <section class="equipment">
+          <div class="equipment-title">
+            <h2>Equipments</h2>
+          </div>
+
+          <div class="display-case">
+            <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment" />
+          </div>
+        </section>
 
       </section>
 
@@ -77,10 +89,13 @@
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
+import EquipmentCapsule from "../components/EquipmentCapsule.vue";
+
 
 export default {
   components: {
     RoomCapsule,
+    EquipmentCapsule,
   },
 
   data() {
@@ -149,6 +164,16 @@ export default {
       ],
       showForm: false,
       newRoomName: "",
+      existingEquipment: [
+        {
+          id: 1,
+          name: "Projector",
+        },
+        {
+          id: 2,
+          name: "Whiteboard",
+        },
+      ],
     };
   },
 
