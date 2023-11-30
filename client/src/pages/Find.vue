@@ -3,7 +3,7 @@
     <div class="find-page">
       <h1>Find a workplace and reserve now!</h1>
 
-      <div class="search-bar">
+      <div @onclick="getRoomsByName()" class="search-bar">
         <input type="text" placeholder="Search and Filter" />
       </div>
 
@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { verifyToken,readToken } from "../utils/authUtils";
+// import { Room } from "../../../server/types/types";
 import axios from 'axios';
 
 export default {
@@ -36,12 +37,24 @@ export default {
       userData: {
         token: "",
       },
+      roomData: {
+        fetchedRooms : []
+      }
     };
   },
 
   methods:{
-    getRoomsByName(name:string) {
-      
+    async getRoomsByName() {
+      const response = await axios.get(`http://localhost:3000/rooms`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': `auth=${this.userData.token}`
+            }
+            
+      });
+
+      console.log(response);
+      // console.log(name);
     }
   }
 };
