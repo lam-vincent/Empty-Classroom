@@ -3,7 +3,7 @@
     <div class="find-page">
       <h1>Find a workplace and reserve now!</h1>
 
-      <div class="search-bar">
+      <div @onclick="getRoomsByName()" class="search-bar">
         <input type="text" placeholder="Search and Filter" />
       </div>
 
