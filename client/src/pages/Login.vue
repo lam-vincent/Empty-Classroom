@@ -48,13 +48,12 @@
 <script lang="ts">
 import axios from 'axios';
 
-
 export default {
   data() {
     return {
       loginData: {
-        username: "vincent",
-        password: "password",
+        username: "alexalex",
+        password: "alexalex",
       },
     };
   },
@@ -70,14 +69,14 @@ export default {
               'Content-Type': 'application/json'
             }
           });
-          
+
           // We set the cookie for the user and redirect him to the dashboard once logged in.
           let postData = response.data;
-          document.cookie=`auth=${postData.authorization}`;
+          document.cookie = `auth=${postData.authorization}`;
           alert("Login succesful. redirecting...");
           // setTimeout(() => { window.location = "/dashboard"; },5000);
           this.$router.push("/dashboard")
-          
+
         } catch (error) {
           console.error(error);
           alert("Login failed. Please check your username and password.");

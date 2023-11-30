@@ -1,65 +1,83 @@
 import { pool } from "../config/database";
+import { Room } from "../types/types";
 
 const fetchAllRooms = async () => {
   const query = "SELECT * FROM Rooms";
-  await pool.query(query, (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
+  });
+};
+
+const fetchRoomByName = async (name: string) => {
+  const query = "SELECT * FROM Rooms WHERE Room_Name LIKE ?";
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [name], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomById = async (id: string) => {
   const query = "SELECT * FROM Rooms WHERE id_room = ?";
-  await pool.query(query, [id], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room>((resolve, reject) => {
+    pool.query(query, [id], async (error, results) => {
+      const myQueryResult = results[0];
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomByCategory = async (category: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_Category = ?";
-  await pool.query(query, [category], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [category], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomByBuilding = async (building: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_Building = ?";
-  await pool.query(query, [building], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [building], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomByCampus = async (campus: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_Campus = ?";
-  await pool.query(query, [campus], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [campus], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomByLocation = async (location: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_Location = ?";
-  await pool.query(query, [location], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [location], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
 const fetchRoomByState = async (state: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_State = ?";
-  await pool.query(query, [state], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Room[]>((resolve, reject) => {
+    pool.query(query, [state], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
@@ -113,6 +131,7 @@ const addEquipment = async (id: string, equipment: string) => {
 export default {
   fetchAllRooms,
   fetchRoomById,
+  fetchRoomByName,
   fetchRoomByCategory,
   fetchRoomByBuilding,
   fetchRoomByCampus,

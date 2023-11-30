@@ -7,6 +7,7 @@ const secretKey: Secret = process.env.SECRET_KEY || "";
 
 interface AuthenticatedRequest extends Request {
   userId?: number;
+  role?: string;
 }
 
 export const authMiddleware = (
@@ -15,18 +16,21 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    // console.log(token);
+    const token = req.headers.cookie?.split("=")[1];
+    // console.log(req.headers.cookie?.split("=")[1]);
     if (!token) {
       throw new Error("Unauthorized");
     }
 
     // decoded userId
-    const decoded = jwt.verify(token, secretKey) as { userId: number };
-    const { userId } = decoded;
+    const decoded = jwt.verify(token, secretKey) as {
+      role: string | undefined;
+      userId: number;
+    };
 
-    // userId for future use but it's not used yet
-    req.userId = userId;
+    // user informations for future use
+    req.userId = decoded.userId;
+    req.role = decoded.role;
 
     next();
   } catch (error) {
