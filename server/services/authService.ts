@@ -1,15 +1,12 @@
 import { pool } from "../config/database";
 import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
-import { config } from "dotenv";
-
-config();
-const secretKey: Secret = process.env.SECRET_KEY || "";
+import { User } from "../types/types";
 
 const registerUser = async (username: string, password: string) => {
   try {
     const checkUsernameQuery = "SELECT * FROM users WHERE User_Name = ?";
-    const checkUsernameResult = await pool.query(
+    const checkUsernameResult = pool.query(
       checkUsernameQuery,
       [username],
       async (error, results, fields) => {
@@ -27,10 +24,7 @@ const registerUser = async (username: string, password: string) => {
     const insertUserQuery =
       "INSERT INTO users (User_Name, User_Password) VALUES (?, ?) ";
     const insertUserValues = [username, hashedPassword];
-    const insertUserResult = await pool.query(
-      insertUserQuery,
-      insertUserValues
-    );
+    const insertUserResult = pool.query(insertUserQuery, insertUserValues);
 
     return insertUserResult;
   } catch (error) {
@@ -38,33 +32,29 @@ const registerUser = async (username: string, password: string) => {
   }
 };
 
-const loginUser = async (username: string, password: string) => {
-  try {
-    const checkUserQuery = "SELECT * FROM users WHERE User_Name = ?";
-    console.log(checkUserQuery);
-    const checkUserResult = await pool.query(
-      checkUserQuery,
-      [username],
-      async (error, results, fields) => {
-        if (error) throw error;
-        console.log(results);
+//write loginUser mat
+
+const loginUser = (username: string, password: string) => {
+  const checkUserQuery = "SELECT * FROM users WHERE User_Name = ?";
+  return new Promise<User>((resolve, reject) => {
+    pool.query(checkUserQuery, [username], async (error, results) => {
+      const myQueryResult = results[0];
+      if (!results.length) {
+        reject("Unknown User."); // We reject the promise if there is no results to the query
+      } else {
         const isPasswordValid = await bcrypt.compare(
           password,
-          results[0].User_Password
+          myQueryResult.User_Password
         );
+
         if (!isPasswordValid) {
-          throw new Error("Invalid username or password");
+          reject("Invalid Password.");
         }
-        const token = jwt.sign({ userId: results[0].id_user }, secretKey, {
-          expiresIn: "1h",
-        });
-        console.log("token", token);
-        return token;
+
+        resolve(myQueryResult);
       }
-    );
-  } catch (error) {
-    throw error;
-  }
+    });
+  });
 };
 
 export default { registerUser, loginUser };
