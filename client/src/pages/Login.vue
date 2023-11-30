@@ -22,7 +22,7 @@
 
       <div class="login-form">
         <h1>Login</h1>
-        <form @submit="loginUser">
+        <form @submit.prevent="loginUser">
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" v-model="loginData.username" required />
@@ -46,6 +46,9 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
+
+
 export default {
   data() {
     return {
@@ -56,11 +59,32 @@ export default {
     };
   },
   methods: {
-    loginUser() {
-      if (this.loginData.username === "vincent" && this.loginData.password === "password") {
-        alert("Login successful!");
+    async loginUser() {
+      if (this.loginData.username != null && this.loginData.password != null) {
+        try {
+          const response = await axios.post(`http://localhost:3000/server/auth/login`, {
+            params: {
+              username: this.loginData.username,
+              password: this.loginData.password
+            }, headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          // We set the cookie for the user and redirect him to the dashboard once logged in.
+          let postData = response.data;
+          document.cookie=`auth=${postData.authorization}`;
+          alert("Login succesful. redirecting...");
+          // setTimeout(() => { window.location = "/dashboard"; },5000);
+          this.$router.push("/dashboard")
+          
+        } catch (error) {
+          console.error(error);
+          alert("Login failed. Please check your username and password.");
+        }
       } else {
-        alert("Login failed. Please check your username and password.");
+        // Ajouter autres validations ici
+        alert("Informations invalides.");
       }
 
       this.loginData = {

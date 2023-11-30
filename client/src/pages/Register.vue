@@ -67,7 +67,15 @@ export default {
   },
   methods: {
     registerUser() {
-      alert("Registration successful! Please login with your new account.");
+      axios
+        .post("http://localhost:3000/api/auth/register", this.registrationData)
+        .then((response) => {
+          console.log(response);
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
