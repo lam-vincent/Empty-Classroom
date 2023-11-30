@@ -20,30 +20,59 @@
 </template>
 
 <script lang="ts">
-import { verifyToken,readToken } from "../utils/authUtils";
+import { verifyToken, readToken } from "../utils/authUtils";
 import axios from 'axios';
 
 export default {
-  beforeMount() {
-    verifyToken();
-  },
-  onMount(){
-    this.userData.token = readToken();
-  }
-  ,
+  props: ['category'],
   data() {
     return {
       userData: {
         token: "",
       },
+      rooms: [],
     };
   },
 
-  methods:{
-    getRoomsByName(name:string) {
-      
+  beforeMount() {
+    verifyToken();
+  },
+  onMount() {
+    this.userData.token = readToken();
+  },
+  mounted() {
+    if (this.category === null) {
+      this.fetchAllRooms();
+    } else {
+      this.fetchRoomsByCategory(this.category);
     }
-  }
+  },
+
+  methods: {
+    async fetchAllRooms() {
+      try {
+        const response = await axios.get('/rooms');
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    async fetchRoomsByCategory(category: any) {
+      try {
+        const response = await axios.get(`/rooms/category/${category}`);
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    handleSuccess(data: never[]) {
+      this.rooms = data;
+    },
+    handleError(error: unknown) {
+      console.error('Error fetching rooms:', error);
+      alert('An error occurred while fetching rooms. Please try again later.');
+    },
+  },
 };
 </script>
 
