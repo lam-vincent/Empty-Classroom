@@ -55,31 +55,14 @@
 
         <div class="recommendation-title">
           <h2>Recommendations</h2>
-          <button>See all</button>
         </div>
 
         <div class="display-case">
-          <div class="room-card">
-            <div class="room-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="room-card-content">
-              <h2>Classroom A101</h2>
-              <p>Available</p>
-            </div>
-          </div>
-          <div class="room-card">
-            <div class="room-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="room-card-content">
-              <h2>Classroom A102</h2>
-              <p>Available</p>
-            </div>
-          </div>
+          <RoomCapsule v-for="room in recommendedRooms" :key="room.id" :room="room" />
         </div>
+    </div>
 
-      </section>
+    </section>
 
     </div>
   </main-layout>
@@ -87,8 +70,12 @@
   
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
+import RoomCapsule from "../components/RoomCapsule.vue";
 
 export default {
+  components: {
+    RoomCapsule,
+  },
 
   beforeMount() {
     verifyToken();
@@ -97,7 +84,7 @@ export default {
 
   methods: {
     redirectToFilteredRooms(category: string) {
-      // Use Vue Router to navigate to /find with the category as a query parameter
+      // navigate to /find with the category as a query parameter
       this.$router.push({ path: '/find', query: { category } });
     },
   },
@@ -189,56 +176,9 @@ export default {
   margin: 20px;
 }
 
-.recommendation-title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-}
-
 .display-case {
   display: flex;
   overflow: scroll;
-}
-
-.room-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 250px;
-  margin-right: 16px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.room-card-image {
-  width: 100%;
-  height: 100px;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  overflow: hidden;
-}
-
-.room-card-content {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  height: 60px;
-}
-
-.room-card-content h2 {
-  font-size: 16px;
-}
-
-.room-card-content p {
-  background-color: var(--dark-blue);
-  color: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  transform: translateY(-20px);
 }
 
 button {
