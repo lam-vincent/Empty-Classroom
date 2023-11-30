@@ -20,43 +20,59 @@
 </template>
 
 <script lang="ts">
-import { verifyToken,readToken } from "../utils/authUtils";
-// import { Room } from "../../../server/types/types";
+import { verifyToken, readToken } from "../utils/authUtils";
 import axios from 'axios';
 
 export default {
-  beforeMount() {
-    verifyToken();
-  },
-  onMount(){
-    this.userData.token = readToken();
-  }
-  ,
+  props: ['category'],
   data() {
     return {
       userData: {
         token: "",
       },
-      roomData: {
-        fetchedRooms : []
-      }
+      rooms: [],
     };
   },
 
-  methods:{
-    async getRoomsByName() {
-      const response = await axios.get(`http://localhost:3000/rooms`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Cookie': `auth=${this.userData.token}`
-            }
-            
-      });
-
-      console.log(response);
-      // console.log(name);
+  beforeMount() {
+    verifyToken();
+  },
+  onMount() {
+    this.userData.token = readToken();
+  },
+  mounted() {
+    if (this.category === null) {
+      this.fetchAllRooms();
+    } else {
+      this.fetchRoomsByCategory(this.category);
     }
-  }
+  },
+
+  methods: {
+    async fetchAllRooms() {
+      try {
+        const response = await axios.get('/rooms');
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    async fetchRoomsByCategory(category: any) {
+      try {
+        const response = await axios.get(`/rooms/category/${category}`);
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    handleSuccess(data: never[]) {
+      this.rooms = data;
+    },
+    handleError(error: unknown) {
+      console.error('Error fetching rooms:', error);
+      alert('An error occurred while fetching rooms. Please try again later.');
+    },
+  },
 };
 </script>
 
