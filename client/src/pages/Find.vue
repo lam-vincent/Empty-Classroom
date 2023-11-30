@@ -3,7 +3,7 @@
     <div class="find-page">
       <h1>Find a workplace and reserve now!</h1>
 
-      <div @onclick="getRoomsByName()" class="search-bar">
+      <div  class="search-bar">
         <input type="text" placeholder="Search and Filter" />
       </div>
 
@@ -41,17 +41,20 @@ export default {
     this.userData.token = readToken();
   },
   mounted() {
-    if (this.category === null) {
-      this.fetchAllRooms();
-    } else {
-      this.fetchRoomsByCategory(this.category);
-    }
-  },
+    // if (this.category === null) {
+    //   this.fetchAllRooms();
+    // } else {
+    //   this.fetchRoomsByCategory(this.category);
+    // }
 
+    this.fetchAllRooms();
+  },
   methods: {
     async fetchAllRooms() {
       try {
-        const response = await axios.get('/rooms');
+        const response = await axios.get('http://localhost:3000/rooms', { withCredentials: true ,headers :{
+          'Access-Control-Allow-Origin':'http://localhost:5173/'
+        }});
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
@@ -59,7 +62,7 @@ export default {
     },
     async fetchRoomsByCategory(category: any) {
       try {
-        const response = await axios.get(`/rooms/category/${category}`);
+        const response = await axios.get(`http://localhost:3000/rooms/category/${category}`);
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
