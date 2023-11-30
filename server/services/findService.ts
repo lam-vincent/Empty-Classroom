@@ -9,6 +9,15 @@ const fetchAllRooms = async () => {
   });
 };
 
+const fetchRoomByName = async (id: string) => {
+  const query = "SELECT * FROM Rooms WHERE Room_Name LIKE ?";
+  await pool.query(query, [id], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
+};
+
 const fetchRoomById = async (id: string) => {
   const query = "SELECT * FROM Rooms WHERE id_room = ?";
   await pool.query(query, [id], (error, results, fields) => {
@@ -113,6 +122,7 @@ const addEquipment = async (id: string, equipment: string) => {
 export default {
   fetchAllRooms,
   fetchRoomById,
+  fetchRoomByName,
   fetchRoomByCategory,
   fetchRoomByBuilding,
   fetchRoomByCampus,

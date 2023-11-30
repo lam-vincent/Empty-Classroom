@@ -16,8 +16,8 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    // console.log(token);
+    const token = req.headers.cookie?.split("=")[1];
+    // console.log(req.headers.cookie?.split("=")[1]);
     if (!token) {
       throw new Error("Unauthorized");
     }

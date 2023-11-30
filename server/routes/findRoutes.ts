@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllRooms,
   getRoomById,
+  getRoomByName,
   getRoomByCategory,
   getRoomByBuilding,
   getRoomByCampus,
@@ -21,6 +22,9 @@ router.get("/rooms", authMiddleware, getAllRooms);
 
 // Get room by id
 router.get("/rooms/:id", authMiddleware, getRoomById);
+
+// Get room by name
+router.get("/rooms/:name", authMiddleware, getRoomByName);
 
 // Get room by category
 router.get("/rooms/category/:category", authMiddleware, getRoomByCategory);

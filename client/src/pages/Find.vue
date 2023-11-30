@@ -20,7 +20,30 @@
 </template>
 
 <script lang="ts">
+import { verifyToken,readToken } from "../utils/authUtils";
+import axios from 'axios';
+
 export default {
+  beforeMount() {
+    verifyToken();
+  },
+  onMount(){
+    this.userData.token = readToken();
+  }
+  ,
+  data() {
+    return {
+      userData: {
+        token: "",
+      },
+    };
+  },
+
+  methods:{
+    getRoomsByName(name:string) {
+      
+    }
+  }
 };
 </script>
 

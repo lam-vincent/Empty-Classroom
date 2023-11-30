@@ -5,7 +5,7 @@
       <div class="dashboard-title">
         <h1>Find your favorite place to work</h1>
       </div>
-
+      
       <section class="go-to-find-card">
         <div class="go-to-find-card-image">
           <img src="classroom1.jpg" />
@@ -89,6 +89,7 @@
 import { verifyToken,readToken } from "../utils/authUtils";
 
 export default {
+  
   beforeMount() {
     verifyToken();
     console.log(readToken());
