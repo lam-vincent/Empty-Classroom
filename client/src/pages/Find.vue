@@ -30,6 +30,9 @@ export default {
       userData: {
         token: "",
       },
+      roomData: {
+        fetchedRooms: []
+      }, // two options: fetchedRooms and rooms. which one to use?
       rooms: [],
     };
   },
@@ -50,6 +53,17 @@ export default {
     this.fetchAllRooms();
   },
   methods: {
+    async getRoomsByName() {
+      const response = await axios.get(`http://localhost:3000/rooms`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': `auth=${this.userData.token}`
+        }
+
+      });
+      console.log(response);
+      // console.log(name);
+    },
     async fetchAllRooms() {
       try {
         const response = await axios.get('http://localhost:3000/rooms', { withCredentials: true ,headers :{

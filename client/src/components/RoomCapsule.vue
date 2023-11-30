@@ -13,6 +13,7 @@
 <script lang="ts">
 
 export default {
+    name: "RoomCapsule",
     props: {
         room: {
             type: Object,
