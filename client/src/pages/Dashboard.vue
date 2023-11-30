@@ -86,11 +86,12 @@
 </template>
   
 <script lang="ts">
-import { verifyToken } from "../utils/authUtils";
+import { verifyToken,readToken } from "../utils/authUtils";
 
 export default {
   beforeMount() {
     verifyToken();
+    console.log(readToken());
   }
 };
 </script>
