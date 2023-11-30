@@ -24,8 +24,8 @@ export const getRoomById = async (req: Request, res: Response) => {
 
 export const getRoomByName = async (req: Request, res: Response) => {
   try {
-    const { state } = req.params;
-    const room = await findService.fetchRoomByName(state);
+    const { name } = req.params;
+    const room = await findService.fetchRoomByName(name);
     res.json(room);
   } catch (error) {
     console.error("Error fetching room:", error);
