@@ -59,6 +59,12 @@
 
         <div class="display-case">
           <RoomCapsule v-for="room in recommendedRooms" :key="room.id" :room="room" />
+          <button @click="toggleForm" v-show="!showForm">Add Room</button>
+          <form v-show="showForm" @submit.prevent="addRoom">
+            <label for="roomName">Room Name:</label>
+            <input type="text" id="roomName" v-model="newRoomName" required />
+            <button type="submit">Save</button>
+          </form>
         </div>
 
 
@@ -141,6 +147,8 @@ export default {
           image: "classroom10.jpg",
         },
       ],
+      showForm: false,
+      newRoomName: "",
     };
   },
 
@@ -153,6 +161,16 @@ export default {
     redirectToFilteredRooms(category: string) {
       // navigate to /find with the category as a query parameter
       this.$router.push({ path: '/find', query: { category } });
+    },
+
+    toggleForm() {
+      this.showForm = !this.showForm;
+    },
+
+    addRoom() {
+      console.log("Adding room:", this.newRoomName); // this part needs to be replaced with a POST request to the backend
+      this.newRoomName = "";
+      this.showForm = false;
     },
   },
 
