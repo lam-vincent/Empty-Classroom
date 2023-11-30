@@ -6,6 +6,13 @@ const verifyToken = () => {
   }
 };
 
+const readToken = () => {
+  var token = document.cookie.split("=")[1];
+  var tokenBody = token.split(".")[1];
+  var tokenBodyParsed = JSON.parse(atob(tokenBody));
+  return tokenBodyParsed;
+};
+
 const logout = () => {
   if (document.cookie.includes("auth")) {
     document.cookie = "";
@@ -53,4 +60,4 @@ const checkPermissions = (userRole: string, action: string): boolean => {
   }
 };
 
-export { verifyToken, logout, checkPermissions }; // logout wasn't exported before?
+export { verifyToken, logout, checkPermissions, readToken }; // logout wasn't exported before?
