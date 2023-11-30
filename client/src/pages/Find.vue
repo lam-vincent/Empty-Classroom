@@ -6,14 +6,8 @@
       <div  class="search-bar">
         <input type="text" placeholder="Search and Filter" />
       </div>
-
       <div class="item-list" ref="itemList">
-        <div class="item">
-        </div>
-        <div class="item">
-        </div>
-        <div class="item">
-        </div>
+        <RoomCapsule v-for="(objet) in roomData.fetchedRooms" :room="objet"/>
       </div>
     </div>
   </main-layout>
@@ -21,19 +15,23 @@
 
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
+import RoomCapsule from "../components/RoomCapsule.vue";
 import axios from 'axios';
 
 export default {
   props: ['category'],
+  components :{
+    RoomCapsule
+  },
   data() {
     return {
       userData: {
         token: "",
       },
       roomData: {
-        fetchedRooms: []
-      }, // two options: fetchedRooms and rooms. which one to use?
-      rooms: [],
+        fetchedRooms: [],
+        currentRooms : []
+      }
     };
   },
 
@@ -49,7 +47,6 @@ export default {
     // } else {
     //   this.fetchRoomsByCategory(this.category);
     // }
-
     this.fetchAllRooms();
   },
   methods: {
@@ -69,6 +66,7 @@ export default {
         const response = await axios.get('http://localhost:3000/rooms', { withCredentials: true ,headers :{
           'Access-Control-Allow-Origin':'http://localhost:5173/'
         }});
+        this.roomData.fetchedRooms = response.data;
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
@@ -82,8 +80,11 @@ export default {
         this.handleError(error);
       }
     },
+    async renderRooms(){
+
+    },
     handleSuccess(data: never[]) {
-      this.rooms = data;
+      this.roomData.fetchedRooms = data;
     },
     handleError(error: unknown) {
       console.error('Error fetching rooms:', error);
