@@ -5,8 +5,8 @@
       <div class="dashboard-title">
         <h1>Find your favorite place to work</h1>
       </div>
-      
-      <section class="go-to-find-card">
+
+      <router-link to="/find" class="go-to-find-card">
         <div class="go-to-find-card-image">
           <img src="classroom1.jpg" />
         </div>
@@ -18,7 +18,7 @@
               d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </div>
-      </section>
+      </router-link>
 
       <section class="categories">
 
@@ -86,10 +86,10 @@
 </template>
   
 <script lang="ts">
-import { verifyToken,readToken } from "../utils/authUtils";
+import { verifyToken, readToken } from "../utils/authUtils";
 
 export default {
-  
+
   beforeMount() {
     verifyToken();
     console.log(readToken());
@@ -110,6 +110,8 @@ export default {
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   margin: 20px;
+  text-decoration: none;
+  color: black;
 }
 
 .go-to-find-card-image {
