@@ -60,9 +60,9 @@
         <div class="display-case">
           <RoomCapsule v-for="room in recommendedRooms" :key="room.id" :room="room" />
         </div>
-    </div>
 
-    </section>
+
+      </section>
 
     </div>
   </main-layout>
@@ -75,6 +75,73 @@ import RoomCapsule from "../components/RoomCapsule.vue";
 export default {
   components: {
     RoomCapsule,
+  },
+
+  data() {
+    return {
+      recommendedRooms: [
+        {
+          id: 1,
+          name: "Room 1",
+          availability: "Available",
+          image: "classroom1.jpg",
+        },
+        {
+          id: 2,
+          name: "Room 2",
+          availability: "Available",
+          image: "classroom2.jpg",
+        },
+        {
+          id: 3,
+          name: "Room 3",
+          availability: "Available",
+          image: "classroom3.jpg",
+        },
+        {
+          id: 4,
+          name: "Room 4",
+          availability: "Available",
+          image: "classroom4.jpg",
+        },
+        {
+          id: 5,
+          name: "Room 5",
+          availability: "Available",
+          image: "classroom5.jpg",
+        },
+        {
+          id: 6,
+          name: "Room 6",
+          availability: "Available",
+          image: "classroom6.jpg",
+        },
+        {
+          id: 7,
+          name: "Room 7",
+          availability: "Available",
+          image: "classroom7.jpg",
+        },
+        {
+          id: 8,
+          name: "Room 8",
+          availability: "Available",
+          image: "classroom8.jpg",
+        },
+        {
+          id: 9,
+          name: "Room 9",
+          availability: "Available",
+          image: "classroom9.jpg",
+        },
+        {
+          id: 10,
+          name: "Room 10",
+          availability: "Available",
+          image: "classroom10.jpg",
+        },
+      ],
+    };
   },
 
   beforeMount() {
