@@ -122,6 +122,7 @@
   
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
+import { fetchAllRooms } from "../utils/fetchUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
 import EquipmentCapsule from "../components/EquipmentCapsule.vue";
 import Modal from "../components/Modal.vue";
@@ -153,7 +154,16 @@ export default {
     verifyToken();
   },
 
+  mounted() {
+    this.fetchAllRecommendedRooms();
+    this.fetchAllRooms();
+  },
+
   methods: {
+
+    fetchAllRooms() {
+      fetchAllRooms.call(this);
+    },
 
     // Lifecycle hooks
     handleSuccess(data: never[]) {
@@ -179,7 +189,7 @@ export default {
       try {
         const userId: number = readToken().userId;
         console.log(userId);
-        const response = await axios.get(`http://localhost:3000/dashboard/preferences/${userId}`, {
+        const response = await axios.get(`http://localhost:3000/dashboard/recommended/${userId}`, {
           withCredentials: true, headers: {
             'Access-Control-Allow-Origin': 'http://localhost:5173/'
           }
@@ -200,7 +210,7 @@ export default {
       const roomId: number = this.newRoomName.length + 1;
 
       const userId: number = readToken().userId;
-      axios.post(`http://localhost:3000/dashboard/preferences/${userId}`, {
+      axios.post(`http://localhost:3000/dashboard/recommended/${userId}`, {
         userId: userId,
         roomId: roomId,
       }, {

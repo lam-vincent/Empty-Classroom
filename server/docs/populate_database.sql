@@ -13,7 +13,7 @@ VALUES
     (3, 'Computer lab');
 
 -- @block
-INSERT INTO `rooms` (`id_room`, `Room_Name`, `Room_Building`, `Room_Campus`, `Room_Location`, `Room_State`, `Room_Category`) VALUES
+INSERT INTO Rooms (id_room, Room_Name, Room_Building, Room_Campus, Room_Location, Room_State, Room_Category) VALUES
 (7, 180, 'A', 'Campus 1', 'Floor 3, Room 302', 'Vacant', 'Study Room'),
 (6, 145, 'A', 'Campus 3', 'Floor 1, Room 123', 'Occupied', 'Auditorium'),
 (5, 130, 'A', 'Campus 2', 'Floor 2, Room 202', 'Vacant', 'Lounge'),
