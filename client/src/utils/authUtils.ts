@@ -60,4 +60,4 @@ const checkPermissions = (userRole: string, action: string): boolean => {
   }
 };
 
-export { verifyToken, logout, checkPermissions, readToken }; // logout wasn't exported before?
+export { verifyToken, logout, checkPermissions, readToken };

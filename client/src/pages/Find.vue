@@ -27,7 +27,7 @@ import axios from 'axios';
 
 export default {
   props: ['category'],
-  components :{
+  components: {
     RoomCapsule
   },
   data() {
@@ -119,9 +119,11 @@ export default {
     },
     async fetchAllRooms() {
       try {
-        const response = await axios.get('http://localhost:3000/rooms', { withCredentials: true ,headers :{
-          'Access-Control-Allow-Origin':'http://localhost:5173/'
-        }});
+        const response = await axios.get('http://localhost:3000/rooms', {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
         this.roomData.fetchedRooms = response.data;
         this.handleSuccess(response.data);
       } catch (error) {
@@ -136,7 +138,7 @@ export default {
         this.handleError(error);
       }
     },
-    async renderRooms(){
+    async renderRooms() {
 
     },
     handleSuccess(data: never[]) {
@@ -152,8 +154,8 @@ export default {
 <style scoped>
 .search-bar {
   margin-bottom: 20px;
-  display:flex;
-  align-items:center; 
+  display: flex;
+  align-items: center;
 }
 
 .search-bar input[type="text"]{
