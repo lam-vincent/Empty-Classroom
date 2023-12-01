@@ -13,14 +13,31 @@ VALUES
     (3, 'Computer lab');
 
 -- @block
-INSERT INTO Rooms (id_room, Room_Name, Room_Building, Room_Campus, Room_Location, id_category, is_reserved, event_time, Room_State)
-VALUES
-    (97101, 101, 'Building A', 'République Campus', '2nd floor', 1, FALSE, NULL, 'Available'),
-    (98110, 110, 'Building B', 'République Campus', '2nd floor', 2, TRUE, '2023-09-20 14:00:00', 'Course in progress'),
-    (101001, 1, 'Building E', 'République Campus', '1st floor', 2, TRUE, '2023-09-20 14:00:00', 'Course in progress'),
-    (99001, 1, 'Building C', 'République Campus', '1st floor', 2, TRUE, '2023-09-20 14:00:00', 'Course in progress'),
-    (107101, 101, 'Building K', 'Gorki Campus', '2nd floor', 2, TRUE, '2023-09-20 14:00:00', 'Course in progress'),
-    (109201, 201, 'Building M', 'Monod Campus', '3rd floor', 1, FALSE, NULL, 'In exam');
+INSERT INTO `rooms` (`id_room`, `Room_Name`, `Room_Building`, `Room_Campus`, `Room_Location`, `Room_State`, `Room_Category`) VALUES
+(7, 180, 'A', 'Campus 1', 'Floor 3, Room 302', 'Vacant', 'Study Room'),
+(6, 145, 'A', 'Campus 3', 'Floor 1, Room 123', 'Occupied', 'Auditorium'),
+(5, 130, 'A', 'Campus 2', 'Floor 2, Room 202', 'Vacant', 'Lounge'),
+(4, 110, 'A', 'Campus 1', 'Floor 4, Room 404', 'Vacant', 'Laboratory'),
+(3, 175, 'A', 'Campus 3', 'Floor 3, Room 301', 'Occupied', 'Boardroom'),
+(2, 120, 'A', 'Campus 2', 'Floor 1, Room 101', 'Vacant', 'Classroom'),
+(1, 150, 'A', 'Campus 1', 'Floor 2, Room 201', 'Occupied', 'Meeting Room'),
+(8, 195, 'A', 'Campus 2', 'Floor 5, Room 555', 'Occupied', 'Office'),
+(9, 105, 'A', 'Campus 3', 'Floor 2, Room 201', 'Vacant', 'Library'),
+(10, 175, 'A', 'Campus 1', 'Floor 3, Room 301', 'Occupied', 'Gymnasium'),
+(11, 115, 'A', 'Campus 2', 'Floor 1, Room 102', 'Vacant', 'Lounge'),
+(12, 160, 'A', 'Campus 3', 'Floor 4, Room 007', 'Occupied', 'Seminar Room'),
+(13, 185, 'A', 'Campus 1', 'Floor 4, Room 410', 'Occupied', 'Conference Room'),
+(14, 140, 'A', 'Campus 2', 'Floor 2, Room 205', 'Vacant', 'Classroom'),
+(15, 195, 'A', 'Campus 3', 'Floor 1, Room 101', 'Occupied', 'Boardroom'),
+(16, 120, 'A', 'Campus 1', 'Floor 3, Room 303', 'Vacant', 'Laboratory'),
+(17, 155, 'A', 'Campus 2', 'Floor 3, Room 302', 'Vacant', 'Lounge'),
+(18, 110, 'A', 'Campus 3', 'Floor 2, Room 202', 'Occupied', 'Auditorium'),
+(19, 130, 'A', 'Campus 1', 'Floor 5, Room 501', 'Vacant', 'Study Room'),
+(20, 165, 'A', 'Campus 2', 'Floor 2, Room 203', 'Occupied', 'Office'),
+(21, 115, 'A', 'Campus 3', 'Floor 4, Room 404', 'Vacant', 'Library'),
+(22, 175, 'A', 'Campus 1', 'Floor 3, Room 302', 'Occupied', 'Gymnasium'),
+(23, 125, 'A', 'Campus 2', 'Floor 1, Room 105', 'Vacant', 'Lounge'),
+(24, 190, 'A', 'Campus 3', 'Floor 5, Room 505', 'Occupied', 'Seminar Room');
 
 -- @block
 INSERT INTO `Groups` (id_group, Group_Creation, Group_Password, Group_Name, Group_Size, Group_State)
@@ -30,16 +47,16 @@ VALUES
     (3, '2023-09-17', 'AZEJOIJFZEF', 'Maths Group', 4, 'Full');
 
 -- @block
-INSERT INTO Equipment (Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status, Room_Id)
+INSERT INTO Equipments (Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status)
 VALUES
-    ('Projector', 'Projector', 'Ceiling mount', 'High-quality HD projector for presentations.', 'Operational', 97101),
-    ('Smartboard', 'Interactive Whiteboard', 'Front wall', 'Interactive whiteboard with touchscreen for interactive learning.', 'Operational', 98110),
-    ('AC Unit', 'Air Conditioner', 'Ceiling', 'Air conditioner for temperature control.', 'Operational', 101001),
-    ('Table', 'Table', 'Center', 'Standard classroom table for seating and workspace.', 'Operational', 99001),
-    ('Chair', 'Chair', 'Around tables', 'Comfortable chairs for students.', 'Operational', 107101),
-    ('Whiteboard', 'Whiteboard', 'Front wall', 'Traditional whiteboard for writing and drawing.', 'Operational', 97101),
-    ('Blackboard', 'Blackboard', 'Back wall', 'Traditional blackboard for writing with chalk.', 'Operational', 98110),
-    ('Markers Set', 'Markers Set', 'Teacher desk', 'Set of colorful markers for whiteboard.', 'Operational', 101001);
+    ('Projector', 'Projector', 'Ceiling mount', 'High-quality HD projector for presentations.', 'Operational'),
+    ('Smartboard', 'Interactive Whiteboard', 'Front wall', 'Interactive whiteboard with touchscreen for interactive learning.', 'Operational'),
+    ('AC Unit', 'Air Conditioner', 'Ceiling', 'Air conditioner for temperature control.', 'Operational'),
+    ('Table', 'Table', 'Center', 'Standard classroom table for seating and workspace.', 'Operational'),
+    ('Chair', 'Chair', 'Around tables', 'Comfortable chairs for students.', 'Operational'),
+    ('Whiteboard', 'Whiteboard', 'Front wall', 'Traditional whiteboard for writing and drawing.', 'Operational'),
+    ('Blackboard', 'Blackboard', 'Back wall', 'Traditional blackboard for writing with chalk.', 'Operational'),
+    ('Markers Set', 'Markers Set', 'Teacher desk', 'Set of colorful markers for whiteboard.', 'Operational');
 
 -- @block
 INSERT INTO Reserve (id_room, id_user)

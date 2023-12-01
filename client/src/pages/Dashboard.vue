@@ -60,36 +60,58 @@
         </div>
 
         <div class="display-case">
-          <RoomCapsule v-for="room in recommendedRooms" :key="room.id" :room="room" />
+
+          <RoomCapsule v-for="(room, index) in recommendedRooms" :key="index" :room="room"
+            @click="() => openModalDetails('modalRoomDetails', room.id)" />
+
           <button @click="toggleForm" v-show="!showForm">Add Room</button>
-          <form v-show="showForm" @submit.prevent="addRoom">
+          <form v-show="showForm" @submit.prevent="addRecommendedRoom">
             <label for="roomName">Room Name:</label>
             <input type="text" id="roomName" v-model="newRoomName" required />
             <button type="submit">Save</button>
           </form>
+
         </div>
 
         <!-- Equipment Section -->
         <section class="equipment">
           <div class="equipment-title">
             <h2>Equipments</h2>
+            <button @click="openModal('lightBulbModal')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#facc15" height="20px" width="20px">
+                <path
+                  d="M10 1a6 6 0 00-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 00.572.729 6.016 6.016 0 002.856 0A.75.75 0 0012 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0010 1zM8.863 17.414a.75.75 0 00-.226 1.483 9.066 9.066 0 002.726 0 .75.75 0 00-.226-1.483 7.553 7.553 0 01-2.274 0z" />
+              </svg>
+            </button>
           </div>
 
           <div class="display-case">
             <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment"
-              @click="() => openDetails(equipment.id)" />
-            <button @click="openModal">Open Modal</button>
+              @click="() => openModalDetails('modalEquipmentDetails', equipment.id)" />
+            <button @click="openModal('addEquipmentModal')">Add Equipment</button>
           </div>
         </section>
 
         <!-- Modal Section -->
-        <Modal :showModal="isModalOpen" @update:showModal="closeModal">
-          <p>This is the content of the modal.</p>
+        <Modal ref="addEquipmentModal" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
+        </Modal>
+
+        <Modal ref="lightBulbModal" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
         </Modal>
 
         <!-- Modal Details Section -->
-        <ModalDetails v-if="isDetailsOpen" @close="closeDetails">
-          <p>This is the content of the modal.</p>
+        <ModalDetails ref="modalRoomDetails" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
+        </ModalDetails>
+
+        <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
         </ModalDetails>
 
       </section>
@@ -104,6 +126,7 @@ import RoomCapsule from "../components/RoomCapsule.vue";
 import EquipmentCapsule from "../components/EquipmentCapsule.vue";
 import Modal from "../components/Modal.vue";
 import ModalDetails from "../components/ModalDetails.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -115,126 +138,92 @@ export default {
 
   data() {
     return {
-      recommendedRooms: [
-        {
-          id: 1,
-          name: "Room 1",
-          availability: "Available",
-          image: "classroom1.jpg",
-        },
-        {
-          id: 2,
-          name: "Room 2",
-          availability: "Available",
-          image: "classroom2.jpg",
-        },
-        {
-          id: 3,
-          name: "Room 3",
-          availability: "Available",
-          image: "classroom3.jpg",
-        },
-        {
-          id: 4,
-          name: "Room 4",
-          availability: "Available",
-          image: "classroom4.jpg",
-        },
-        {
-          id: 5,
-          name: "Room 5",
-          availability: "Available",
-          image: "classroom5.jpg",
-        },
-        {
-          id: 6,
-          name: "Room 6",
-          availability: "Available",
-          image: "classroom6.jpg",
-        },
-        {
-          id: 7,
-          name: "Room 7",
-          availability: "Available",
-          image: "classroom7.jpg",
-        },
-        {
-          id: 8,
-          name: "Room 8",
-          availability: "Available",
-          image: "classroom8.jpg",
-        },
-        {
-          id: 9,
-          name: "Room 9",
-          availability: "Available",
-          image: "classroom9.jpg",
-        },
-        {
-          id: 10,
-          name: "Room 10",
-          availability: "Available",
-          image: "classroom10.jpg",
-        },
-      ],
+      recommendedRooms: [] as { id: number; name: string }[],
       showForm: false,
       newRoomName: "",
-      existingEquipment: [
-        {
-          id: 1,
-          name: "Projector",
-        },
-        {
-          id: 2,
-          name: "Whiteboard",
-        },
-      ],
-      isModalOpen: false,
-      isDetailsOpen: false,
+      existingEquipment: [],
+      roomData: {
+        fetchedRooms: [],
+        currentRooms: [],
+      },
     };
   },
 
   beforeMount() {
     verifyToken();
-    console.log(readToken());
   },
 
   methods: {
+
+    // Lifecycle hooks
+    handleSuccess(data: never[]) {
+      this.recommendedRooms = data;
+    },
+
+    handleError(error: any) {
+      console.log(error);
+    },
+
+    // Category methods
     redirectToFilteredRooms(category: string) {
       // navigate to /find with the category as a query parameter
       this.$router.push({ path: '/find', query: { category } });
     },
 
+    // Recommendation methods
     toggleForm() {
       this.showForm = !this.showForm;
     },
 
-    addRoom() {
-      console.log("Adding room:", this.newRoomName); // this part needs to be replaced with a POST request to the backend
+    async fetchAllRecommendedRooms() {
+      try {
+        const userId: number = readToken().userId;
+        console.log(userId);
+        const response = await axios.get(`http://localhost:3000/dashboard/preferences/${userId}`, {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
+        this.recommendedRooms = response.data;
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+
+    addRecommendedRoom() {
+      this.recommendedRooms.push({
+        id: this.recommendedRooms.length + 1,
+        name: this.newRoomName,
+      });
+
+      const roomId: number = this.newRoomName.length + 1;
+
+      const userId: number = readToken().userId;
+      axios.post(`http://localhost:3000/dashboard/preferences/${userId}`, {
+        userId: userId,
+        roomId: roomId,
+      }, {
+        withCredentials: true, headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:5173/'
+        }
+      });
+
       this.newRoomName = "";
-      this.showForm = false;
+      this.toggleForm();
     },
 
-    openModal() {
-      this.isModalOpen = true;
+    // Modal methods
+    openModal(_ref: string) {
+      (this.$refs.ref as any).open();
+      console.log('Modal opened openModal');
     },
-
+    openModalDetails(_ref: string, _id: number) {
+      (this.$refs.ref as any).open();
+      console.log('Modal opened openModalDetails');
+    },
     closeModal() {
-      this.isModalOpen = false;
-    },
-
-    openDetails(equipmentId: number) {
-      this.isDetailsOpen = true;
-
-      // fetch the equipment details from the backend
-      // set the equipment details to the data property
-
-      // for now, we'll just log the equipment id
-      console.log("Equipment ID:", equipmentId);
-    },
-
-    closeDetails() {
-      this.isDetailsOpen = false;
+      console.log('Modal closed');
     },
   },
 
@@ -342,6 +331,14 @@ button {
 
 button:hover {
   color: var(--dark-blue);
+}
+
+.equipment-title {
+  display: flex;
+}
+
+.equipment-title svg {
+  transform: translateY(0.25rem);
 }
 </style>
   
