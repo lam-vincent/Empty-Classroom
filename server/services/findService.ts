@@ -14,7 +14,7 @@ const fetchAllRooms = async () => {
 const fetchRoomByName = async (name: string) => {
   const query = "SELECT * FROM Rooms WHERE Room_Name LIKE ?";
   return new Promise<Room[]>((resolve, reject) => {
-    pool.query(query, [name], async (error, results) => {
+    pool.query(query, [`%${name}%`], async (error, results) => {
       const myQueryResult = results;
       resolve(myQueryResult);
     });

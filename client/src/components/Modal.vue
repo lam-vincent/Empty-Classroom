@@ -1,0 +1,59 @@
+<template>
+    <div class="modal" v-if="showModal">
+        <div class="modal-content">
+            <span class="close" @click="closeModal">&times;</span>
+            <slot></slot>
+        </div>
+    </div>
+</template>
+  
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+    props: {
+        showModal: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    setup(_props, { emit }) {
+        const closeModal = () => {
+            emit('update:showModal', false);
+        };
+
+        return { closeModal };
+    },
+});
+</script>
+  
+<style scoped>
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    z-index: 2;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+</style>
+  

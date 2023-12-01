@@ -25,7 +25,7 @@ router.get("/rooms", authMiddleware, getAllRooms);
 router.get("/rooms/:id", authMiddleware, getRoomById);
 
 // Get room by name
-router.get("/rooms/:name", authMiddleware, getRoomByName);
+router.get("/rooms/name/:name", authMiddleware, getRoomByName);
 
 // Get room by category
 router.get("/rooms/category/:category", authMiddleware, getRoomByCategory);

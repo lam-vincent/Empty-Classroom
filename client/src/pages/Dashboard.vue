@@ -76,9 +76,21 @@
           </div>
 
           <div class="display-case">
-            <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment" />
+            <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment"
+              @click="() => openDetails(equipment.id)" />
+            <button @click="openModal">Open Modal</button>
           </div>
         </section>
+
+        <!-- Modal Section -->
+        <Modal :showModal="isModalOpen" @update:showModal="closeModal">
+          <p>This is the content of the modal.</p>
+        </Modal>
+
+        <!-- Modal Details Section -->
+        <ModalDetails v-if="isDetailsOpen" @close="closeDetails">
+          <p>This is the content of the modal.</p>
+        </ModalDetails>
 
       </section>
 
@@ -90,12 +102,15 @@
 import { verifyToken, readToken } from "../utils/authUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
 import EquipmentCapsule from "../components/EquipmentCapsule.vue";
-
+import Modal from "../components/Modal.vue";
+import ModalDetails from "../components/ModalDetails.vue";
 
 export default {
   components: {
     RoomCapsule,
     EquipmentCapsule,
+    Modal,
+    ModalDetails,
   },
 
   data() {
@@ -174,6 +189,8 @@ export default {
           name: "Whiteboard",
         },
       ],
+      isModalOpen: false,
+      isDetailsOpen: false,
     };
   },
 
@@ -196,6 +213,28 @@ export default {
       console.log("Adding room:", this.newRoomName); // this part needs to be replaced with a POST request to the backend
       this.newRoomName = "";
       this.showForm = false;
+    },
+
+    openModal() {
+      this.isModalOpen = true;
+    },
+
+    closeModal() {
+      this.isModalOpen = false;
+    },
+
+    openDetails(equipmentId: number) {
+      this.isDetailsOpen = true;
+
+      // fetch the equipment details from the backend
+      // set the equipment details to the data property
+
+      // for now, we'll just log the equipment id
+      console.log("Equipment ID:", equipmentId);
+    },
+
+    closeDetails() {
+      this.isDetailsOpen = false;
     },
   },
 

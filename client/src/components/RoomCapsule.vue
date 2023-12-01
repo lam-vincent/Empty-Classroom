@@ -1,11 +1,11 @@
 <template>
-    <div class="room-card">
+    <div class="room-card" @click="showRoom();">
         <div class="room-card-image">
-            <img :src="room.image" alt="Room Image" />
+            <img src="../../public/classroom1.jpg" alt="Room Image" />
         </div>
         <div class="room-card-content">
-            <h2>{{ room.name }}</h2>
-            <p>{{ room.availability }}</p>
+            <h2>{{ room.Room_Building+room.Room_Name }}</h2>
+            <p>{{ room.Room_State }}</p>
         </div>
     </div>
 </template>
@@ -20,6 +20,11 @@ export default {
             required: true,
         },
     },
+    methods:{
+        showRoom(){
+            alert(1);
+        }
+    }
 };
 </script>
   
@@ -30,10 +35,12 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 250px;
-    margin-right: 16px;
+    margin-right: 25px;
+    margin-bottom:25px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    cursor:pointer;
 }
 
 .room-card-image {
