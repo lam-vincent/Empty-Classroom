@@ -77,8 +77,14 @@
 
           <div class="display-case">
             <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment" />
+            <button @click="openModal">Open Modal</button>
           </div>
         </section>
+
+        <!-- Modal Section -->
+        <Modal :showModal="isModalOpen" @update:showModal="closeModal">
+          <p>This is the content of the modal.</p>
+        </Modal>
 
       </section>
 
@@ -90,12 +96,13 @@
 import { verifyToken, readToken } from "../utils/authUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
 import EquipmentCapsule from "../components/EquipmentCapsule.vue";
-
+import Modal from "../components/Modal.vue";
 
 export default {
   components: {
     RoomCapsule,
     EquipmentCapsule,
+    Modal,
   },
 
   data() {
@@ -174,6 +181,7 @@ export default {
           name: "Whiteboard",
         },
       ],
+      isModalOpen: false,
     };
   },
 
@@ -196,6 +204,14 @@ export default {
       console.log("Adding room:", this.newRoomName); // this part needs to be replaced with a POST request to the backend
       this.newRoomName = "";
       this.showForm = false;
+    },
+
+    openModal() {
+      this.isModalOpen = true;
+    },
+
+    closeModal() {
+      this.isModalOpen = false;
     },
   },
 
