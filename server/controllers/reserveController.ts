@@ -23,6 +23,17 @@ export const getReservationByUser = async (req: Request, res: Response) => {
   }
 };
 
+export const getReservationByRoom = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.room_id;
+    const reservations = await reserveService.fetchReservationByRoom(roomId);
+    res.json(reservations);
+  } catch (error) {
+    console.error("Error fetching reservation:", error);
+    res.status(500).json({ message: "Error fetching reservation" });
+  }
+};
+
 export const updateReservation = async (req: Request, res: Response) => {
   try {
     const reserveId = req.params.id_reserve;

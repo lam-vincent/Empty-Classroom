@@ -54,9 +54,10 @@ export default {
   beforeMount() {
     verifyToken();
     this.userData.token = readToken();
+    this.fetchAllRooms();
   },
   mounted() {
-    this.fetchAllRooms();
+    // console.log("test");
   },
   methods: {
     resetSearchOptions () {
@@ -68,7 +69,6 @@ export default {
     identifyKeyword (mot:string) {
       // Regex pour heure sous le format ':1h'
       const heureRegex = /^\d{1,2}h$/;
-
       const codeSalleRegex = /^[1-9]\d{0,2}$/;
       const estNomDeCampus = this.userData.campusDictionary.includes(mot);
       const estNomDeBuilding = this.userData.buildingDictionary.includes(mot);
@@ -110,12 +110,11 @@ export default {
         if (!buildingCriteria(room.Room_Building)) { includeRoom = false;}
         if (!campusCriteria(room.Room_Campus)) { includeRoom = false;}
         if (!nameCriteria(room.Room_Name)) {includeRoom = false;}
-        
+        if (this.userData.searchOptions.building.length === 0 && this.userData.searchOptions.campus.length == 0 && this.userData.searchOptions.name.length == 0  ){includeRoom = false;}
 
         return includeRoom;
       });
       this.roomData.currentRooms = filteredRooms;
-      console.log(filteredRooms);
     },
     async fetchAllRooms() {
       try {
@@ -125,21 +124,19 @@ export default {
           }
         });
         this.roomData.fetchedRooms = response.data;
+        this.roomData.currentRooms = [...this.roomData.fetchedRooms];
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
       }
     },
-    async fetchRoomsByCategory(category: any) {
+    async fetchRoomsByCategory(category: any) { 
       try {
         const response = await axios.get(`http://localhost:3000/rooms/category/${category}`);
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
       }
-    },
-    async renderRooms() {
-
     },
     handleSuccess(data: never[]) {
       this.roomData.fetchedRooms = data;
