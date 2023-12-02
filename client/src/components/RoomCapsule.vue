@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         showRoom() {
-            alert(1);
+            console.log("showRoom clicked");
         }
     }
 };

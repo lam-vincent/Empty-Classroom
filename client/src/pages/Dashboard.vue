@@ -62,7 +62,7 @@
         <div class="display-case">
 
           <RoomCapsule v-for="(room, index) in recommendedRooms" :key="index" :room="room"
-            @click="() => openModalDetails('modalRoomDetails', room.id)" />
+            @click="() => openModalDetails('modalRoomDetails')" />
 
           <button @click="toggleForm" v-show="!showForm">Add Room</button>
           <form v-show="showForm" @submit.prevent="addRecommendedRoom">
@@ -87,7 +87,7 @@
 
           <div class="display-case">
             <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment"
-              @click="() => openModalDetails('modalEquipmentDetails', equipment.id)" />
+              @click="() => openModalDetails('modalEquipmentDetails')" />
             <button @click="openModal('addEquipmentModal')">Add Equipment</button>
           </div>
         </section>
@@ -224,12 +224,12 @@ export default {
     },
 
     // Modal methods
-    openModal(_ref: string) {
-      (this.$refs.ref as any).open();
+    openModal(reference: string) {
+      (this.$refs[reference] as any).open();
       console.log('Modal opened openModal');
     },
-    openModalDetails(_ref: string, _id: number) {
-      (this.$refs.ref as any).open();
+    openModalDetails(reference: string) {
+      (this.$refs[reference] as any).open();
       console.log('Modal opened openModalDetails');
     },
     closeModal() {
