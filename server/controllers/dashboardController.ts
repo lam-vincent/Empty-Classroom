@@ -9,10 +9,7 @@ export const getPreferredClassrooms = async (req: Request, res: Response) => {
       userId
     );
 
-    console.log("preferredClassrooms", preferredClassrooms);
-
     res.status(200).json({
-      message: "Preferred classrooms fetched",
       preferredClassrooms: preferredClassrooms,
     });
   } catch (error) {

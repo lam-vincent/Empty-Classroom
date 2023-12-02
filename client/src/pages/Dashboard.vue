@@ -215,15 +215,12 @@ export default {
             'Access-Control-Allow-Origin': 'http://localhost:5173/'
           }
         });
-        this.preferData.fetchedPreferRooms = response.data;
+        this.preferData.fetchedPreferRooms = response.data.preferredClassrooms;
         this.preferData.currentPreferRooms = [...this.preferData.fetchedPreferRooms];
-        console.log("this.recommendedData.currentRecommendedRooms", this.preferData.currentPreferRooms);
 
         // when id are the same and userId from Prefer table and userId from token are the same, push the room to recommendedData
         this.preferData.currentPreferRooms.forEach((preferRoom: any) => {
-          console.log("preferRoom", preferRoom);
           this.roomData.fetchedRooms.forEach((room: any) => {
-            console.log("room", room);
             if (preferRoom.id_room === room.id_room) {
               if (preferRoom.id_user === userId) {
                 this.recommendedData.currentRecommendedRooms.push(room as never);

@@ -1,17 +1,14 @@
 import { pool } from "../config/database";
 
 const fetchPreferredClassrooms = async (userId: string) => {
-  try {
-    const query = "SELECT * FROM Prefer WHERE id_user = ?";
+  const query = "SELECT * FROM Prefer WHERE id_user = ?";
 
-    await pool.query(query, [userId], async (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [userId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const insertPreferredClassroom = async (userId: string, roomId: string) => {
