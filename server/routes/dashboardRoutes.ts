@@ -4,8 +4,13 @@ import {
   addPreferredClassroom,
   updatePreferredClassroom,
   deletePreferredClassroom,
+  getEquipment,
+  addEquipment,
+  updateEquipment,
+  deleteEquipment,
 } from "../controllers/dashboardController";
 import { authMiddleware } from "../middlewares/authMiddleware";
+import { isAdminMiddleware } from "../middlewares/isAdminMiddleware";
 
 const router = express.Router();
 
@@ -35,6 +40,22 @@ router.delete(
   "/dashboard/recommended/:userId",
   authMiddleware,
   deletePreferredClassroom
+);
+
+// CRUD routes for equipment. These routes are protected by an admin middleware.
+router.get("/equipment", authMiddleware, isAdminMiddleware);
+router.post("/equipment", authMiddleware, isAdminMiddleware, addEquipment);
+router.put(
+  "/equipment/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  updateEquipment
+);
+router.delete(
+  "/equipment/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  deleteEquipment
 );
 
 export default router;
