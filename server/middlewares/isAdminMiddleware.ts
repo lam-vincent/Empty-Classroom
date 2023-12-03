@@ -12,8 +12,10 @@ export const isAdminMiddleware = (
 ) => {
   try {
     const userRole = req.role;
+    console.log("isAdminMiddleware.ts: userRole", userRole);
 
     if (userRole !== "Admin") {
+      console.log("isAdminMiddleware.ts: userRole", userRole);
       throw new Error("Unauthorized");
     }
 

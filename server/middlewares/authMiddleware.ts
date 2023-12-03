@@ -24,9 +24,11 @@ export const authMiddleware = (
 
     // decoded userId
     const decoded = jwt.verify(token, secretKey) as {
-      role: string | undefined;
+      role: string;
       userId: number;
     };
+
+    console.log("authMiddleware.ts: decoded", decoded);
 
     // user informations for future use
     req.userId = decoded.userId;

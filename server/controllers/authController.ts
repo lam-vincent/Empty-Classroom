@@ -33,9 +33,13 @@ const login = async (req: Request, res: Response) => {
     console.info(checkUserLogin);
 
     // We generate a token for the logged in user
-    const token = jwt.sign({ userId: checkUserLogin.id_user }, secretKey, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { userId: checkUserLogin.id_user, role: "Admin" },
+      secretKey,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     console.info("Token : " + token);
 

@@ -68,7 +68,7 @@ export default {
         console.log("EquipmentSection mounted");
     },
 
-    methids: {
+    methods: {
         // Axios methods
         handleSuccess(response: any) {
             console.log("response", response);

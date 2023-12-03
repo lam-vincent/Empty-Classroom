@@ -10,6 +10,7 @@ const readToken = () => {
   var token = document.cookie.split("=")[1];
   var tokenBody = token.split(".")[1];
   var tokenBodyParsed = JSON.parse(atob(tokenBody));
+  console.log("authUtils.ts: tokenBodyParsed", tokenBodyParsed);
   return tokenBodyParsed;
 };
 
