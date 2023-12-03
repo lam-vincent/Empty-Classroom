@@ -32,7 +32,7 @@
             <!-- Your custom content here -->
         </Modal>
     </section>
-</section></template>
+</template>
   
 <script lang="ts">
 import { verifyToken } from "../utils/authUtils";
@@ -78,6 +78,19 @@ export default {
             console.log(error);
         },
 
+        // Modal methods
+        openModal(reference: string) {
+            (this.$refs[reference] as any).open();
+            console.log('Modal opened openModal');
+        },
+        openModalDetails(reference: string) {
+            (this.$refs[reference] as any).open();
+            console.log('Modal opened openModalDetails');
+        },
+        closeModal() {
+            console.log('Modal closed');
+        },
+
         // Equipment methods
         async fetchAllEquipment() {
             try {
@@ -86,6 +99,7 @@ export default {
                         'Access-Control-Allow-Origin': 'http://localhost:5173/'
                     }
                 });
+                debugger;
                 this.Equipment.fetchedEquipment = response.data;
                 this.Equipment.currentEquipment = [...this.Equipment.fetchedEquipment];
                 this.handleSuccess(response.data);
@@ -112,18 +126,7 @@ export default {
             }
         },
 
-        // Modal methods
-        openModal(reference: string) {
-            (this.$refs[reference] as any).open();
-            console.log('Modal opened openModal');
-        },
-        openModalDetails(reference: string) {
-            (this.$refs[reference] as any).open();
-            console.log('Modal opened openModalDetails');
-        },
-        closeModal() {
-            console.log('Modal closed');
-        },
+
     },
 };
 </script>

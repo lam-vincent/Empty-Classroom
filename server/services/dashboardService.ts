@@ -1,4 +1,5 @@
 import { pool } from "../config/database";
+import { Equipment } from "../types/types";
 
 const fetchPreferredClassrooms = async (userId: string) => {
   const query = "SELECT * FROM Prefer WHERE id_user = ?";
@@ -12,100 +13,80 @@ const fetchPreferredClassrooms = async (userId: string) => {
 };
 
 const insertPreferredClassroom = async (userId: string, roomId: string) => {
-  try {
-    const query = "INSERT INTO Prefer(id_user, id_room) VALUES(?, ?)";
-    await pool.query(query, [userId, roomId], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  const query = "INSERT INTO Prefer(id_user, id_room) VALUES(?, ?)";
+
+  return new Promise((resolve, reject) => {
+    pool.query(query, [userId, roomId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const modifyPreferredClassroom = async (userId: string, roomId: string) => {
-  try {
-    const query = "UPDATE Prefer SET id_room = ? WHERE id_user = ?";
+  const query = "UPDATE Prefer SET id_room = ? WHERE id_user = ?";
 
-    await pool.query(query, [roomId, userId], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [roomId, userId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const removePreferredClassroom = async (userId: string, roomId: string) => {
-  try {
-    const query = "DELETE FROM Prefer WHERE id_user = ? AND id_room = ?";
+  const query = "DELETE FROM Prefer WHERE id_user = ? AND id_room = ?";
 
-    await pool.query(query, [userId, roomId], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [userId, roomId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const fetchEquipment = async () => {
-  try {
-    const query = "SELECT * FROM Equipments";
+  const query = "SELECT * FROM Equipments";
 
-    await pool.query(query, async (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      return results;
+  return new Promise<Equipment[]>((resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const addEquipment = async (name: string, quantity: number) => {
-  try {
-    const query = "INSERT INTO Equipments(name, quantity) VALUES(?, ?)";
+  const query = "INSERT INTO Equipments(name, quantity) VALUES(?, ?)";
 
-    await pool.query(query, [name, quantity], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [name, quantity], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const updateEquipment = async (id: string, name: string) => {
-  try {
-    const query = "UPDATE Equipments SET name = ? WHERE id = ?";
+  const query = "UPDATE Equipments SET name = ? WHERE id = ?";
 
-    await pool.query(query, [name, id], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [name, id], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const deleteEquipment = async (id: string) => {
-  try {
-    const query = "DELETE FROM Equipments WHERE id = ?";
+  const query = "DELETE FROM Equipments WHERE id = ?";
 
-    await pool.query(query, [id], (error, results, fields) => {
-      if (error) throw error;
-      console.log("results", results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [id], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 export default {
