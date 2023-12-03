@@ -50,47 +50,33 @@ export default {
 </script>
   
 <style scoped>
-.go-to-find-card {
+.categories {
     display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    text-decoration: none;
-    color: black;
-}
-
-.go-to-find-card-image {
-    width: 100%;
-    height: 100px;
-    overflow: hidden;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.go-to-find-card-content {
-    display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    overflow: scroll;
 }
 
-.go-to-find-card-content img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+.category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 32px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    padding-left: 16px;
+    margin: 20px;
+    margin-right: 0;
 }
 
-.go-to-find-card-content svg {
-    background-color: var(--blue);
-    border-radius: 50%;
-    padding: 10px;
-    color: #fff;
-    height: 25px;
-    width: 25px;
+.category span {
+    margin-left: 5px;
+    width: 100px;
+}
+
+.category svg {
+    color: var(--blue);
 }
 </style>
   

@@ -24,13 +24,15 @@
             <h3 slot="header">Custom Header</h3>
             <!-- Your custom content here -->
         </ModalDetails>
+
+    </section>
 </template>
   
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
-import RoomCapsule from "../components/RoomCapsule.vue";
-import Modal from "../components/Modal.vue";
-import ModalDetails from "../components/ModalDetails.vue";
+import RoomCapsule from "./RoomCapsule.vue";
+import Modal from "./Modal.vue";
+import ModalDetails from "./ModalDetails.vue";
 import axios from "axios";
 
 export default {

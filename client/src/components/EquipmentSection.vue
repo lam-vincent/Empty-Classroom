@@ -16,22 +16,22 @@
                 @click="() => openModalDetails('modalEquipmentDetails')" />
             <button @click="openModal('addEquipmentModal')">Add Equipment</button>
         </div>
+
+        <Modal ref="lightBulbModal" @close="closeModal">
+            <h3 slot="header">Custom Header</h3>
+            <!-- Your custom content here -->
+        </Modal>
+
+        <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
+            <h3 slot="header">Custom Header</h3>
+            <!-- Your custom content here -->
+        </ModalDetails>
+
+        <Modal ref="addEquipmentModal" @close="closeModal">
+            <h3 slot="header">Custom Header</h3>
+            <!-- Your custom content here -->
+        </Modal>
     </section>
-
-    <Modal ref="lightBulbModal" @close="closeModal">
-        <h3 slot="header">Custom Header</h3>
-        <!-- Your custom content here -->
-    </Modal>
-
-    <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
-        <h3 slot="header">Custom Header</h3>
-        <!-- Your custom content here -->
-    </ModalDetails>
-
-    <Modal ref="addEquipmentModal" @close="closeModal">
-        <h3 slot="header">Custom Header</h3>
-        <!-- Your custom content here -->
-    </Modal>
 </section></template>
   
 <script lang="ts">
@@ -69,7 +69,7 @@ export default {
     },
 
     methids: {
-        // Success and error handlers
+        // Axios methods
         handleSuccess(response: any) {
             console.log("response", response);
         },
@@ -134,6 +134,15 @@ export default {
     overflow: scroll;
 }
 
+
+.equipment-title {
+    display: flex;
+}
+
+.equipment-title svg {
+    transform: translateY(0.25rem);
+}
+
 button {
     color: var(--blue);
     background-color: transparent;
@@ -146,14 +155,6 @@ button {
 
 button:hover {
     color: var(--dark-blue);
-}
-
-.equipment-title {
-    display: flex;
-}
-
-.equipment-title svg {
-    transform: translateY(0.25rem);
 }
 </style>
   
