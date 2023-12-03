@@ -34,7 +34,7 @@ const login = async (req: Request, res: Response) => {
 
     // We generate a token for the logged in user
     const token = jwt.sign(
-      { userId: checkUserLogin.id_user, role: "Admin" },
+      { userId: checkUserLogin.id_user, role: checkUserLogin.User_Role },
       secretKey,
       {
         expiresIn: "24h",

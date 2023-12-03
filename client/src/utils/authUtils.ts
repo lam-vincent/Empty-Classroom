@@ -21,7 +21,7 @@ const logout = () => {
   }
 };
 
-const isDateExpired = (timestamp) => {
+const isDateExpired = (timestamp: number) => {
   const timestampInMilliseconds = timestamp * 1000;
   const currentDate = new Date();
   const providedDate = new Date(timestampInMilliseconds);

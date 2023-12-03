@@ -1,6 +1,6 @@
 <template>
     <!-- Equipment Section -->
-    <section class="equipment">
+    <section v-if="userData.token.role === 'Admin'" class="equipment">
         <div class="equipment-title">
             <h2>Equipments</h2>
             <button @click="openModal('lightBulbModal')">
@@ -35,7 +35,7 @@
 </template>
   
 <script lang="ts">
-import { verifyToken } from "../utils/authUtils";
+import { verifyToken, readToken } from "../utils/authUtils";
 import EquipmentCapsule from "./EquipmentCapsule.vue";
 import Modal from "./Modal.vue";
 import ModalDetails from "./ModalDetails.vue";
@@ -51,6 +51,9 @@ export default {
 
     data() {
         return {
+            userData: {
+                token: "",
+            },
             Equipment: {
                 fetchedEquipment: [],
                 currentEquipment: [],
@@ -61,7 +64,12 @@ export default {
 
     beforeMount() {
         verifyToken();
-        this.fetchAllEquipment();
+        this.userData.token = readToken();
+        console.log("EquipmentSection this.userData.token", this.userData.token.role);
+        if (this.userData.token.role === "Admin") {
+            console.log("EquipmentSection this.userData.token.role === Admin");
+            this.fetchAllEquipment();
+        }
     },
 
     mounted() {
