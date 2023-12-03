@@ -16,6 +16,7 @@ export type Group = {
   Group_Name: string;
   Group_Size: number;
   Group_State: string;
+  Belonging?: any;
 };
 
 export type Room = {

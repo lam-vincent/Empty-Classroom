@@ -11,6 +11,16 @@ export const getAllGroups = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllBelongings = async (req: Request, res: Response) => {
+  try {
+    const groups = await groupService.fetchAllGroups();
+    res.json(groups);
+  } catch (error) {
+    console.error("Error fetching groups:", error);
+    res.status(500).json({ message: "Error fetching groups" });
+  }
+};
+
 export const getGroupsByUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;

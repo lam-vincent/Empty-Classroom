@@ -1,11 +1,52 @@
 import { pool } from "../config/database";
+import { Group } from "../types/types";
+import { Belong } from "../types/types";
 
 const fetchAllGroups = async () => {
   const query = "SELECT * FROM `Groups`";
-  await pool.query(query, (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Group[]>((resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myArrayPromises = results.map(async (result: Group) => {
+        const belongings = await fetchBelongingByGroup(
+          result.id_group.toString()
+        );
+        return {
+          ...result,
+          Belonging: belongings,
+        };
+      });
+
+      // Wait for all promises to resolve
+      Promise.all(myArrayPromises)
+        .then((myArray) => {
+          resolve(myArray);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  });
+};
+
+const fetchAllBelongings = async () => {
+  const query = "SELECT * FROM `Belong`";
+  return new Promise<Group[]>(async (resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
+  });
+};
+
+const fetchBelongingByGroup = async (groupId: string) => {
+  const query = "SELECT * FROM `Belong` WHERE id_group = ?";
+  return new Promise<Belong[]>(async (resolve, reject) => {
+    pool.query(query, [groupId], async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
   });
 };
 
@@ -77,6 +118,7 @@ const joinGroup = async (id_user: string, id_group: string) => {
 
 export default {
   fetchAllGroups,
+  fetchAllBelongings,
   fetchGroupsByUser,
   fetchGroupsByStatus,
   createGroup,

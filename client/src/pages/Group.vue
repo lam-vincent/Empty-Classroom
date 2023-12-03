@@ -8,24 +8,7 @@
         <h2>Joined Groups</h2>
 
         <div class="display-case">
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
+          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :group="objet" />
         </div>
 
       </section>
@@ -47,24 +30,7 @@
         <h2>Public Groups to Join</h2>
 
         <div class="display-case">
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
+          <GroupCapsule v-for="(objet) in groupData.publicGroups" :group="objet" />
         </div>
 
       </section>
@@ -74,7 +40,53 @@
 </template>
 
 <script lang="ts">
+import axios from "axios"
+import GroupCapsule from "../components/GroupCapsule.vue";
+import { verifyToken, readToken } from "../utils/authUtils";
+
 export default {
+    beforeMount(){
+      this.fetchAllGroups();
+    },
+    data() {
+        return {
+            groupData: {
+                fetchedGroups: [],
+                joinedGroups: [],
+                publicGroups: []
+            }
+        };
+    },
+    methods: {
+        async fetchAllGroups() {
+            try {
+                const response = await axios.get('http://localhost:3000/groups', {
+                    withCredentials: true, headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/'
+                    }
+                });
+                this.groupData.fetchedGroups = response.data;
+                // this.groupData.joinedGroups = [...this.groupData.fetchedGroups];
+                this.groupData.publicGroups = [...this.groupData.fetchedGroups];
+                console.log(response.data);
+                this.fetchJoinedGroups();
+            }
+            catch (error) {
+                console.error("Error fetching groups : " + error);
+            }
+        },
+        fetchJoinedGroups(){
+          const userId = readToken().userId;
+
+          const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
+            element.Belonging.some((belonging) => belonging.id_user === userId)
+          );
+          // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
+          // Ajouter les éléments filtrés au tableau vide
+          this.groupData.joinedGroups.push(...elementsFiltres);
+        } 
+    },
+    components: { GroupCapsule }
 };
 </script>
 
