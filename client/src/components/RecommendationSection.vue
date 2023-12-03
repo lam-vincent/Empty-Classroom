@@ -21,8 +21,17 @@
         </div>
 
         <ModalDetails ref="modalRoomDetails" @close="closeModal">
-            <h3 slot="header">Custom Header</h3>
-            <!-- Your custom content here -->
+            <template #header>
+                <h3>Your Custom Header</h3>
+            </template>
+
+            <template #body>
+                <p>Your Custom Body</p>
+            </template>
+
+            <template #footer>
+                <p>Your Custom Footer</p>
+            </template>
         </ModalDetails>
 
     </section>

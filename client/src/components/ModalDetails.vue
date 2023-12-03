@@ -19,10 +19,10 @@
                     <div class="modal-footer">
                         <slot name="footer">
                             Default Footer
-                            <button class="modal-default-button" @click="close">
-                                OK
-                            </button>
                         </slot>
+                        <button class="modal-default-button" @click="close">
+                            OK
+                        </button>
                     </div>
                 </div>
             </div>
@@ -89,8 +89,14 @@ export default defineComponent({
     margin: 20px 0;
 }
 
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .modal-default-button {
-    float: right;
+    height: 30px;
 }
 </style>
   

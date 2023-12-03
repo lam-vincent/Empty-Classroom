@@ -1,7 +1,7 @@
 <template>
     <div class="room-card" @click="showRoom();">
         <div class="room-card-image">
-            <img src="/classroom1.jpg" alt="Room Image" />
+            <img src="/classroom2.jpg" alt="Room Image" />
         </div>
         <div class="room-card-content">
             <h2>{{ room.Room_Building + room.Room_Name }}</h2>
