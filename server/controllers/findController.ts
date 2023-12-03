@@ -125,15 +125,3 @@ export const deleteRoom = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error deleting room" });
   }
 };
-
-export const addEquipment = async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id;
-    const equipmentData = req.body;
-    const result = await findService.addEquipment(id, equipmentData);
-    res.json({ message: "Equipment added successfully" });
-  } catch (error) {
-    console.error("Error adding equipment:", error);
-    res.status(500).json({ message: "Error adding equipment" });
-  }
-};

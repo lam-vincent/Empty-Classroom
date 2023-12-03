@@ -1,17 +1,14 @@
 import { pool } from "../config/database";
 
 const fetchPreferredClassrooms = async (userId: string) => {
-  try {
-    const query = "SELECT * FROM Prefer WHERE id_user = ?";
+  const query = "SELECT * FROM Prefer WHERE id_user = ?";
 
-    await pool.query(query, [userId], async (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      return results;
+  return new Promise((resolve, reject) => {
+    pool.query(query, [userId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
     });
-  } catch (error) {
-    throw error;
-  }
+  });
 };
 
 const insertPreferredClassroom = async (userId: string, roomId: string) => {
@@ -55,9 +52,69 @@ const removePreferredClassroom = async (userId: string, roomId: string) => {
   }
 };
 
+const fetchEquipment = async () => {
+  try {
+    const query = "SELECT * FROM Equipments";
+
+    await pool.query(query, async (error, results, fields) => {
+      if (error) throw error;
+      console.log(results);
+      return results;
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const addEquipment = async (name: string, quantity: number) => {
+  try {
+    const query = "INSERT INTO Equipments(name, quantity) VALUES(?, ?)";
+
+    await pool.query(query, [name, quantity], (error, results, fields) => {
+      if (error) throw error;
+      console.log("results", results);
+      return results;
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateEquipment = async (id: string, name: string) => {
+  try {
+    const query = "UPDATE Equipments SET name = ? WHERE id = ?";
+
+    await pool.query(query, [name, id], (error, results, fields) => {
+      if (error) throw error;
+      console.log("results", results);
+      return results;
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteEquipment = async (id: string) => {
+  try {
+    const query = "DELETE FROM Equipments WHERE id = ?";
+
+    await pool.query(query, [id], (error, results, fields) => {
+      if (error) throw error;
+      console.log("results", results);
+      return results;
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   fetchPreferredClassrooms,
   insertPreferredClassroom,
   modifyPreferredClassroom,
   removePreferredClassroom,
+  fetchEquipment,
+  addEquipment,
+  updateEquipment,
+  deleteEquipment,
 };

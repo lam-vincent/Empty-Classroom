@@ -61,7 +61,7 @@
 
         <div class="display-case">
 
-          <RoomCapsule v-for="(room, index) in recommendedRooms" :key="index" :room="room"
+          <RoomCapsule v-for="(room, index) in recommendedData.currentRecommendedRooms" :key="index" :room="room"
             @click="() => openModalDetails('modalRoomDetails')" />
 
           <button @click="toggleForm" v-show="!showForm">Add Room</button>
@@ -86,7 +86,7 @@
           </div>
 
           <div class="display-case">
-            <EquipmentCapsule v-for="equipment in existingEquipment" :key="equipment.id" :equipment="equipment"
+            <EquipmentCapsule v-for="(equipment, index) in Equipment.currentEquipment" :key="index" :equipment="equipment"
               @click="() => openModalDetails('modalEquipmentDetails')" />
             <button @click="openModal('addEquipmentModal')">Add Equipment</button>
           </div>
@@ -122,7 +122,6 @@
   
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
-import { fetchAllRooms } from "../utils/fetchUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
 import EquipmentCapsule from "../components/EquipmentCapsule.vue";
 import Modal from "../components/Modal.vue";
@@ -139,35 +138,43 @@ export default {
 
   data() {
     return {
-      recommendedRooms: [] as { id: number; name: string }[],
       showForm: false,
       newRoomName: "",
-      existingEquipment: [],
       roomData: {
         fetchedRooms: [],
         currentRooms: [],
       },
+      preferData: {
+        fetchedPreferRooms: [],
+        currentPreferRooms: [],
+      },
+      recommendedData: {
+        fetchedRecommendedRooms: [],
+        currentRecommendedRooms: [],
+      },
+      Equipment: {
+        fetchedEquipment: [],
+        currentEquipment: [],
+      }
     };
   },
 
   beforeMount() {
     verifyToken();
+    this.fetchAllRooms();
+    this.fetchAllRecommendedRooms();
+    this.fetchAllEquipment();
   },
 
   mounted() {
-    this.fetchAllRecommendedRooms();
-    this.fetchAllRooms();
+    console.log("Dashboard mounted");
   },
 
   methods: {
 
-    fetchAllRooms() {
-      fetchAllRooms.call(this);
-    },
-
-    // Lifecycle hooks
-    handleSuccess(data: never[]) {
-      this.recommendedRooms = data;
+    // Axios methods
+    handleSuccess(response: any) {
+      console.log("response", response);
     },
 
     handleError(error: any) {
@@ -185,16 +192,43 @@ export default {
       this.showForm = !this.showForm;
     },
 
+    async fetchAllRooms() {
+      try {
+        const response = await axios.get('http://localhost:3000/rooms', {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
+        this.roomData.fetchedRooms = response.data;
+        this.roomData.currentRooms = [...this.roomData.fetchedRooms];
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+
     async fetchAllRecommendedRooms() {
       try {
         const userId: number = readToken().userId;
-        console.log(userId);
         const response = await axios.get(`http://localhost:3000/dashboard/recommended/${userId}`, {
           withCredentials: true, headers: {
             'Access-Control-Allow-Origin': 'http://localhost:5173/'
           }
         });
-        this.recommendedRooms = response.data;
+        this.preferData.fetchedPreferRooms = response.data.preferredClassrooms;
+        this.preferData.currentPreferRooms = [...this.preferData.fetchedPreferRooms];
+
+        // when id are the same and userId from Prefer table and userId from token are the same, push the room to recommendedData
+        this.preferData.currentPreferRooms.forEach((preferRoom: any) => {
+          this.roomData.fetchedRooms.forEach((room: any) => {
+            if (preferRoom.id_room === room.id_room) {
+              if (preferRoom.id_user === userId) {
+                this.recommendedData.currentRecommendedRooms.push(room as never);
+              }
+            }
+          });
+        });
+
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
@@ -202,10 +236,10 @@ export default {
     },
 
     addRecommendedRoom() {
-      this.recommendedRooms.push({
-        id: this.recommendedRooms.length + 1,
+      this.recommendedData.currentRecommendedRooms.push({
+        id: this.recommendedData.currentRecommendedRooms.length + 1,
         name: this.newRoomName,
-      });
+      } as never);
 
       const roomId: number = this.newRoomName.length + 1;
 
@@ -221,6 +255,40 @@ export default {
 
       this.newRoomName = "";
       this.toggleForm();
+    },
+
+    // Equipment methods
+    async fetchAllEquipment() {
+      try {
+        const response = await axios.get('http://localhost:3000/equipment', {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
+        this.Equipment.fetchedEquipment = response.data;
+        this.Equipment.currentEquipment = [...this.Equipment.fetchedEquipment];
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+
+    async addEquipment() {
+      try {
+        const response = await axios.post('http://localhost:3000/equipment', {
+          name: "test",
+          status: "test",
+          roomId: 1,
+        }, {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
+        console.log(response);
+        this.handleSuccess(response.data);
+      } catch (error) {
+        this.handleError(error);
+      }
     },
 
     // Modal methods
