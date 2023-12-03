@@ -65,9 +65,7 @@ export default {
     beforeMount() {
         verifyToken();
         this.userData.token = readToken();
-        console.log("EquipmentSection this.userData.token", this.userData.token.role);
         if (this.userData.token.role === "Admin") {
-            console.log("EquipmentSection this.userData.token.role === Admin");
             this.fetchAllEquipment();
         }
     },
