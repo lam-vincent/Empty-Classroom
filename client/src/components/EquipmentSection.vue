@@ -106,8 +106,11 @@ export default {
                     }
                 });
                 debugger;
-                this.Equipment.fetchedEquipment = response.data;
+                console.log("fetchAllEquipment response.data.equipment", response.data.equipment);
+                this.Equipment.fetchedEquipment = response.data.equipment;
+                console.log("fetchAllEquipment this.Equipment.fetchedEquipment", this.Equipment.fetchedEquipment);
                 this.Equipment.currentEquipment = [...this.Equipment.fetchedEquipment];
+                console.log("fetchAllEquipment this.Equipment.currentEquipment", this.Equipment.currentEquipment);
                 this.handleSuccess(response.data);
             } catch (error) {
                 this.handleError(error);

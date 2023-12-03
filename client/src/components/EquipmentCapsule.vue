@@ -1,11 +1,11 @@
 <template>
     <div class="equipment-capsule">
         <div class="equipment-image">
-            <img :src="equipment.image" :alt="equipment.name" />
+            <img src="computer-room1.jpg" alt="equipment image" />
         </div>
         <div class="equipment-details">
-            <h3>{{ equipment.name }}</h3>
-            <p>Status: {{ equipment.status }}</p>
+            <h3>{{ equipment.Equipment_Name }}</h3>
+            <p>Type: {{ equipment.Equipment_Type }}</p>
         </div>
     </div>
 </template>

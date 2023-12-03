@@ -101,7 +101,6 @@ export default {
                 });
                 this.roomData.fetchedRooms = response.data;
                 this.roomData.currentRooms = [...this.roomData.fetchedRooms];
-                console.log("fetchAllRooms this.roomData.currentRooms", this.roomData.currentRooms);
                 this.handleSuccess(response.data);
             } catch (error) {
                 this.handleError(error);
@@ -119,7 +118,6 @@ export default {
 
                 this.preferData.fetchedPreferRooms = response.data.preferredClassrooms;
                 this.preferData.currentPreferRooms = [...this.preferData.fetchedPreferRooms];
-                console.log("fetchAllRecommendedRooms this.preferData.currentPreferRooms", this.preferData.currentPreferRooms);
 
                 // when id are the same and userId from Prefer table and userId from token are the same, push the room to recommendedData
                 this.preferData.currentPreferRooms.forEach((preferRoom: any) => {

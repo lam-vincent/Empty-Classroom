@@ -43,7 +43,7 @@ router.delete(
 );
 
 // CRUD routes for equipment. These routes are protected by an admin middleware.
-router.get("/equipment", authMiddleware, isAdminMiddleware);
+router.get("/equipment", authMiddleware, isAdminMiddleware, getEquipment);
 router.post("/equipment", authMiddleware, isAdminMiddleware, addEquipment);
 router.put(
   "/equipment/:id",
