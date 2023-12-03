@@ -26,6 +26,7 @@ export type Room = {
   Room_Location: string;
   Room_State: string;
   Room_Category: string;
+  Room_reservations?: any;
 };
 
 export type Equipment = {

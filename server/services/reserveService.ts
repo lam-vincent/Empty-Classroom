@@ -1,6 +1,17 @@
 import { pool } from "../config/database";
 import { Reserve } from "../types/types";
 
+const fetchAllReservations = async () => {
+  const query = "SELECT * FROM Reserve";
+  return new Promise<Reserve[]>(async (resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
+  });
+};
+
 const createReservation = async (reservationData: any) => {
   const query =
     "INSERT INTO Reserve(id_room, id_user, Title, Description, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?)";
@@ -61,6 +72,7 @@ export default {
   createReservation,
   fetchReservationByUser,
   fetchReservationByRoom,
+  fetchAllReservations,
   updateReservation,
   deleteReservation,
 };

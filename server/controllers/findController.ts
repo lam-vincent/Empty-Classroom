@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import findService from "../services/findService";
+import reserveService from "../services/reserveService";
 
 export const getAllRooms = async (req: Request, res: Response) => {
   try {

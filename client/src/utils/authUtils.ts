@@ -1,7 +1,7 @@
 import router from "../router";
 
 const verifyToken = () => {
-  if (!document.cookie.includes("auth")) {
+  if (!document.cookie.includes("auth") || isDateExpired(readToken().exp)) {
     router.push("/login");
   }
 };
@@ -18,6 +18,13 @@ const logout = () => {
     document.cookie = "";
     router.push("/login");
   }
+};
+
+const isDateExpired = (timestamp) => {
+  const timestampInMilliseconds = timestamp * 1000;
+  const currentDate = new Date();
+  const providedDate = new Date(timestampInMilliseconds);
+  return providedDate < currentDate;
 };
 
 const checkPermissions = (userRole: string, action: string): boolean => {

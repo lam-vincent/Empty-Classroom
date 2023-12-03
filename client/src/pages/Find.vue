@@ -16,6 +16,12 @@
         <div class="item-list" ref="itemList">
             <RoomCapsule v-for="(objet) in roomData.currentRooms" :room="objet"/>
         </div>
+        <section>
+          <ModalDetails ref="modalRoomDetails">
+                <h3 slot="header">Custom Header</h3>
+                <!-- Your custom content here -->
+          </ModalDetails>
+        </section>
     </div>
   </main-layout>
 </template>
@@ -23,6 +29,7 @@
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
 import RoomCapsule from "../components/RoomCapsule.vue";
+import ModalDetails from "../components/ModalDetails.vue";
 import axios from 'axios';
 
 export default {
@@ -57,7 +64,7 @@ export default {
     this.fetchAllRooms();
   },
   mounted() {
-    // console.log("test");
+    // const myComponent:Modal = this.$refs.modalRoomDetails;
   },
   methods: {
     resetSearchOptions () {
@@ -125,6 +132,7 @@ export default {
         });
         this.roomData.fetchedRooms = response.data;
         this.roomData.currentRooms = [...this.roomData.fetchedRooms];
+        console.log(response.data);
         this.handleSuccess(response.data);
       } catch (error) {
         this.handleError(error);
