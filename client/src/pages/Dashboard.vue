@@ -73,6 +73,11 @@
 
         </div>
 
+        <ModalDetails ref="modalRoomDetails" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
+        </ModalDetails>
+
         <!-- Equipment Section -->
         <section class="equipment">
           <div class="equipment-title">
@@ -92,27 +97,20 @@
           </div>
         </section>
 
-        <!-- Modal Section -->
-        <Modal ref="addEquipmentModal" @close="closeModal">
-          <h3 slot="header">Custom Header</h3>
-          <!-- Your custom content here -->
-        </Modal>
-
         <Modal ref="lightBulbModal" @close="closeModal">
           <h3 slot="header">Custom Header</h3>
           <!-- Your custom content here -->
         </Modal>
 
-        <!-- Modal Details Section -->
-        <ModalDetails ref="modalRoomDetails" @close="closeModal">
-          <h3 slot="header">Custom Header</h3>
-          <!-- Your custom content here -->
-        </ModalDetails>
-
         <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
           <h3 slot="header">Custom Header</h3>
           <!-- Your custom content here -->
         </ModalDetails>
+
+        <Modal ref="addEquipmentModal" @close="closeModal">
+          <h3 slot="header">Custom Header</h3>
+          <!-- Your custom content here -->
+        </Modal>
 
       </section>
 
@@ -183,7 +181,6 @@ export default {
 
     // Category methods
     redirectToFilteredRooms(category: string) {
-      // navigate to /find with the category as a query parameter
       this.$router.push({ path: '/find', query: { category } });
     },
 
@@ -215,6 +212,7 @@ export default {
             'Access-Control-Allow-Origin': 'http://localhost:5173/'
           }
         });
+
         this.preferData.fetchedPreferRooms = response.data.preferredClassrooms;
         this.preferData.currentPreferRooms = [...this.preferData.fetchedPreferRooms];
 
