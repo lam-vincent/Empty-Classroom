@@ -5,12 +5,12 @@
                 <div class="modal-container">
 
                     <!-- return button -->
-                    <div class="return-button" @click="close">
+                    <button class="return-button" @click="close">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M15.5 5.5L8.5 12.5L15.5 19.5" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
-                    </div>
+                    </button>
                     <!-- image -->
                     <div class="image">
                         <img src="" alt="image" />
