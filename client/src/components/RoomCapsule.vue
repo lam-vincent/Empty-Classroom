@@ -9,22 +9,22 @@
         </div>
 
 
-        <ModalDetails ref="modalRoomDetails" @close="closeModal">
-            <!-- <template #header>
-                <h2>{{ room.Room_Building }} {{
-                    room.Room_Name }}</h2>
-            </template>
-
-            <template #body>
-                <p>Room Type: {{ room.Room_Type }}</p>
-            </template>
-
-            <template #footer>
-                <p>Your Custom Footer</p>
-            </template> -->
-        </ModalDetails>
-
     </div>
+
+    <ModalDetails ref="modalRoomDetails" @close="closeModal">
+        <!-- <template #header>
+                    <h2>{{ room.Room_Building }} {{
+                        room.Room_Name }}</h2>
+                </template>
+    
+                <template #body>
+                    <p>Room Type: {{ room.Room_Type }}</p>
+                </template>
+    
+                <template #footer>
+                    <p>Your Custom Footer</p>
+                </template> -->
+    </ModalDetails>
 </template>
   
 <script lang="ts">
