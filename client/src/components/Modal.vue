@@ -70,8 +70,8 @@
                     <!-- form input 6 -->
                     <div class="form-input">
                         <slot name="form-input-6">
-                            <label for="form-input-6">Category</label>
-                            <input type="text" placeholder="Classroom" />
+                            <!-- <label for="form-input-6">Category</label>
+                            <input type="text" placeholder="Classroom" /> -->
                         </slot>
                     </div>
                     <!-- modal button -->

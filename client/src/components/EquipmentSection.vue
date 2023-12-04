@@ -18,18 +18,48 @@
         </div>
 
         <Modal ref="lightBulbModal" @close="closeModal">
-            <h3 slot="header">Custom Header</h3>
-            <!-- Your custom content here -->
+            <template v-slot:header-title>
+                <h3>Congrats, if you see this message, it means that you are an admin.</h3>
+            </template>
+
         </Modal>
 
         <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
-            <h3 slot="header">Custom Header</h3>
-            <!-- Your custom content here -->
+
         </ModalDetails>
 
         <Modal ref="addEquipmentModal" @close="closeModal">
-            <h3 slot="header">Custom Header</h3>
-            <!-- Your custom content here -->
+            <template v-slot:header-title>
+                <h3>Add Equipment</h3>
+            </template>
+            <template v-slot:form-input-1>
+                <label for="form-input-1">Name</label>
+                <input type="text" placeholder="Desk" />
+            </template>
+            <template v-slot:form-input-2>
+                <label for="form-input-2">Type</label>
+                <input type="text" placeholder="Furniture" />
+            </template>
+            <template v-slot:form-input-description>
+                <label for="form-input-description">Description</label>
+                <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
+                    placeholder="Write the Description here."></textarea>
+            </template>
+            <template v-slot:form-input-3>
+                <label for="form-input-3">Location</label>
+                <input type="text" placeholder="On the floor" />
+            </template>
+            <template v-slot:form-input-4>
+                <label for="form-input-4">Status</label>
+                <input type="text" placeholder="Operational" />
+            </template>
+            <template v-slot:form-input-5>
+                <label for="form-input-5">Require</label>
+                <input type="text" placeholder="Nothing" />
+            </template>
+            <template v-slot:modal-button>
+                <button @click="addEquipment">Add Equipment</button>
+            </template>
         </Modal>
     </section>
 </template>

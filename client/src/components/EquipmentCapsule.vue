@@ -1,5 +1,5 @@
 <template>
-    <div class="equipment-capsule">
+    <div class="equipment-capsule" @click="openModalDetails('modalEquipmentDetails')">
         <div class="equipment-image">
             <img src="computer-room1.jpg" alt="equipment image" />
         </div>
@@ -8,11 +8,40 @@
             <p>Type: {{ equipment.Equipment_Type }}</p>
         </div>
     </div>
+
+    <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
+        <template v-slot:title>
+            <h1>{{ equipment.Equipment_Name }}</h1>
+        </template>
+        <template v-slot:engagement-tag>
+            <p>{{ equipment.Equipment_Type }}</p>
+        </template>
+        <template v-slot:second-title>
+            <p>{{ equipment.Equipment_Location }} - {{ equipment.Equipment_Status }}</p>
+        </template>
+        <template v-slot:description>
+            <p>{{ equipment.Equipment_Description }}</p>
+        </template>
+        <template v-slot:additonal-information-before-modal-button>
+            <p>Click on the button to edit the equipment.
+                If you can see this, congrats it means that
+                you are an admin.</p>
+        </template>
+        <template v-slot:modal-button>
+            <span>Edit the Equipment</span>
+        </template>
+    </ModalDetails>
 </template>
   
 <script lang="ts">
 
+import ModalDetails from "./ModalDetails.vue";
+
 export default {
+    name: "EquipmentCapsule",
+    components: {
+        ModalDetails,
+    },
     props: {
         equipment: {
             type: Object,
@@ -23,6 +52,20 @@ export default {
     beforeMount() {
         console.log("EquipmentCapsule mounted: this.equipment", this.equipment);
     },
+
+    methods: {
+        // Modal methods
+        openModal(reference: string) {
+            (this.$refs[reference] as any).open();
+            console.log('Modal opened openModal');
+        },
+        openModalDetails(reference: string) {
+            (this.$refs[reference] as any).open();
+        },
+        closeModal() {
+            console.log('Modal closed');
+        },
+    }
 };
 </script>
   

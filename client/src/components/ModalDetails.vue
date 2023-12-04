@@ -60,8 +60,6 @@
                         <!-- description -->
                         <div class="description">
                             <slot name="description">
-                                <p>You can find 30 desks and chairs and ...
-                                    The classroom is in the building A.</p>
                             </slot>
                         </div>
                         <!-- requirement -->
@@ -76,13 +74,18 @@
                         <div class="wrapper">
                             <!-- additonal information before modal button -->
                             <div class="additonal-information-before-modal-button">
-                                <p>Click on the button to reserve the room.
-                                    You will get to see the availability through
-                                    timestamp there.</p>
+
+                                <slot name="additonal-information-before-modal-button">
+                                </slot>
+
                             </div>
                             <!-- modal button -->
                             <div class="modal-button">
-                                <button>Reserve Now</button>
+                                <button>
+                                    <slot name="modal-button">
+
+                                    </slot>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -185,7 +188,7 @@ export default defineComponent({
 .title h1 {
     font-size: 24px;
     font-weight: 600;
-    color: #1E1E1E;
+    color: black
 }
 
 

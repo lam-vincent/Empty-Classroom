@@ -14,16 +14,23 @@
         <template v-slot:title>
             <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
         </template>
+        <template v-slot:engagement-tag>
+            <p>{{ room.Room_State }}</p>
+        </template>
         <template v-slot:second-title>
             <p>{{ room.Room_Campus }} - {{ room.Room_Location }}</p>
         </template>
         <template v-slot:description>
-            <p>You can find desks, chairs and a whiteboard in the classroom. The classroom is in the building {{
-                room.Room_Building }}.
+            <p>The room is in the building {{ room.Room_Building }}.
             </p>
         </template>
-        <template v-slot:engagement-tag>
-            <p>Available</p>
+        <template v-slot:additonal-information-before-modal-button>
+            <p>Click on the button to reserve the room.
+                You will get to see the availability through
+                timestamp there.</p>
+        </template>
+        <template v-slot:modal-button>
+            <span>Reserve Now</span>
         </template>
 
     </ModalDetails>
