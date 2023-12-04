@@ -28,19 +28,55 @@
                 you are an admin.</p>
         </template>
         <template v-slot:modal-button>
-            <button>Edit the Equipment</button>
+            <button @click="openModalDetails('EditEquipment')">Edit the Equipment</button>
         </template>
     </ModalDetails>
+
+    <Modal ref="EditEquipment" @close="closeModal">
+        <template v-slot:header-title>
+            <h3>Edit Equipment</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Name</label>
+            <input type="text" placeholder="Desk" />
+        </template>
+        <template v-slot:form-input-2>
+            <label for="form-input-2">Type</label>
+            <input type="text" placeholder="Furniture" />
+        </template>
+        <template v-slot:form-input-description>
+            <label for="form-input-description">Description</label>
+            <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
+                placeholder="Write the Description here."></textarea>
+        </template>
+        <template v-slot:form-input-3>
+            <label for="form-input-3">Location</label>
+            <input type="text" placeholder="On the floor" />
+        </template>
+        <template v-slot:form-input-4>
+            <label for="form-input-4">Status</label>
+            <input type="text" placeholder="Operational" />
+        </template>
+        <template v-slot:form-input-5>
+            <label for="form-input-5">Require</label>
+            <input type="text" placeholder="Nothing" />
+        </template>
+        <template v-slot:modal-button>
+            <button>Edit Equipment</button>
+        </template>
+    </Modal>
 </template>
   
 <script lang="ts">
 
 import ModalDetails from "./ModalDetails.vue";
+import Modal from "./Modal.vue";
 
 export default {
     name: "EquipmentCapsule",
     components: {
         ModalDetails,
+        Modal,
     },
     props: {
         equipment: {
@@ -311,6 +347,116 @@ export default {
     font-weight: 600;
     color: white;
     cursor: pointer;
+}
+
+
+/* Modal styling */
+h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-container {
+    width: 300px;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.header-return-button {
+    display: flex;
+    justify-content: center;
+}
+
+.header-return-button button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.form-input-description {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-input-description label,
+.form-input label {
+    width: auto;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--dark-gray);
+}
+
+.form-input-description textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.form-input input {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.modal-button {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-button button {
+    background-color: var(--blue);
+    color: #fff;
+    padding: 10px 80px;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    outline: none;
 }
 </style>
   

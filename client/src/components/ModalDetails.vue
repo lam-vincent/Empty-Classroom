@@ -182,7 +182,9 @@ export default defineComponent({
 }
 
 .title {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .title h1 {

@@ -109,6 +109,7 @@ export default defineComponent({
 </script>
   
 <style scoped>
+/* Modal styling */
 h3 {
     margin: 0;
     font-size: 1.25rem;
