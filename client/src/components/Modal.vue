@@ -208,17 +208,13 @@ header {
 }
 
 .modal-button button {
-    background-color: #1e88e5;
+    background-color: var(--blue);
     color: #fff;
     padding: 10px 80px;
     border: none;
     border-radius: 1rem;
     cursor: pointer;
     outline: none;
-}
-
-.modal-button button:hover {
-    background-color: #1976d2;
 }
 </style>
   

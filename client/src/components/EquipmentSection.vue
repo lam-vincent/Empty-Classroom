@@ -24,9 +24,6 @@
 
         </Modal>
 
-        <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
-
-        </ModalDetails>
 
         <Modal ref="addEquipmentModal" @close="closeModal">
             <template v-slot:header-title>
@@ -193,6 +190,115 @@ button {
 
 button:hover {
     color: var(--dark-blue);
+}
+
+/* Modal styling */
+h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-container {
+    width: 300px;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.header-return-button {
+    display: flex;
+    justify-content: center;
+}
+
+.header-return-button button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.form-input-description {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-input-description label,
+.form-input label {
+    width: auto;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--dark-gray);
+}
+
+.form-input-description textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.form-input input {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.modal-button {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-button button {
+    background-color: var(--blue);
+    color: #fff;
+    padding: 10px 80px;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    outline: none;
 }
 </style>
   
