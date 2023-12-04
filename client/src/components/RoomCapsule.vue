@@ -1,5 +1,5 @@
 <template>
-    <div class="room-card" @click="showRoom();">
+    <div class="room-card" @click="() => openModalDetails('modalRoomDetails')">
         <div class="room-card-image">
             <img src="/classroom1.jpg" alt="Room Image" />
         </div>
@@ -7,10 +7,28 @@
             <h2>{{ room.Room_Building + room.Room_Name }}</h2>
             <p>{{ room.Room_State }}</p>
         </div>
+
+
+        <ModalDetails ref="modalRoomDetails" @close="closeModal">
+            <!-- <template #header>
+                <h2>{{ room.Room_Building }} {{
+                    room.Room_Name }}</h2>
+            </template>
+
+            <template #body>
+                <p>Room Type: {{ room.Room_Type }}</p>
+            </template>
+
+            <template #footer>
+                <p>Your Custom Footer</p>
+            </template> -->
+        </ModalDetails>
+
     </div>
 </template>
   
 <script lang="ts">
+import ModalDetails from "./ModalDetails.vue";
 
 export default {
     name: "RoomCapsule",
@@ -20,10 +38,21 @@ export default {
             required: true,
         },
     },
+    components: {
+        ModalDetails,
+    },
     methods: {
-        showRoom() {
-            console.log("showRoom clicked");
-        }
+        // Modal methods
+        openModal(reference: string) {
+            (this.$refs[reference] as any).open();
+            console.log('Modal opened openModal');
+        },
+        openModalDetails(reference: string) {
+            (this.$refs[reference] as any).open();
+        },
+        closeModal() {
+            console.log('Modal closed');
+        },
     }
 };
 </script>
@@ -51,9 +80,9 @@ export default {
     overflow: hidden;
 }
 
-.room-card-image img{
-    height:100%;
-    width:100%;
+.room-card-image img {
+    height: 100%;
+    width: 100%;
 }
 
 .room-card-content {

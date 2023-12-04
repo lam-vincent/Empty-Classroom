@@ -19,6 +19,10 @@ export default {
             required: true,
         },
     },
+
+    beforeMount() {
+        console.log("EquipmentCapsule mounted: this.equipment", this.equipment);
+    },
 };
 </script>
   

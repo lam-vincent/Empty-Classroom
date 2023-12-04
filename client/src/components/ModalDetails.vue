@@ -4,26 +4,84 @@
             <div class="modal-wrapper">
                 <div class="modal-container">
 
-                    <div class="modal-header">
-                        <slot name="header">
-                            Default Header
+                    <!-- return button -->
+                    <div class="return-button" @click="close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15.5 5.5L8.5 12.5L15.5 19.5" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <!-- image -->
+                    <div class="image">
+                        <img src="" alt="image" />
+                    </div>
+                    <!-- title -->
+                    <div class="title">
+                        <slot name="title">
+                            <h1>title</h1>
+                        </slot>
+                    </div>
+                    <!-- engagement tag -->
+                    <div class="engagement-tag">
+                        <slot name="engagement-tag">
+                            <p>engagement tag</p>
+                        </slot>
+                    </div>
+                    <!-- second title -->
+                    <div class="second-title">
+                        <slot name="second-title">
+                            <h2>second title</h2>
+                        </slot>
+                    </div>
+                    <!-- capsule with blue svg -->
+                    <div class="capsule-with-blue-svg">
+                        <slot name="capsule-with-blue-svg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M15.5 5.5L8.5 12.5L15.5 19.5" stroke="#1E1E1E" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </slot>
+                    </div>
+                    <!-- capsule with gray svg -->
+                    <div class="capsule-with-gray-svg">
+                        <slot name="capsule-with-gray-svg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M15.5 5.5L8.5 12.5L15.5 19.5" stroke="#1E1E1E" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </slot>
+                    </div>
+                    <!-- description title -->
+                    <div class="description-title">
+                        <slot name="description-title">
+                            <h2>description title</h2>
+                        </slot>
+                    </div>
+                    <!-- description -->
+                    <div class="description">
+                        <slot name="description">
+                            <p>description</p>
+                        </slot>
+                    </div>
+                    <!-- requirement -->
+                    <div class="requirement">
+                        <slot name="requirement">
+                            <p>requirement</p>
+                        </slot>
+                    </div>
+                    <!-- additonal information before modal button -->
+                    <div class="additonal-information-before-modal-button">
+                        <slot name="additonal-information-before-modal-button">
+                            <p>additonal information before modal button</p>
+                        </slot>
+                    </div>
+                    <!-- modal button -->
+                    <div class="modal-button">
+                        <slot name="modal-button">
+                            <button>modal button</button>
                         </slot>
                     </div>
 
-                    <div class="modal-body">
-                        <slot name="body">
-                            Default Body
-                        </slot>
-                    </div>
-
-                    <div class="modal-footer">
-                        <slot name="footer">
-                            Default Footer
-                        </slot>
-                        <button class="modal-default-button" @click="close">
-                            OK
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -78,25 +136,6 @@ export default defineComponent({
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-    margin-top: 0;
-    color: #42b983;
-}
-
-.modal-body {
-    margin: 20px 0;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-default-button {
-    height: 30px;
 }
 </style>
   

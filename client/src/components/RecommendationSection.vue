@@ -8,8 +8,7 @@
 
         <div class="display-case">
 
-            <RoomCapsule v-for="(room, index) in recommendedData.currentRecommendedRooms" :key="index" :room="room"
-                @click="() => openModalDetails('modalRoomDetails')" />
+            <RoomCapsule v-for="(room, index) in recommendedData.currentRecommendedRooms" :key="index" :room="room" />
 
             <button @click="toggleForm" v-show="!showForm">Add Room</button>
             <form v-show="showForm" @submit.prevent="addRecommendedRoom">
@@ -20,35 +19,17 @@
 
         </div>
 
-        <ModalDetails ref="modalRoomDetails" @close="closeModal">
-            <template #header>
-                <h3>Your Custom Header</h3>
-            </template>
-
-            <template #body>
-                <p>Your Custom Body</p>
-            </template>
-
-            <template #footer>
-                <p>Your Custom Footer</p>
-            </template>
-        </ModalDetails>
-
     </section>
 </template>
   
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
 import RoomCapsule from "./RoomCapsule.vue";
-import Modal from "./Modal.vue";
-import ModalDetails from "./ModalDetails.vue";
 import axios from "axios";
 
 export default {
     components: {
         RoomCapsule,
-        Modal,
-        ModalDetails,
     },
 
     data() {
@@ -165,19 +146,6 @@ export default {
 
             this.newRoomName = "";
             this.toggleForm();
-        },
-
-        // Modal methods
-        openModal(reference: string) {
-            (this.$refs[reference] as any).open();
-            console.log('Modal opened openModal');
-        },
-        openModalDetails(reference: string) {
-            (this.$refs[reference] as any).open();
-            console.log('Modal opened openModalDetails');
-        },
-        closeModal() {
-            console.log('Modal closed');
         },
     },
 };
