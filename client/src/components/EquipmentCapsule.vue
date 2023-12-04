@@ -35,6 +35,7 @@
     <Modal ref="EditEquipment" @close="closeModal">
         <template v-slot:header-title>
             <h3>Edit Equipment</h3>
+            <h3>for {{ equipment.Equipment_Name }}</h3>
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
