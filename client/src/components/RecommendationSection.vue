@@ -155,7 +155,6 @@ export default {
 .recommendation {
     display: flex;
     flex-direction: column;
-    margin: 20px;
 }
 
 .display-case {

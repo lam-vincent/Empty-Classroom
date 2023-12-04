@@ -7,23 +7,25 @@
             <h2>{{ room.Room_Building + room.Room_Name }}</h2>
             <p>{{ room.Room_State }}</p>
         </div>
-
-
     </div>
 
     <ModalDetails ref="modalRoomDetails" @close="closeModal">
-        <!-- <template #header>
-                    <h2>{{ room.Room_Building }} {{
-                        room.Room_Name }}</h2>
-                </template>
-    
-                <template #body>
-                    <p>Room Type: {{ room.Room_Type }}</p>
-                </template>
-    
-                <template #footer>
-                    <p>Your Custom Footer</p>
-                </template> -->
+
+        <template v-slot:title>
+            <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
+        </template>
+        <template v-slot:second-title>
+            <p>{{ room.Room_Campus }} - {{ room.Room_Location }}</p>
+        </template>
+        <template v-slot:description>
+            <p>You can find desks, chairs and a whiteboard in the classroom. The classroom is in the building {{
+                room.Room_Building }}.
+            </p>
+        </template>
+        <template v-slot:engagement-tag>
+            <p>Available</p>
+        </template>
+
     </ModalDetails>
 </template>
   
@@ -56,7 +58,7 @@ export default {
     }
 };
 </script>
-  
+
 <style scoped>
 .room-card {
     display: flex;
@@ -64,17 +66,18 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 250px;
-    margin-right: 25px;
-    margin-bottom: 25px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    min-width: 200px;
 }
 
 .room-card-image {
     width: 100%;
-    height: 100px;
+    object-fit: cover;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     overflow: hidden;
@@ -105,4 +108,3 @@ export default {
     transform: translateY(-20px);
 }
 </style>
-  

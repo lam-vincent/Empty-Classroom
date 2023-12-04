@@ -33,7 +33,9 @@ export default {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    min-width: 200px;
 }
 
 .equipment-image {

@@ -23,28 +23,24 @@
                             <!-- title -->
                             <div class="title">
                                 <slot name="title">
-                                    <h1>Classroom A101</h1>
                                 </slot>
                             </div>
                             <!-- engagement tag -->
                             <div class="engagement-tag">
                                 <slot name="engagement-tag">
-                                    <p>Available</p>
                                 </slot>
                             </div>
                         </div>
                         <!-- second title -->
                         <div class="second-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" width="16px" height="16px">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                            </svg>
                             <slot name="second-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" width="16px" height="16px">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-
-                                <h2>Campus République - 1st floor</h2>
                             </slot>
                         </div>
                         <!-- capsule with blue svg -->
@@ -71,26 +67,22 @@
                         <!-- requirement -->
                         <div class="requirement">
                             <slot name="requirement">
-                                <p>Require</p>
+                                <!-- <p>Require</p>
                                 <span>nothing</span>
-                                <span>HDMI cable</span>
+                                <span>HDMI cable</span> -->
                             </slot>
                         </div>
 
                         <div class="wrapper">
                             <!-- additonal information before modal button -->
                             <div class="additonal-information-before-modal-button">
-                                <slot name="additonal-information-before-modal-button">
-                                    <p>Click on the button to reserve the room.
-                                        You will get to see the availability through
-                                        timestamp there.</p>
-                                </slot>
+                                <p>Click on the button to reserve the room.
+                                    You will get to see the availability through
+                                    timestamp there.</p>
                             </div>
                             <!-- modal button -->
                             <div class="modal-button">
-                                <slot name="modal-button">
-                                    <button>Reserve Now</button>
-                                </slot>
+                                <button>Reserve Now</button>
                             </div>
                         </div>
                     </div>
@@ -206,12 +198,12 @@ export default defineComponent({
     border-width: 8px;
     border-color: white;
     transform: translateY(-2rem);
+    color: white;
 }
 
 .engagement-tag p {
     font-size: 14px;
     font-weight: 600;
-    color: white;
 }
 
 .second-title {
