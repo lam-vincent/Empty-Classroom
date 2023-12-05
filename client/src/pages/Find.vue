@@ -22,8 +22,7 @@
 
 <script lang="ts">
 import { verifyToken, readToken } from "../utils/authUtils";
-import RoomCapsule from "../components/RoomCapsule.vue";
-import ModalDetails from "../components/ModalDetails.vue";
+import RoomCapsule from "../components/Capsule/RoomCapsule.vue";
 import axios from 'axios';
 
 export default {
@@ -56,9 +55,6 @@ export default {
     verifyToken();
     this.userData.token = readToken();
     this.fetchAllRooms();
-  },
-  mounted() {
-    // const myComponent:Modal = this.$refs.modalRoomDetails;
   },
   methods: {
     resetSearchOptions() {

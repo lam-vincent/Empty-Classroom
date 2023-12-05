@@ -73,9 +73,9 @@
 </template>
   
 <script lang="ts">
-import { verifyToken, readToken } from "../utils/authUtils";
-import ModalDetails from "./ModalDetails.vue";
-import Modal from "./Modal.vue";
+import { verifyToken, readToken } from "../../utils/authUtils";
+import ModalDetails from "../ModalDetails.vue";
+import Modal from "../Modal.vue";
 
 export default {
     name: "EquipmentCapsule",

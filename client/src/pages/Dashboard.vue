@@ -35,14 +35,14 @@
 <script lang="ts">
 import { verifyToken } from "../utils/authUtils";
 
-import RoomCapsule from "../components/RoomCapsule.vue";
-import EquipmentCapsule from "../components/EquipmentCapsule.vue";
+import RoomCapsule from "../components/Capsule/RoomCapsule.vue";
+import EquipmentCapsule from "../components/Capsule/EquipmentCapsule.vue";
 import Modal from "../components/Modal.vue";
 import ModalDetails from "../components/ModalDetails.vue";
 
-import CategoriesSection from "../components/CategoriesSection.vue";
-import RecommendationSection from "../components/RecommendationSection.vue";
-import EquipmentSection from "../components/EquipmentSection.vue";
+import CategoriesSection from "../components/Section/CategoriesSection.vue";
+import RecommendationSection from "../components/Section/RecommendationSection.vue";
+import EquipmentSection from "../components/Section/EquipmentSection.vue";
 
 
 export default {

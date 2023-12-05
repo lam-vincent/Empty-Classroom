@@ -23,8 +23,8 @@
 </template>
   
 <script lang="ts">
-import { verifyToken, readToken } from "../utils/authUtils";
-import RoomCapsule from "./RoomCapsule.vue";
+import { verifyToken, readToken } from "../../utils/authUtils";
+import RoomCapsule from "../Capsule/RoomCapsule.vue";
 import axios from "axios";
 
 export default {

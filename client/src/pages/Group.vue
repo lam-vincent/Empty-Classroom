@@ -41,8 +41,8 @@
 
 <script lang="ts">
 import axios from "axios"
-import GroupCapsule from "../components/GroupCapsule.vue";
-import { verifyToken, readToken } from "../utils/authUtils";
+import GroupCapsule from "../components/Capsule/GroupCapsule.vue";
+import { readToken } from "../utils/authUtils";
 
 export default {
   beforeMount() {
