@@ -23,7 +23,7 @@
 
       <div class="register-form">
         <h1>Register</h1>
-        <form @submit="registerUser">
+        <form @submit.prevent="registerUser()">
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" v-model="registrationData.username" required />
@@ -40,7 +40,7 @@
             <label for="role">Role</label>
             <select v-model="registrationData.role">
               <option value="user">User</option>
-              <option value="admin">Moderator</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           <a href="/login">Already have an account? Sign in here.</a>
@@ -70,9 +70,10 @@ export default {
   methods: {
     registerUser() {
       axios
-        .post("http://localhost:3000/api/auth/register", this.registrationData)
+        .post("http://localhost:3000/server/auth/register", this.registrationData)
         .then((response) => {
           console.log(response);
+          alert("Registration success.. redirection");
           this.$router.push("/login");
         })
         .catch((error) => {

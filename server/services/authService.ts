@@ -1,9 +1,12 @@
 import { pool } from "../config/database";
 import bcrypt from "bcrypt";
-import jwt, { Secret } from "jsonwebtoken";
 import { User } from "../types/types";
 
-const registerUser = async (username: string, password: string) => {
+const registerUser = async (
+  username: string,
+  password: string,
+  role: string
+) => {
   try {
     const checkUsernameQuery = "SELECT * FROM users WHERE User_Name = ?";
     const checkUsernameResult = pool.query(
@@ -22,8 +25,8 @@ const registerUser = async (username: string, password: string) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const insertUserQuery =
-      "INSERT INTO users (User_Name, User_Password) VALUES (?, ?) ";
-    const insertUserValues = [username, hashedPassword];
+      "INSERT INTO users (User_Name, User_Password, User_Role) VALUES (?, ?, ?) ";
+    const insertUserValues = [username, hashedPassword, role];
     const insertUserResult = pool.query(insertUserQuery, insertUserValues);
 
     return insertUserResult;
