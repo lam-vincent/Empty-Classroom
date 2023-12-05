@@ -8,8 +8,8 @@
                         <!-- header title -->
                         <div class="header-title">
                             <slot name="header-title">
-                                <h3>Edit Room</h3>
-                                <h3>for Classroom A101</h3>
+                                <!-- <h3>Edit Room</h3>
+                                <h3>for Classroom A101</h3> -->
                             </slot>
                         </div>
                         <!-- header return button -->
@@ -27,44 +27,44 @@
                     <!-- form input 1 -->
                     <div class="form-input">
                         <slot name="form-input-1">
-                            <label for="form-input-1">Name</label>
-                            <input type="text" placeholder="101" />
+                            <!-- <label for="form-input-1">Name</label>
+                            <input type="text" placeholder="101" /> -->
                         </slot>
                     </div>
                     <!-- form input 2 -->
                     <div class="form-input">
                         <slot name="form-input-2">
-                            <label for="form-input-2">Building</label>
-                            <input type="text" placeholder="A" />
+                            <!-- <label for="form-input-2">Building</label>
+                            <input type="text" placeholder="A" /> -->
                         </slot>
                     </div>
                     <!-- form input description -->
                     <div class="form-input-description">
                         <slot name="form-input-description">
-                            <label for="form-input-description">Description</label>
+                            <!-- <label for="form-input-description">Description</label>
                             <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
-                                placeholder="You can find 30 desks and chairs and ... The classroom is in the building A."></textarea>
+                                placeholder="You can find 30 desks and chairs and ... The classroom is in the building A."></textarea> -->
                         </slot>
                     </div>
                     <!-- form input 3 -->
                     <div class="form-input">
                         <slot name="form-input-3">
-                            <label for="form-input-3">Campus</label>
-                            <input type="text" placeholder="République" />
+                            <!-- <label for="form-input-3">Campus</label>
+                            <input type="text" placeholder="République" /> -->
                         </slot>
                     </div>
                     <!-- form input 4 -->
                     <div class="form-input">
                         <slot name="form-input-4">
-                            <label for="form-input-4">Location</label>
-                            <input type="text" placeholder="1st Floor" />
+                            <!-- <label for="form-input-4">Location</label>
+                            <input type="text" placeholder="1st Floor" /> -->
                         </slot>
                     </div>
                     <!-- form input 5 -->
                     <div class="form-input">
                         <slot name="form-input-5">
-                            <label for="form-input-5">State</label>
-                            <input type="text" placeholder="Available" />
+                            <!-- <label for="form-input-5">State</label>
+                            <input type="text" placeholder="Available" /> -->
                         </slot>
                     </div>
                     <!-- form input 6 -->
@@ -77,7 +77,7 @@
                     <!-- modal button -->
                     <div class="modal-button">
                         <slot name="modal-button">
-                            <button>modal button</button>
+                            <!-- <button>modal button</button> -->
                         </slot>
                     </div>
 
