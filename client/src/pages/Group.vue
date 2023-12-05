@@ -44,9 +44,9 @@
 
 <script lang="ts">
 import axios from "axios"
-import GroupCapsule from "../components/GroupCapsule.vue";
+import GroupCapsule from "../components/Capsule/GroupCapsule.vue";
 import { generatePassword } from "../utils/utils";
-import { verifyToken, readToken } from "../utils/authUtils";
+import { readToken } from "../utils/authUtils";
 
 export default {
     beforeMount(){
@@ -116,15 +116,15 @@ export default {
           this.groupData.joinedGroups.length = 0;
           const userId = readToken().userId;
 
-          const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
-            element.Belonging.some((belonging) => belonging.id_user === userId)
-          );
-          // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
-          // Ajouter les éléments filtrés au tableau vide
-          this.groupData.joinedGroups.push(...elementsFiltres);
-        } 
-    },
-    components: { GroupCapsule }
+      const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
+        element.Belonging.some((belonging) => belonging.id_user === userId)
+      );
+      // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
+      // Ajouter les éléments filtrés au tableau vide
+      this.groupData.joinedGroups.push(...elementsFiltres);
+    }
+  },
+  components: { GroupCapsule }
 };
 </script>
 

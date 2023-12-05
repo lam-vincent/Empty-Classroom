@@ -62,10 +62,10 @@
 </template>
   
 <script lang="ts">
-import { verifyToken, readToken } from "../utils/authUtils";
-import EquipmentCapsule from "./EquipmentCapsule.vue";
-import Modal from "./Modal.vue";
-import ModalDetails from "./ModalDetails.vue";
+import { verifyToken, readToken } from "../../utils/authUtils";
+import EquipmentCapsule from "../Capsule/EquipmentCapsule.vue";
+import Modal from "../Modal.vue";
+import ModalDetails from "../ModalDetails.vue";
 import axios from "axios";
 
 export default {

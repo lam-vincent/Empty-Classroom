@@ -1,102 +1,125 @@
 <template>
-    <div class="equipment-capsule" @click="openModalDetails('modalEquipmentDetails')">
-        <div class="equipment-image">
-            <img src="computer-room1.jpg" alt="equipment image" />
+    <div class="room-card" @click="() => openModalDetails('modalRoomDetails')">
+        <div class="room-card-image">
+            <img src="/classroom1.jpg" alt="Room Image" />
         </div>
-        <div class="equipment-container">
-            <div class="equipment-details">
-                <h3>{{ equipment.Equipment_Name }}</h3>
-                <p>Type: {{ equipment.Equipment_Type }}</p>
-            </div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="black" width="20px" height="20px">
-                <path fill-rule="evenodd"
-                    d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
-                    clip-rule="evenodd" />
-            </svg>
+        <div class="room-card-content">
+            <h2>{{ room.Room_Building + room.Room_Name }}</h2>
+            <p>{{ room.Room_State }}</p>
         </div>
     </div>
 
-    <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
+    <ModalDetails ref="modalRoomDetails" @close="closeModal">
+
         <template v-slot:title>
-            <h1>{{ equipment.Equipment_Name }}</h1>
+            <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
+
+            <svg xmlns=" http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" width="24px" height="24px" style="transform: translateY(-2px); margin-left: 8px;"
+                @click="() => openModal('EditRoom')">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+            </svg>
         </template>
         <template v-slot:engagement-tag>
-            <p>{{ equipment.Equipment_Type }}</p>
+            <p>{{ room.Room_State }}</p>
         </template>
         <template v-slot:second-title>
-            <p>{{ equipment.Equipment_Location }} - {{ equipment.Equipment_Status }}</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                width="16px" height="16px">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            <p>{{ room.Room_Campus }} - {{ room.Room_Location }}</p>
         </template>
         <template v-slot:description>
-            <p>{{ equipment.Equipment_Description }}</p>
+            <p>The room is in the building {{ room.Room_Building }}.
+            </p>
         </template>
         <template v-slot:additonal-information-before-modal-button>
-            <p>Click on the button to edit the equipment.
-                If you can see this, congrats it means that
-                you are an admin.</p>
+            <p>Click on the button to reserve the room.
+                You will get to see the availability through
+                timestamp there.</p>
         </template>
         <template v-slot:modal-button>
-            <button @click="openModalDetails('EditEquipment')">Edit the Equipment</button>
+            <button>Reserve Now</button>
+
+            <button v-if="userData.token.role === 'Admin'" style="margin-top: 1rem; background-color: var(--red);">Delete
+                Room
+            </button>
         </template>
+
     </ModalDetails>
 
-    <Modal ref="EditEquipment" @close="closeModal">
+    <Modal ref="EditRoom" @close="closeModal">
         <template v-slot:header-title>
-            <h3>Edit Equipment</h3>
-            <h3>for {{ equipment.Equipment_Name }}</h3>
+            <h3>Edit Room</h3>
+            <h3>for {{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h3>
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
-            <input type="text" placeholder="Desk" />
+            <input type="text" placeholder="101" />
         </template>
         <template v-slot:form-input-2>
-            <label for="form-input-2">Type</label>
-            <input type="text" placeholder="Furniture" />
+            <label for="form-input-2">Building</label>
+            <input type="text" placeholder="A" />
         </template>
         <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
             <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
-                placeholder="Write the Description here."></textarea>
+                placeholder="Write Description Here"></textarea>
         </template>
         <template v-slot:form-input-3>
-            <label for="form-input-3">Location</label>
-            <input type="text" placeholder="On the floor" />
+            <label for="form-input-3">Campus</label>
+            <input type="text" placeholder="République" />
         </template>
         <template v-slot:form-input-4>
-            <label for="form-input-4">Status</label>
-            <input type="text" placeholder="Operational" />
+            <label for="form-input-4">Location</label>
+            <input type="text" placeholder="1st Floor" />
         </template>
         <template v-slot:form-input-5>
-            <label for="form-input-5">Require</label>
-            <input type="text" placeholder="Nothing" />
+            <label for="form-input-7">State</label>
+            <input type="text" placeholder="Operational" />
+        </template>
+        <template v-slot:form-input-6>
+            <label for="form-input-6">Category</label>
+            <input type="text" placeholder="Classroom" />
         </template>
         <template v-slot:modal-button>
-            <button>Edit Equipment</button>
+            <button>Save the Changes</button>
         </template>
     </Modal>
 </template>
   
 <script lang="ts">
-
-import ModalDetails from "./ModalDetails.vue";
-import Modal from "./Modal.vue";
+import { verifyToken, readToken } from "../../utils/authUtils";
+import ModalDetails from "../ModalDetails.vue";
+import Modal from "../Modal.vue";
 
 export default {
-    name: "EquipmentCapsule",
+    name: "RoomCapsule",
     components: {
         ModalDetails,
         Modal,
     },
     props: {
-        equipment: {
+        room: {
             type: Object,
             required: true,
         },
     },
-
-    beforeMount() {
-        console.log("EquipmentCapsule mounted: this.equipment", this.equipment);
+    data() {
+        return {
+            userData: {
+                token: "",
+            },
+        };
     },
-
+    beforeMount() {
+        verifyToken();
+        this.userData.token = readToken();
+    },
     methods: {
         // Modal methods
         openModal(reference: string) {
@@ -112,58 +135,56 @@ export default {
     }
 };
 </script>
-  
+
 <style scoped>
-.equipment-capsule {
+.room-card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 250px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-right: 20px;
-    margin-bottom: 20px;
+    cursor: pointer;
     min-width: 200px;
 }
 
-.equipment-image {
+.room-card-image {
     width: 100%;
-    height: 100px;
-    overflow: hidden;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.equipment-image img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
-    object-position: center;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    overflow: hidden;
 }
 
-.equipment-container {
+.room-card-image img {
+    height: 100%;
+    width: 100%;
+}
+
+.room-card-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
+    width: 100%;
+    height: 60px;
 }
 
-.equipment-container svg {
-    cursor: pointer;
-}
-
-.equipment-details {
-    padding: 10px;
-}
-
-.equipment-details h3 {
+.room-card-content h2 {
     font-size: 16px;
-    margin-bottom: 5px;
 }
 
-.equipment-details p {
-    font-size: 14px;
-    color: #555;
-    margin: 0;
+.room-card-content p {
+    background-color: var(--dark-blue);
+    color: #fff;
+    padding: 16px;
+    border-radius: 16px;
+    transform: translateY(-20px);
 }
+
 
 /* ModalDetails styling */
 .modal-mask {
@@ -477,4 +498,3 @@ header {
     outline: none;
 }
 </style>
-  
