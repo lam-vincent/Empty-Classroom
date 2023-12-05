@@ -39,8 +39,8 @@
           <div class="form-group">
             <label for="role">Role</label>
             <select v-model="registrationData.role">
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
             </select>
           </div>
           <a href="/login">Already have an account? Sign in here.</a>
