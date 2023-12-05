@@ -72,7 +72,7 @@ const fetchGroupsByStatus = async (status: string) => {
 // create then error probably because of the name Groups that should be in backticks
 const createGroup = async (groupData: any) => {
   const query =
-    "INSERT INTO `Groups`(Group_Creation, Group_Password, Group_Name, Group_Size, Group_State) VALUES(?, ?, ?, ?, ?)";
+    "INSERT INTO `Groups`(Group_Creation, Group_Password, Group_Name, Group_Size, Group_State, Group_Owner) VALUES(?, ?, ?, ?, ?, ?)";
   return new Promise(async (resolve, reject) => {
     pool.query(
       query,
