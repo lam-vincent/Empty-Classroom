@@ -73,15 +73,25 @@ const fetchGroupsByStatus = async (status: string) => {
 const createGroup = async (groupData: any) => {
   const query =
     "INSERT INTO `Groups`(Group_Creation, Group_Password, Group_Name, Group_Size, Group_State) VALUES(?, ?, ?, ?, ?)";
-  await pool.query(
-    query,
-    Object.values(groupData),
-    (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      return results;
-    }
-  );
+  return new Promise(async (resolve, reject) => {
+    pool.query(
+      query,
+      Object.values(groupData),
+      async (error, results, fields) => {
+        if (error) throw error;
+        resolve(results);
+      }
+    );
+  });
+};
+
+const createBelonging = async (idUser: any, idGroup: any) => {
+  const query = "INSERT INTO `Belong`(id_user,id_group) VALUES(?, ?)";
+  await pool.query(query, [idUser, idGroup], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
 };
 
 const updateGroupById = async (id: string, groupData: any) => {
@@ -122,6 +132,7 @@ export default {
   fetchGroupsByUser,
   fetchGroupsByStatus,
   createGroup,
+  createBelonging,
   updateGroupById,
   deleteGroupById,
   joinGroup,

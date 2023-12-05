@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import groupService from "../services/groupService";
+import { ResultSetHeader } from "mysql2";
 
 export const getAllGroups = async (req: Request, res: Response) => {
   try {
@@ -47,8 +48,19 @@ export const getGroupsByStatus = async (req: Request, res: Response) => {
 export const createGroup = async (req: Request, res: Response) => {
   try {
     const groupData = req.body;
-    await groupService.createGroup(groupData);
-    res.status(201).json({ message: "Group created successfully" });
+    const myGroup: any = await groupService.createGroup(groupData);
+
+    if (myGroup && "insertId" in myGroup) {
+      const insertId = myGroup.insertId;
+      await groupService.createBelonging(groupData.Group_Owner, insertId);
+
+      console.log("Group and belonging created successfully!");
+      res.status(201).json({ message: "Group created successfully" });
+    } else {
+      console.log(myGroup);
+      console.error("Group creation failed.");
+      res.status(500).json({ message: "Error creating group" });
+    }
   } catch (error) {
     console.error("Error creating group:", error);
     res.status(500).json({ message: "Error creating group" });
