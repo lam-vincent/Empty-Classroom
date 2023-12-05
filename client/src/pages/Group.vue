@@ -8,24 +8,7 @@
         <h2>Joined Groups</h2>
 
         <div class="display-case">
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
+          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :group="objet" />
         </div>
 
       </section>
@@ -34,10 +17,13 @@
       <!-- Form to create a new group -->
       <section>
         <h2>Create a New Group</h2>
-        <form>
-          <input type="text" placeholder="Group Name" required />
-          <input type="text" placeholder="Group Member Limit" required />
-          <input type="text" placeholder="Group Status" required />
+        <form @submit.prevent="createGroup()">
+          <input type="text" v-model="groupCreationData.groupName" placeholder="Group Name" required />
+          <input type="text" v-model="groupCreationData.groupSize" placeholder="Group Member Limit" required />
+          <select v-model="groupCreationData.groupState">
+            <option value="private">private</option>
+            <option value="public">public</option>
+          </select>
           <button type="submit">Create</button>
         </form>
       </section>
@@ -47,24 +33,7 @@
         <h2>Public Groups to Join</h2>
 
         <div class="display-case">
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
-          <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>INT4 students</h2>
-              <p>5 / 50</p>
-            </div>
-          </div>
+          <GroupCapsule v-for="(objet) in groupData.publicGroups" :group="objet" />
         </div>
 
       </section>
@@ -74,7 +43,88 @@
 </template>
 
 <script lang="ts">
+import axios from "axios"
+import GroupCapsule from "../components/Capsule/GroupCapsule.vue";
+import { generatePassword } from "../utils/utils";
+import { readToken } from "../utils/authUtils";
+
 export default {
+    beforeMount(){
+      this.fetchAllGroups();
+    },
+    data() {
+        return {
+            groupData: {
+                fetchedGroups: [],
+                joinedGroups: [],
+                publicGroups: []
+            },
+            groupCreationData: {
+              groupName:"",
+              groupSize:"",
+              groupState:"",
+              groupPassword:""
+            }
+        };
+    },
+    methods: {
+        async fetchAllGroups() {
+            try {
+                this.groupData.fetchedGroups.length = 0;
+                const response = await axios.get('http://localhost:3000/groups', {
+                    withCredentials: true, headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/'
+                    }
+                });
+                this.groupData.fetchedGroups = response.data;
+                // this.groupData.joinedGroups = [...this.groupData.fetchedGroups];
+                this.groupData.publicGroups = [...this.groupData.fetchedGroups];
+                this.fetchJoinedGroups();
+            }
+            catch (error) {
+                console.error("Error fetching groups : " + error);
+            }
+        },async createGroup(){
+            try {
+              let formattedDate = new Date().toISOString().slice(0, 10);
+              let OwnerId = readToken().userId;
+              console.log("createur : "+OwnerId);
+              if(this.groupCreationData.groupState == "private"){ 
+                this.groupCreationData.groupPassword = generatePassword() 
+              } else { this.groupCreationData.groupPassword = ""}
+              // group_p
+                  const response = await axios.post('http://localhost:3000/groups', {
+                    Group_Creation:formattedDate,
+                    Group_Password:this.groupCreationData.groupPassword,
+                    Group_Name:this.groupCreationData.groupName,
+                    Group_Size:this.groupCreationData.groupSize,
+                    Group_State:this.groupCreationData.groupState,
+                    Group_Owner:OwnerId
+                  } , {
+                      withCredentials: true, headers: {
+                          'Access-Control-Allow-Origin': 'http://localhost:5173/'
+                      }
+                  });
+
+                  this.fetchAllGroups();
+              }
+              catch (error) {
+                  console.error("Error creating group : " + error);
+              }
+        },
+        fetchJoinedGroups(){
+          this.groupData.joinedGroups.length = 0;
+          const userId = readToken().userId;
+
+      const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
+        element.Belonging.some((belonging) => belonging.id_user === userId)
+      );
+      // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
+      // Ajouter les éléments filtrés au tableau vide
+      this.groupData.joinedGroups.push(...elementsFiltres);
+    }
+  },
+  components: { GroupCapsule }
 };
 </script>
 

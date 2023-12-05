@@ -1,11 +1,52 @@
 import { pool } from "../config/database";
+import { Group } from "../types/types";
+import { Belong } from "../types/types";
 
 const fetchAllGroups = async () => {
   const query = "SELECT * FROM `Groups`";
-  await pool.query(query, (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Group[]>((resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myArrayPromises = results.map(async (result: Group) => {
+        const belongings = await fetchBelongingByGroup(
+          result.id_group.toString()
+        );
+        return {
+          ...result,
+          Belonging: belongings,
+        };
+      });
+
+      // Wait for all promises to resolve
+      Promise.all(myArrayPromises)
+        .then((myArray) => {
+          resolve(myArray);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  });
+};
+
+const fetchAllBelongings = async () => {
+  const query = "SELECT * FROM `Belong`";
+  return new Promise<Group[]>(async (resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
+  });
+};
+
+const fetchBelongingByGroup = async (groupId: string) => {
+  const query = "SELECT * FROM `Belong` WHERE id_group = ?";
+  return new Promise<Belong[]>(async (resolve, reject) => {
+    pool.query(query, [groupId], async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
   });
 };
 
@@ -31,16 +72,26 @@ const fetchGroupsByStatus = async (status: string) => {
 // create then error probably because of the name Groups that should be in backticks
 const createGroup = async (groupData: any) => {
   const query =
-    "INSERT INTO `Groups`(Group_Creation, Group_Password, Group_Name, Group_Size, Group_State) VALUES(?, ?, ?, ?, ?)";
-  await pool.query(
-    query,
-    Object.values(groupData),
-    (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      return results;
-    }
-  );
+    "INSERT INTO `Groups`(Group_Creation, Group_Password, Group_Name, Group_Size, Group_State, Group_Owner) VALUES(?, ?, ?, ?, ?, ?)";
+  return new Promise(async (resolve, reject) => {
+    pool.query(
+      query,
+      Object.values(groupData),
+      async (error, results, fields) => {
+        if (error) throw error;
+        resolve(results);
+      }
+    );
+  });
+};
+
+const createBelonging = async (idUser: any, idGroup: any) => {
+  const query = "INSERT INTO `Belong`(id_user,id_group) VALUES(?, ?)";
+  await pool.query(query, [idUser, idGroup], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
 };
 
 const updateGroupById = async (id: string, groupData: any) => {
@@ -77,9 +128,11 @@ const joinGroup = async (id_user: string, id_group: string) => {
 
 export default {
   fetchAllGroups,
+  fetchAllBelongings,
   fetchGroupsByUser,
   fetchGroupsByStatus,
   createGroup,
+  createBelonging,
   updateGroupById,
   deleteGroupById,
   joinGroup,

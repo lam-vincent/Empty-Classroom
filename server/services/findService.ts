@@ -1,12 +1,31 @@
 import { pool } from "../config/database";
 import { Room } from "../types/types";
+import { Reserve } from "../types/types";
+import fetchReservationByRoom from "./reserveService";
 
 const fetchAllRooms = async () => {
   const query = "SELECT * FROM Rooms";
   return new Promise<Room[]>((resolve, reject) => {
     pool.query(query, async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
+      const myArrayPromises = results.map(async (result: Room) => {
+        const reservations =
+          await fetchReservationByRoom.fetchReservationByRoom(
+            result.id_room.toString()
+          );
+        return {
+          ...result,
+          Room_reservations: reservations,
+        };
+      });
+
+      // Wait for all promises to resolve
+      Promise.all(myArrayPromises)
+        .then((myArray) => {
+          resolve(myArray);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   });
 };

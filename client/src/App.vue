@@ -15,6 +15,7 @@
   --secondary-bg-color: white;
   --main-text-color: black;
   --light-gray: #f2f3f7;
+  --light-dark-gray: #D9D9D9;
   --gray: #9ca3af;
   --dark-gray: #4b5563;
   --blue: #3b82f6;

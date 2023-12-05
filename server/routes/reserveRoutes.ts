@@ -4,6 +4,8 @@ import {
   getReservationByUser,
   updateReservation,
   deleteReservation,
+  getReservationByRoom,
+  getReservations,
 } from "../controllers/reserveController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
@@ -13,7 +15,9 @@ const router = express.Router();
 router.post("/reserve", authMiddleware, createReservation);
 
 // Get all reservations for a user
+router.get("/reserve/rooms", authMiddleware, getReservations);
 router.get("/reserve/:user_id", authMiddleware, getReservationByUser);
+router.get("/reserve/room/:room_id", authMiddleware, getReservationByRoom);
 
 // Update a reservation by room and user
 router.put("/reserve/:id_reserve", authMiddleware, updateReservation);

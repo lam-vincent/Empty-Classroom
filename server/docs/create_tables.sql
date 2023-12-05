@@ -19,6 +19,7 @@ CREATE TABLE `Groups` (
     Group_Name VARCHAR(50) NOT NULL,
     Group_Size INT NOT NULL,
     Group_State VARCHAR(50) NOT NULL, 
+    Group_Owner INT NOT NULL,
     PRIMARY KEY (id_group)
 );
 

@@ -1,4 +1,16 @@
 import { pool } from "../config/database";
+import { Reserve } from "../types/types";
+
+const fetchAllReservations = async () => {
+  const query = "SELECT * FROM Reserve";
+  return new Promise<Reserve[]>(async (resolve, reject) => {
+    pool.query(query, async (error, results) => {
+      const myQueryResult = results;
+      console.log(results);
+      resolve(myQueryResult);
+    });
+  });
+};
 
 const createReservation = async (reservationData: any) => {
   const query =
@@ -20,6 +32,16 @@ const fetchReservationByUser = async (userId: string) => {
     if (error) throw error;
     console.log(results);
     return results;
+  });
+};
+
+const fetchReservationByRoom = async (roomId: string) => {
+  const query = "SELECT * FROM Reserve WHERE id_room = ?";
+  return new Promise<Reserve[]>((resolve, reject) => {
+    pool.query(query, [roomId], async (error, results, fields) => {
+      if (error) throw error;
+      resolve(results);
+    });
   });
 };
 
@@ -49,6 +71,8 @@ const deleteReservation = async (id: string) => {
 export default {
   createReservation,
   fetchReservationByUser,
+  fetchReservationByRoom,
+  fetchAllReservations,
   updateReservation,
   deleteReservation,
 };

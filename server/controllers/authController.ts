@@ -8,13 +8,16 @@ config();
 const secretKey: Secret = process.env.SECRET_KEY || "";
 
 const register = async (req: Request, res: Response) => {
-  const { username, password } = req.body.params;
+  // console.log(req.body);
+  const { username, password, role } = req.body;
 
   try {
-    const registerResult = await authService.registerUser(username, password);
-    res
-      .status(201)
-      .json({ message: "User registered successfully", registerResult });
+    const registerResult = await authService.registerUser(
+      username,
+      password,
+      role
+    );
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Registration failed:", error);
     res.status(500).json({ message: "Registration failed" });
@@ -33,9 +36,13 @@ const login = async (req: Request, res: Response) => {
     console.info(checkUserLogin);
 
     // We generate a token for the logged in user
-    const token = jwt.sign({ userId: checkUserLogin.id_user }, secretKey, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { userId: checkUserLogin.id_user, role: checkUserLogin.User_Role },
+      secretKey,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     console.info("Token : " + token);
 

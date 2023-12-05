@@ -1,7 +1,7 @@
 import router from "../router";
 
 const verifyToken = () => {
-  if (!document.cookie.includes("auth")) {
+  if (!document.cookie.includes("auth") || isDateExpired(readToken().exp)) {
     router.push("/login");
   }
 };
@@ -10,6 +10,7 @@ const readToken = () => {
   var token = document.cookie.split("=")[1];
   var tokenBody = token.split(".")[1];
   var tokenBodyParsed = JSON.parse(atob(tokenBody));
+  console.log("authUtils.ts: tokenBodyParsed", tokenBodyParsed);
   return tokenBodyParsed;
 };
 
@@ -18,6 +19,13 @@ const logout = () => {
     document.cookie = "";
     router.push("/login");
   }
+};
+
+const isDateExpired = (timestamp: number) => {
+  const timestampInMilliseconds = timestamp * 1000;
+  const currentDate = new Date();
+  const providedDate = new Date(timestampInMilliseconds);
+  return providedDate < currentDate;
 };
 
 const checkPermissions = (userRole: string, action: string): boolean => {
@@ -60,4 +68,4 @@ const checkPermissions = (userRole: string, action: string): boolean => {
   }
 };
 
-export { verifyToken, logout, checkPermissions, readToken }; // logout wasn't exported before?
+export { verifyToken, logout, checkPermissions, readToken };

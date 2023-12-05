@@ -11,7 +11,6 @@ import {
   createRoom,
   updateRoom,
   deleteRoom,
-  addEquipment,
 } from "../controllers/findController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { isAdminMiddleware } from "../middlewares/isAdminMiddleware";
@@ -46,8 +45,5 @@ router.get("/rooms/state/:state", authMiddleware, getRoomByState);
 router.post("/rooms", authMiddleware, isAdminMiddleware, createRoom);
 router.put("/rooms/:id", authMiddleware, isAdminMiddleware, updateRoom);
 router.delete("/rooms/:id", authMiddleware, isAdminMiddleware, deleteRoom);
-
-// Route to add an equipment to a room
-router.post("/rooms/:id", authMiddleware, isAdminMiddleware, addEquipment);
 
 export default router;
