@@ -1,17 +1,16 @@
 <template>
     <div class="group-card">
-            <div class="group-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="group-card-content">
-              <h2>{{group.Group_Name}}</h2>
-              <p>{{ group.Belonging.length }} / {{group.Group_Size}}</p>
-            </div>
+        <div class="group-card-image">
+            <img src="classroom1.jpg" />
+        </div>
+        <div class="group-card-content">
+            <h2>{{ group.Group_Name }}</h2>
+            <p>{{ group.Belonging.length }} / {{ group.Group_Size }}</p>
+        </div>
     </div>
 </template>
   
 <script lang="ts">
-
 export default {
     name: "GroupCapsule",
     props: {
@@ -34,11 +33,9 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 250px;
-    margin-right: 25px;
-    margin-bottom: 25px;
+    width: 200px;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 1rem;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
@@ -51,9 +48,9 @@ export default {
     overflow: hidden;
 }
 
-.group-card-image img{
-    height:100%;
-    width:100%;
+.group-card-image img {
+    height: 100%;
+    width: 100%;
 }
 
 .group-card-content {

@@ -38,6 +38,10 @@
         </template>
         <template v-slot:modal-button>
             <button>Reserve Now</button>
+
+            <button v-if="userData.token.role === 'Admin'" style="margin-top: 1rem; background-color: var(--red);">Delete
+                Room
+            </button>
         </template>
 
     </ModalDetails>
@@ -83,6 +87,7 @@
 </template>
   
 <script lang="ts">
+import { verifyToken, readToken } from "../utils/authUtils";
 import ModalDetails from "./ModalDetails.vue";
 import Modal from "./Modal.vue";
 
@@ -97,6 +102,17 @@ export default {
             type: Object,
             required: true,
         },
+    },
+    data() {
+        return {
+            userData: {
+                token: "",
+            },
+        };
+    },
+    beforeMount() {
+        verifyToken();
+        this.userData.token = readToken();
     },
     methods: {
         // Modal methods

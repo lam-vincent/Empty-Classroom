@@ -45,48 +45,48 @@ import GroupCapsule from "../components/GroupCapsule.vue";
 import { verifyToken, readToken } from "../utils/authUtils";
 
 export default {
-    beforeMount(){
-      this.fetchAllGroups();
+  beforeMount() {
+    this.fetchAllGroups();
+  },
+  data() {
+    return {
+      groupData: {
+        fetchedGroups: [],
+        joinedGroups: [],
+        publicGroups: []
+      }
+    };
+  },
+  methods: {
+    async fetchAllGroups() {
+      try {
+        const response = await axios.get('http://localhost:3000/groups', {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
+        this.groupData.fetchedGroups = response.data;
+        // this.groupData.joinedGroups = [...this.groupData.fetchedGroups];
+        this.groupData.publicGroups = [...this.groupData.fetchedGroups];
+        console.log(response.data);
+        this.fetchJoinedGroups();
+      }
+      catch (error) {
+        console.error("Error fetching groups : " + error);
+      }
     },
-    data() {
-        return {
-            groupData: {
-                fetchedGroups: [],
-                joinedGroups: [],
-                publicGroups: []
-            }
-        };
-    },
-    methods: {
-        async fetchAllGroups() {
-            try {
-                const response = await axios.get('http://localhost:3000/groups', {
-                    withCredentials: true, headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/'
-                    }
-                });
-                this.groupData.fetchedGroups = response.data;
-                // this.groupData.joinedGroups = [...this.groupData.fetchedGroups];
-                this.groupData.publicGroups = [...this.groupData.fetchedGroups];
-                console.log(response.data);
-                this.fetchJoinedGroups();
-            }
-            catch (error) {
-                console.error("Error fetching groups : " + error);
-            }
-        },
-        fetchJoinedGroups(){
-          const userId = readToken().userId;
+    fetchJoinedGroups() {
+      const userId = readToken().userId;
 
-          const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
-            element.Belonging.some((belonging) => belonging.id_user === userId)
-          );
-          // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
-          // Ajouter les éléments filtrés au tableau vide
-          this.groupData.joinedGroups.push(...elementsFiltres);
-        } 
-    },
-    components: { GroupCapsule }
+      const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
+        element.Belonging.some((belonging) => belonging.id_user === userId)
+      );
+      // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
+      // Ajouter les éléments filtrés au tableau vide
+      this.groupData.joinedGroups.push(...elementsFiltres);
+    }
+  },
+  components: { GroupCapsule }
 };
 </script>
 
