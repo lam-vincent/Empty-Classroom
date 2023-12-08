@@ -81,6 +81,12 @@
                         </slot>
                     </div>
 
+                    <div class="modal-button-negative modal-button">
+                        <slot name="modal-button-negative">
+                            <!-- <button>modal button</button> -->
+                        </slot>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -110,6 +116,10 @@ export default defineComponent({
   
 <style scoped>
 /* Modal styling */
+.modal-button-negative{
+    margin-top:10px;
+}
+
 h3 {
     margin: 0;
     font-size: 1.25rem;
@@ -217,5 +227,10 @@ header {
     cursor: pointer;
     outline: none;
 }
+
+
+
+
+
 </style>
   

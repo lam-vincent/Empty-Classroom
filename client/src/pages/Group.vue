@@ -8,7 +8,7 @@
         <h2>Joined Groups</h2>
 
         <div class="display-case">
-          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :group="objet" />
+          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :group="objet" @groupListUpdated="fetchAllGroups();" />
         </div>
 
       </section>
@@ -33,7 +33,7 @@
         <h2>Public Groups to Join</h2>
 
         <div class="display-case">
-          <GroupCapsule v-for="(objet) in groupData.publicGroups" :group="objet" />
+          <GroupCapsule v-for="(objet) in groupData.publicGroups" :group="objet" @groupListUpdated="fetchAllGroups();" />
         </div>
 
       </section>
