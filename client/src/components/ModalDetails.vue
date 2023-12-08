@@ -111,6 +111,7 @@ export default defineComponent({
 </script>
   
 <style scoped>
+
 .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -130,7 +131,7 @@ export default defineComponent({
 
 .modal-container {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
@@ -313,5 +314,6 @@ export default defineComponent({
     color: white;
     cursor: pointer;
 }
+
 </style>
   

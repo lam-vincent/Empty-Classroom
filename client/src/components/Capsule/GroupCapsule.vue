@@ -37,23 +37,29 @@
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
-            <input type="text" placeholder="Studying Computer Science" />
+            <input type="text" v-model="currentGroupData.Group_Name" />
         </template>
         <template v-slot:form-input-2>
             <label for="form-input-2">Size</label>
-            <input type="text" placeholder="5" />
+            <input type="text" v-model="currentGroupData.Group_Size" />
         </template>
-        <template v-slot:form-input-description>
+        <!-- <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
             <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
-                placeholder="Write the Description here."></textarea>
-        </template>
+            :placeholder="`add some nice description to your group !`"></textarea>
+        </template> -->
         <template v-slot:form-input-3>
             <label for="form-input-3">Status</label>
-            <input type="text" placeholder="Public" />
+            <select v-model="currentGroupData.Group_State">
+                <option value="private" :selected="currentGroupData.Group_State === 'private' ? true : false">private</option>
+                <option value="public" :selected="currentGroupData.Group_State === 'public' ? true : false">public</option>
+            </select>
         </template>
         <template v-slot:modal-button>
-            <button>Edit Group</button>
+            <button @click="editGroup();">Edit Group</button>
+        </template>
+        <template v-slot:modal-button-negative>
+            <button @click="() => deleteGroup()">Delete Group</button>
         </template>
     </Modal>
 </template>
@@ -61,6 +67,7 @@
 <script lang="ts">
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
+import axios from "axios";
 
 export default {
     name: "GroupCapsule",
@@ -74,6 +81,17 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            currentGroupData : {
+                Group_Creation:this.group.Group_Creation,
+                Group_Password: this.group.Group_Password,
+                Group_Name: this.group.Group_Name,
+                Group_Size: this.group.Group_Size,
+                Group_State:    this.group.Group_State
+            }
+        }
+    },
     methods: {
         // Modal methods
         openModal(reference: string) {
@@ -86,6 +104,39 @@ export default {
         closeModal() {
             console.log('Modal closed');
         },
+        editGroup(){
+            // console.log(this.currentGroupData);
+            try{
+                const response = axios.put(`http://localhost:3000/groups/${this.group.id_group}`,this.currentGroupData, {
+                      withCredentials: true, headers: {
+                          'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                          'Content-Type': 'application/json'
+                      }
+                  });
+                alert("group Infos successfully edited.");
+                this.$emit('groupListUpdated');
+                // this.roomData.fetchedRooms = response.data;
+            }catch(e){
+                alert("Error while updating group");
+            }
+        },
+        deleteGroup(){
+                if(confirm("Are you sure you want to delete this group ?")){
+                    try{
+                        const response = axios.delete(`http://localhost:3000/groups/${this.group.id_group}`, {
+                        withCredentials: true, headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json'
+                        }
+                        });
+                        alert("Group successfully deleted.");
+                        this.$emit('close');
+                        this.$emit('groupListUpdated');
+                    }catch(e){
+                        
+                    }
+                }           
+        }
     }
 };
 </script>
@@ -453,5 +504,10 @@ header {
     cursor: pointer;
     outline: none;
 }
+
+.modal-button-negative button{
+    background:var(--red);
+}
+
 </style>
   

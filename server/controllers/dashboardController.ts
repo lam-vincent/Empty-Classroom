@@ -79,9 +79,8 @@ export const getEquipment = async (req: Request, res: Response) => {
 
 export const addEquipment = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
     const equipmentData = req.body;
-    const result = await dashboardService.addEquipment(id, equipmentData);
+    const result = await dashboardService.addEquipment(equipmentData);
     res.json({ message: "Equipment added successfully" });
   } catch (error) {
     console.error("Error adding equipment:", error);
@@ -104,8 +103,11 @@ export const updateEquipment = async (req: Request, res: Response) => {
 export const deleteEquipment = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    console.log("id", id);
     const result = await dashboardService.deleteEquipment(id);
-    res.json({ message: "Equipment deleted successfully" });
+    res.json({
+      message: "dashboardController.ts: Equipment deleted successfully",
+    });
   } catch (error) {
     console.error("Error deleting equipment:", error);
     res.status(500).json({ message: "Error deleting equipment" });

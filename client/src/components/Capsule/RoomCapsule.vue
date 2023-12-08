@@ -14,9 +14,9 @@
         <template v-slot:title>
             <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
 
-            <svg xmlns=" http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" width="24px" height="24px" style="transform: translateY(-2px); margin-left: 8px;"
-                @click="() => openModal('EditRoom')">
+            <svg v-if="userData.token.role === 'Admin'" xmlns=" http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" width="24px" height="24px"
+                style="transform: translateY(-2px); margin-left: 8px;" @click="() => openModal('EditRoom')">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
             </svg>
@@ -45,7 +45,8 @@
         <template v-slot:modal-button>
             <button>Reserve Now</button>
 
-            <button v-if="userData.token.role === 'Admin'" style="margin-top: 1rem; background-color: var(--red);">Delete
+            <button @click="deleteRoom()" v-if="userData.token.role === 'Admin'"
+                style="margin-top: 1rem; background-color: var(--red);">Delete
                 Room
             </button>
         </template>
@@ -59,35 +60,39 @@
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
-            <input type="text" placeholder="101" />
+            <input v-model="currentRoomData.Room_Name" type="text" placeholder="101" />
         </template>
         <template v-slot:form-input-2>
             <label for="form-input-2">Building</label>
-            <input type="text" placeholder="A" />
+            <input v-model="currentRoomData.Room_Building" type="text" placeholder="A" />
         </template>
-        <template v-slot:form-input-description>
+        <!-- <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
             <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
                 placeholder="Write Description Here"></textarea>
-        </template>
+        </template> -->
         <template v-slot:form-input-3>
             <label for="form-input-3">Campus</label>
-            <input type="text" placeholder="République" />
+            <input v-model="currentRoomData.Room_Campus" type="text" placeholder="République" />
         </template>
         <template v-slot:form-input-4>
             <label for="form-input-4">Location</label>
-            <input type="text" placeholder="1st Floor" />
+            <input v-model="currentRoomData.Room_Location" type="text" placeholder="1st Floor" />
         </template>
         <template v-slot:form-input-5>
             <label for="form-input-7">State</label>
-            <input type="text" placeholder="Operational" />
+            <select v-model="currentRoomData.Room_State">
+                <option value="Occupied" :selected="currentRoomData.Room_State === 'Occupied' ? true : false">Occupied
+                </option>
+                <option value="Vacant" :selected="currentRoomData.Room_State === 'Vacant' ? true : false">Vacant</option>
+            </select>
         </template>
         <template v-slot:form-input-6>
             <label for="form-input-6">Category</label>
-            <input type="text" placeholder="Classroom" />
+            <input v-model="currentRoomData.Room_Category" type="text" placeholder="Classroom" />
         </template>
         <template v-slot:modal-button>
-            <button>Save the Changes</button>
+            <button @click="editRoom(); closeModal();">Save the Changes</button>
         </template>
     </Modal>
 </template>
@@ -96,6 +101,7 @@
 import { verifyToken, readToken } from "../../utils/authUtils";
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
+import axios from "axios"
 
 export default {
     name: "RoomCapsule",
@@ -114,6 +120,14 @@ export default {
             userData: {
                 token: "",
             },
+            currentRoomData: {
+                Room_Name: this.room.Room_Name,
+                Room_Building: this.room.Room_Building,
+                Room_Campus: this.room.Room_Campus,
+                Room_Location: this.room.Room_Location,
+                Room_State: this.room.Room_State,
+                Room_Category: this.room.Room_Category
+            }
         };
     },
     beforeMount() {
@@ -130,8 +144,42 @@ export default {
             (this.$refs[reference] as any).open();
         },
         closeModal() {
-            console.log('Modal closed');
+            (this.$refs.modalRoomDetails as any).close();
         },
+        editRoom() {
+            try {
+                const response = axios.put(`http://localhost:3000/rooms/${this.room.id_room}`, this.currentRoomData, {
+                    withCredentials: true, headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                alert("Room infos successfully edited.");
+                this.$emit('roomListUpdated');
+                this.$emit('close');
+            } catch (e) {
+                alert("Error while updating room");
+            }
+        },
+        deleteRoom() {
+            if (confirm("Are you sure you want to delete this room ?")) {
+                try {
+                    console.log("this.room", this.room);
+                    const response = axios.delete(`http://localhost:3000/rooms/${this.room.id_room}`, {
+                        withCredentials: true, headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    alert("Room successfully deleted.");
+                    (this.$refs.modalRoomDetails as any).close();
+                    this.$emit('close');
+                    this.$emit('roomListUpdated');
+                } catch (e) {
+
+                }
+            }
+        }
     }
 };
 </script>
