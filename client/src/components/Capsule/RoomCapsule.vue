@@ -59,11 +59,11 @@
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
-            <input v-model="room.Room_Name" type="text" placeholder="101" />
+            <input v-model="currentRoomData.Room_Name" type="text" placeholder="101" />
         </template>
         <template v-slot:form-input-2>
             <label for="form-input-2">Building</label>
-            <input v-model="room.Room_Building" type="text" placeholder="A" />
+            <input v-model="currentRoomData.Room_Building" type="text" placeholder="A" />
         </template>
         <!-- <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
