@@ -153,7 +153,7 @@ export default {
                     }
                 );
                 this.$emit('equipmentListUpdated');
-                this.$emit('close');
+                window.location.reload();
             } catch (e) {
                 alert("Error while updating equipment");
             }
