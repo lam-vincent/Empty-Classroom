@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <ModalDetails ref="modalEquipmentDetails" @close="closeModal">
+    <ModalDetails ref="modalEquipmentDetails" @close="">
         <template v-slot:title>
             <h1>{{ equipment.Equipment_Name }}</h1>
         </template>
@@ -36,44 +36,54 @@
         <template v-slot:modal-button>
             <button @click="openModalDetails('EditEquipment')">Edit the Equipment</button>
 
-            <button v-if="userData.token.role === 'Admin'" style="margin-top: 1rem; background-color: var(--red);">Delete
+            <button @click="deleteEquipment()" v-if="userData.token.role === 'Admin'"
+                style="margin-top: 1rem; background-color: var(--red);">Delete
                 Equipment
             </button>
         </template>
     </ModalDetails>
 
-    <Modal ref="EditEquipment" @close="closeModal">
+    <Modal ref="EditEquipment" @close="">
         <template v-slot:header-title>
             <h3>Edit Equipment</h3>
             <h3>for {{ equipment.Equipment_Name }}</h3>
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Name</label>
-            <input type="text" placeholder="Desk" />
+            <input v-model="currentEquipmentData.Equipment_Name" type="text" placeholder="Desk" />
         </template>
         <template v-slot:form-input-2>
             <label for="form-input-2">Type</label>
-            <input type="text" placeholder="Furniture" />
+            <input v-model="currentEquipmentData.Equipment_Type" type="text" placeholder="Furniture" />
         </template>
         <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
-            <textarea name="form-input-description" id="form-input-description" cols="30" rows="5"
-                placeholder="Write the Description here."></textarea>
+            <textarea v-model="currentEquipmentData.Equipment_Description" name="form-input-description"
+                id="form-input-description" cols="30" rows="5" placeholder="Write the Description here."></textarea>
         </template>
         <template v-slot:form-input-3>
             <label for="form-input-3">Location</label>
-            <input type="text" placeholder="On the floor" />
+            <input v-model="currentEquipmentData.Equipment_Location" type="text" placeholder="On the floor" />
         </template>
         <template v-slot:form-input-4>
             <label for="form-input-4">Status</label>
-            <input type="text" placeholder="Operational" />
+            <select v-model="currentEquipmentData.Equipment_Status">
+                <option value="Operational"
+                    :selected="currentEquipmentData.Equipment_Status === 'Operational' ? true : false">
+                    Operational
+                </option>
+                <option value="Not Operational"
+                    :selected="currentEquipmentData.Equipment_Status === 'Not Operational' ? true : false">
+                    Not Operational
+                </option>
+            </select>
         </template>
-        <template v-slot:form-input-5>
+        <!-- <template v-slot:form-input-5>
             <label for="form-input-5">Require</label>
-            <input type="text" placeholder="Nothing" />
-        </template>
+            <input v-model="currentEquipmentData.Equipment_Require" type="text" placeholder="Nothing" />
+        </template> -->
         <template v-slot:modal-button>
-            <button>Edit Equipment</button>
+            <button @click="editEquipment(); closeModal();">Edit Equipment</button>
         </template>
     </Modal>
 </template>
@@ -82,6 +92,7 @@
 import { verifyToken, readToken } from "../../utils/authUtils";
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
+import axios from "axios";
 
 export default {
     name: "EquipmentCapsule",
@@ -95,10 +106,20 @@ export default {
             required: true,
         },
     },
+    emits: ['equipmentListUpdated'],
     data() {
         return {
             userData: {
                 token: "",
+            },
+
+            currentEquipmentData: {
+                Equipment_Name: this.equipment.Equipment_Name,
+                Equipment_Type: this.equipment.Equipment_Type,
+                Equipment_Description: this.equipment.Equipment_Description,
+                Equipment_Location: this.equipment.Equipment_Location,
+                Equipment_Status: this.equipment.Equipment_Status,
+                // Equipment_Require: this.equipment.Equipment_Require,
             },
         };
     },
@@ -116,9 +137,62 @@ export default {
             (this.$refs[reference] as any).open();
         },
         closeModal() {
-            console.log('Modal closed');
+            (this.$refs.modalEquipmentDetails as any).close();
         },
-    }
+
+        editEquipment() {
+            try {
+                console.log(this.currentEquipmentData);
+                console.log(this.equipment.id_equipment);
+                axios.put(`http://localhost:3000/equipment/${this.equipment.id_equipment}`, this.currentEquipmentData,
+                    {
+                        withCredentials: true, headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                this.$emit('equipmentListUpdated');
+                this.$emit('close');
+            } catch (e) {
+                alert("Error while updating equipment");
+            }
+        },
+
+        deleteEquipment() {
+            console.log('deleteEquipment equipment', this.equipment);
+            // if (confirm("Are you sure you want to delete this equipment?")) {
+            try {
+                const response = axios.delete(`http://localhost:3000/equipment/${this.equipment.id_equipment}`,
+                    {
+                        withCredentials: true, headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                ).then((response) => {
+                    if (response.status === 200) {
+                        // Equipment deleted successfully
+                        console.log('Equipment deleted successfully');
+                        this.$emit('equipmentListUpdated');
+                    } else {
+                        // Handle unexpected status code
+                        console.error(`Unexpected status code: ${response.status}`);
+                        // You can show an error message to the user if needed
+                    }
+                })
+                    .catch((error) => {
+                        // Handle errors from the server
+                        console.error('Error deleting equipment:', error);
+                        // You can show an error message to the user if needed
+                    });
+            } catch (e) {
+                console.error('Error in deleteEquipment try block:', e);
+                // You can show an error message to the user if needed
+            }
+        }
+    },
+    // }
 };
 </script>
   

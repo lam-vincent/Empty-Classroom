@@ -13,7 +13,7 @@
 
         <div class="display-case">
             <EquipmentCapsule v-for="(equipment, index) in Equipment.currentEquipment" :key="index" :equipment="equipment"
-                @click="() => openModalDetails('modalEquipmentDetails')" />
+                @equipmentListUpdated="fetchAllEquipment()" />
             <button @click="openModal('addEquipmentModal')">Add Equipment</button>
         </div>
 
@@ -25,7 +25,7 @@
         </Modal>
 
 
-        <Modal ref="addEquipmentModal" @close="closeModal">
+        <Modal ref="addEquipmentModal">
             <template v-slot:header-title>
                 <h3>Add Equipment</h3>
             </template>
@@ -50,10 +50,10 @@
                 <label for="form-input-4">Status</label>
                 <input v-model="newEquipmentData.Equipment_Status" type="text" placeholder="Operational" />
             </template>
-            <template v-slot:form-input-5>
+            <!-- <template v-slot:form-input-5>
                 <label for="form-input-5">Require</label>
                 <input v-model="newEquipmentData.Equipment_Require" type="text" placeholder="Nothing" />
-            </template>
+            </template> -->
             <template v-slot:modal-button>
                 <button @click="addEquipment">Add Equipment</button>
             </template>
@@ -91,7 +91,7 @@ export default {
                 Equipment_Description: "",
                 Equipment_Location: "",
                 Equipment_Status: "",
-                Equipment_Require: "",
+                // Equipment_Require: "",
             },
         };
     },
@@ -108,6 +108,13 @@ export default {
     mounted() {
         console.log("EquipmentSection mounted");
     },
+
+    // when Equipment.currentEquipment changes, fetchAllRooms() is called
+    // watch: {
+    //     "Equipment.currentEquipment": function () {
+    //         this.fetchAllEquipment();
+    //     },
+    // },
 
     methods: {
         // Axios methods

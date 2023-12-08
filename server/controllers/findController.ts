@@ -118,6 +118,7 @@ export const updateRoom = async (req: Request, res: Response) => {
 export const deleteRoom = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    console.log("id", id);
     const result = await findService.deleteRoom(id);
     res.json({ message: "Room deleted successfully" });
   } catch (error) {

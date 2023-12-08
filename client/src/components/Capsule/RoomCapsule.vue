@@ -164,6 +164,7 @@ export default {
         deleteRoom() {
             if (confirm("Are you sure you want to delete this room ?")) {
                 try {
+                    console.log("this.room", this.room);
                     const response = axios.delete(`http://localhost:3000/rooms/${this.room.id_room}`, {
                         withCredentials: true, headers: {
                             'Access-Control-Allow-Origin': 'http://localhost:5173/',

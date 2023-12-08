@@ -103,8 +103,11 @@ export const updateEquipment = async (req: Request, res: Response) => {
 export const deleteEquipment = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    console.log("id", id);
     const result = await dashboardService.deleteEquipment(id);
-    res.json({ message: "Equipment deleted successfully" });
+    res.json({
+      message: "dashboardController.ts: Equipment deleted successfully",
+    });
   } catch (error) {
     console.error("Error deleting equipment:", error);
     res.status(500).json({ message: "Error deleting equipment" });

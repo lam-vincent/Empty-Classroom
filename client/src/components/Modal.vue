@@ -116,8 +116,8 @@ export default defineComponent({
   
 <style scoped>
 /* Modal styling */
-.modal-button-negative{
-    margin-top:10px;
+.modal-button-negative {
+    margin-top: 10px;
 }
 
 h3 {
@@ -227,10 +227,5 @@ header {
     cursor: pointer;
     outline: none;
 }
-
-
-
-
-
 </style>
   

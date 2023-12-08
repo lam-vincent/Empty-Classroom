@@ -70,7 +70,9 @@ const addEquipment = async (roomEquipment: any) => {
 };
 
 const updateEquipment = async (id: string, roomEquipment: any) => {
-  const query = `UPDATE Equipments SET Equipment_Name = ?, Equipment_Type = ?, Equipment_Location = ?, Equipment_Description = ?, Equipment_Status = ? WHERE id = ?`;
+  const query = `UPDATE Equipments SET Equipment_Name = ?, Equipment_Type = ?, Equipment_Location = ?, Equipment_Description = ?, Equipment_Status = ? WHERE id_equipment = ?`;
+
+  console.log("roomEquipment", roomEquipment);
 
   return new Promise((resolve, reject) => {
     pool.query(
@@ -85,11 +87,12 @@ const updateEquipment = async (id: string, roomEquipment: any) => {
 };
 
 const deleteEquipment = async (id: string) => {
-  const query = "DELETE FROM Equipments WHERE id = ?";
+  const query = "DELETE FROM Equipments WHERE id_equipment = ?";
 
   return new Promise((resolve, reject) => {
     pool.query(query, [id], async (error, results) => {
       const myQueryResult = results;
+      if (error) reject(error);
       resolve(myQueryResult);
     });
   });
