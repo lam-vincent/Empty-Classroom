@@ -105,7 +105,7 @@ const fetchRoomByState = async (state: string) => {
 const createRoom = async (roomData: any) => {
   const query =
     "INSERT INTO Rooms (Room_Name, Room_Building, Room_Campus, Room_Location, Room_State, Room_Category) VALUES (?, ?, ?, ?, ?, ?)";
-  await pool.query(query, Object.values(roomData), (error, results, fields) => {
+  pool.query(query, Object.values(roomData), (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -116,7 +116,7 @@ const createRoom = async (roomData: any) => {
 const updateRoom = async (id: string, roomData: any) => {
   const query =
     "UPDATE Rooms SET Room_Name = ?, Room_Building = ?, Room_Campus = ?, Room_Location = ?, Room_State = ?, Room_Category = ? WHERE id_room = ?";
-  await pool.query(
+  pool.query(
     query,
     [...Object.values(roomData), id],
     (error, results, fields) => {
@@ -129,18 +129,7 @@ const updateRoom = async (id: string, roomData: any) => {
 
 const deleteRoom = async (id: string) => {
   const query = "DELETE FROM Rooms WHERE id_room = ?";
-  await pool.query(query, [id], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
-  });
-};
-
-// put an error but add the equipment
-const addEquipment = async (id: string, equipment: string) => {
-  const query =
-    "INSERT INTO Equipments (id_room, Equipment_Name) VALUES (?, ?)";
-  await pool.query(query, [id, equipment], (error, results, fields) => {
+  pool.query(query, [id], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -159,5 +148,4 @@ export default {
   createRoom,
   updateRoom,
   deleteRoom,
-  addEquipment,
 };

@@ -79,9 +79,8 @@ export const getEquipment = async (req: Request, res: Response) => {
 
 export const addEquipment = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
     const equipmentData = req.body;
-    const result = await dashboardService.addEquipment(id, equipmentData);
+    const result = await dashboardService.addEquipment(equipmentData);
     res.json({ message: "Equipment added successfully" });
   } catch (error) {
     console.error("Error adding equipment:", error);

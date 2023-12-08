@@ -45,6 +45,7 @@ const removePreferredClassroom = async (userId: string, roomId: string) => {
   });
 };
 
+// Equipment methods
 const fetchEquipment = async () => {
   const query = "SELECT * FROM Equipments";
 
@@ -56,25 +57,30 @@ const fetchEquipment = async () => {
   });
 };
 
-const addEquipment = async (name: string, quantity: number) => {
-  const query = "INSERT INTO Equipments(name, quantity) VALUES(?, ?)";
+const addEquipment = async (roomEquipment: any) => {
+  const query =
+    "INSERT INTO Equipments(Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status) VALUES(?, ?, ?, ?, ?)";
 
   return new Promise((resolve, reject) => {
-    pool.query(query, [name, quantity], async (error, results) => {
+    pool.query(query, Object.values(roomEquipment), async (error, results) => {
       const myQueryResult = results;
       resolve(myQueryResult);
     });
   });
 };
 
-const updateEquipment = async (id: string, name: string) => {
-  const query = "UPDATE Equipments SET name = ? WHERE id = ?";
+const updateEquipment = async (id: string, roomEquipment: any) => {
+  const query = `UPDATE Equipments SET Equipment_Name = ?, Equipment_Type = ?, Equipment_Location = ?, Equipment_Description = ?, Equipment_Status = ? WHERE id = ?`;
 
   return new Promise((resolve, reject) => {
-    pool.query(query, [name, id], async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
-    });
+    pool.query(
+      query,
+      [...Object.values(roomEquipment), id],
+      async (error, results) => {
+        const myQueryResult = results;
+        resolve(myQueryResult);
+      }
+    );
   });
 };
 
