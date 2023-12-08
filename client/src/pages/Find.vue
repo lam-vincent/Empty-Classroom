@@ -13,50 +13,51 @@
           </svg>
         </button>
         <button class="create-room-btn" @click="openModal('createRoom')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-        </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+          </svg>
         </button>
       </div>
       <div class="item-list" ref="itemList">
-        <RoomCapsule v-for="(objet) in roomData.currentRooms" :room="objet" @roomListUpdated="fetchAllRooms();"/>
+        <RoomCapsule v-for="(objet) in roomData.currentRooms" :room="objet" @roomListUpdated="fetchAllRooms();" />
       </div>
     </div>
 
     <Modal ref="createRoom" @close="">
       <template v-slot:header-title>
-            <h3>Create a new room</h3>
-        </template>
-        <template v-slot:form-input-1>
-            <label for="form-input-1">Name</label>
-            <input v-model="newRoomData.Room_Name" type="text" placeholder="101" />
-        </template>
-        <template v-slot:form-input-2>
-            <label for="form-input-2">Building</label>
-            <input v-model="newRoomData.Room_Building" type="text" placeholder="A" />
-        </template>
-        <template v-slot:form-input-3>
-            <label for="form-input-3">Campus</label>
-            <input v-model="newRoomData.Room_Campus" type="text" placeholder="République" />
-        </template>
-        <template v-slot:form-input-4>
-            <label for="form-input-4">Location</label>
-            <input  v-model="newRoomData.Room_Location" type="text" placeholder="1st Floor" />
-        </template>
-        <template v-slot:form-input-5>
-            <label for="form-input-7">State</label>
-            <select v-model="newRoomData.Room_State">
-                <option value="Occupied" :selected="newRoomData.Room_State === 'Occupied' ? true : false">Occupied</option>
-                <option value="Vacant" :selected="newRoomData.Room_State === 'Vacant' ? true : false">Vacant</option>
-            </select>
-        </template>
-        <template v-slot:form-input-6>
-            <label for="form-input-6">Category</label>
-            <input  v-model="newRoomData.Room_Category" type="text" placeholder="Classroom" />
-        </template>
-        <template v-slot:modal-button>
-            <button @click="createRoom();">Save the Changes</button>
-        </template>
+        <h3>Create a new room</h3>
+      </template>
+      <template v-slot:form-input-1>
+        <label for="form-input-1">Name</label>
+        <input v-model="newRoomData.Room_Name" type="text" placeholder="101" />
+      </template>
+      <template v-slot:form-input-2>
+        <label for="form-input-2">Building</label>
+        <input v-model="newRoomData.Room_Building" type="text" placeholder="A" />
+      </template>
+      <template v-slot:form-input-3>
+        <label for="form-input-3">Campus</label>
+        <input v-model="newRoomData.Room_Campus" type="text" placeholder="République" />
+      </template>
+      <template v-slot:form-input-4>
+        <label for="form-input-4">Location</label>
+        <input v-model="newRoomData.Room_Location" type="text" placeholder="1st Floor" />
+      </template>
+      <template v-slot:form-input-5>
+        <label for="form-input-7">State</label>
+        <select v-model="newRoomData.Room_State">
+          <option value="Occupied" :selected="newRoomData.Room_State === 'Occupied' ? true : false">Occupied</option>
+          <option value="Vacant" :selected="newRoomData.Room_State === 'Vacant' ? true : false">Vacant</option>
+        </select>
+      </template>
+      <template v-slot:form-input-6>
+        <label for="form-input-6">Category</label>
+        <input v-model="newRoomData.Room_Category" type="text" placeholder="Classroom" />
+      </template>
+      <template v-slot:modal-button>
+        <button @click="createRoom();">Save the Changes</button>
+      </template>
     </Modal>
 
   </main-layout>
@@ -92,13 +93,13 @@ export default {
         fetchedRooms: [],
         currentRooms: []
       },
-      newRoomData:{
-        Room_Name:"",
-        Room_Building:"",
-        Room_Campus:"",
-        Room_Location:"",
-        Room_State:"",
-        Room_Category:""
+      newRoomData: {
+        Room_Name: "",
+        Room_Building: "",
+        Room_Campus: "",
+        Room_Location: "",
+        Room_State: "",
+        Room_Category: ""
       }
     };
   },
@@ -108,6 +109,14 @@ export default {
     this.userData.token = readToken();
     this.fetchAllRooms();
   },
+
+  // when roomData.currentRooms changes, fetchAllRooms() is called
+  watch: {
+    'roomData.currentRooms': function () {
+      this.fetchAllRooms();
+    }
+  },
+
   methods: {
     resetSearchOptions() {
       this.userData.searchOptions.building.length = 0;
@@ -116,8 +125,8 @@ export default {
       this.userData.searchOptions.hour.length = 0;
     },
     openModal(reference: string) {
-            (this.$refs[reference] as any).open();
-            console.log('Modal opened openModal');
+      (this.$refs[reference] as any).open();
+      console.log('Modal opened openModal');
     },
     identifyKeyword(mot: string) {
       // Regex pour heure sous le format ':1h'
@@ -192,19 +201,19 @@ export default {
         this.handleError(error);
       }
     },
-    async createRoom(){
-            try {
-                  const response = await axios.post('http://localhost:3000/rooms', this.newRoomData , {
-                      withCredentials: true, headers: {
-                          'Access-Control-Allow-Origin': 'http://localhost:5173/'
-                      }
-                  });
+    async createRoom() {
+      try {
+        const response = await axios.post('http://localhost:3000/rooms', this.newRoomData, {
+          withCredentials: true, headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:5173/'
+          }
+        });
 
-                  this.fetchAllRooms();
-                  alert("Room created successfully.");
-              }catch(e){
-                alert("Error while creating new room.");
-              }
+        this.fetchAllRooms();
+        alert("Room created successfully.");
+      } catch (e) {
+        alert("Error while creating new room.");
+      }
     },
     handleSuccess(data: never[]) {
       this.roomData.fetchedRooms = data;
@@ -212,7 +221,7 @@ export default {
     handleError(error: unknown) {
       console.error('Error fetching rooms:', error);
       alert('An error occurred while fetching rooms. Please try again later.');
-    }
+    },
   }
 };
 </script>
@@ -246,15 +255,15 @@ export default {
   cursor: pointer;
 }
 
-.create-room-btn{
-  margin-left:20px;
-  height:40px;
-  width:40px;
-  background:var(--blue);
-  color:#FFF;
-  border-radius:4px;
-  border:none;
-  cursor:pointer;
+.create-room-btn {
+  margin-left: 20px;
+  height: 40px;
+  width: 40px;
+  background: var(--blue);
+  color: #FFF;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
 }
 
 .item-list {
