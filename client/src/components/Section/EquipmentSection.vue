@@ -109,13 +109,6 @@ export default {
         console.log("EquipmentSection mounted");
     },
 
-    // when Equipment.currentEquipment changes, fetchAllRooms() is called
-    // watch: {
-    //     "Equipment.currentEquipment": function () {
-    //         this.fetchAllEquipment();
-    //     },
-    // },
-
     methods: {
         // Axios methods
         handleSuccess(response: any) {
@@ -164,9 +157,10 @@ export default {
                 });
 
                 this.fetchAllEquipment();
-                alert("Equipment created successfully.");
+                window.location.reload();
+
             } catch (e) {
-                alert("Error while creating new equipment.");
+                console.log(e);
             }
         },
     },

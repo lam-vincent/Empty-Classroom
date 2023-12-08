@@ -162,34 +162,25 @@ export default {
         deleteEquipment() {
             console.log('deleteEquipment equipment', this.equipment);
             // if (confirm("Are you sure you want to delete this equipment?")) {
-            try {
-                const response = axios.delete(`http://localhost:3000/equipment/${this.equipment.id_equipment}`,
-                    {
-                        withCredentials: true, headers: {
-                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                            'Content-Type': 'application/json'
-                        }
+            const response = axios.delete(`http://localhost:3000/equipment/${this.equipment.id_equipment}`,
+                {
+                    withCredentials: true, headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        'Content-Type': 'application/json'
                     }
-                ).then((response) => {
-                    if (response.status === 200) {
-                        // Equipment deleted successfully
-                        console.log('Equipment deleted successfully');
-                        this.$emit('equipmentListUpdated');
-                    } else {
-                        // Handle unexpected status code
-                        console.error(`Unexpected status code: ${response.status}`);
-                        // You can show an error message to the user if needed
-                    }
-                })
-                    .catch((error) => {
-                        // Handle errors from the server
-                        console.error('Error deleting equipment:', error);
-                        // You can show an error message to the user if needed
-                    });
-            } catch (e) {
-                console.error('Error in deleteEquipment try block:', e);
-                // You can show an error message to the user if needed
-            }
+                }
+            ).then((response) => {
+                if (response.status === 200) {
+                    console.log('Equipment deleted successfully');
+                    this.$emit('equipmentListUpdated');
+                    window.location.reload();
+                } else {
+                    console.error(`Unexpected status code: ${response.status}`);
+                }
+            }).catch((error) => {
+                console.error('Error deleting equipment:', error);
+            });
+
         }
     },
     // }
