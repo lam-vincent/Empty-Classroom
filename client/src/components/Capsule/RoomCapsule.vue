@@ -43,7 +43,7 @@
                 timestamp there.</p>
         </template>
         <template v-slot:modal-button>
-            <button>Reserve Now</button>
+            <button @click="() => openModal('ReserveRoom')">Reserve Now</button>
 
             <button @click="deleteRoom()" v-if="userData.token.role === 'Admin'"
                 style="margin-top: 1rem; background-color: var(--red);">Delete
@@ -95,13 +95,39 @@
             <button @click="editRoom(); closeModal();">Save the Changes</button>
         </template>
     </Modal>
+
+    <Modal ref="ReserveRoom" @close="">
+        <template v-slot:header-title>
+            <h3>Create a new Reservation</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Title</label>
+            <input v-model="newReserveData.Title" type="text" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-description>
+            <label for="form-input-description">Description</label>
+            <textarea v-model="newReserveData.Description" name="form-input-description" id="form-input-description"
+                cols="30" rows="5" placeholder="Write Description Here"></textarea>
+        </template>
+        <template v-slot:form-input-3>
+            <label for="form-input-3">Start time</label>
+            <input v-model="newReserveData.start_time" type="text" placeholder="2023-12-30 10:0:00" />
+        </template>
+        <template v-slot:form-input-4>
+            <label for="form-input-4">End time</label>
+            <input v-model="newReserveData.end_time" type="text" placeholder="2023-12-30 12:00:00" />
+        </template>
+        <template v-slot:modal-button>
+            <button @click="reserveRoom();">Finalize Reservation</button>
+        </template>
+    </Modal>
 </template>
-  
+
 <script lang="ts">
 import { verifyToken, readToken } from "../../utils/authUtils";
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
-import axios from "axios"
+import axios from "axios";
 
 export default {
     name: "RoomCapsule",
@@ -126,8 +152,16 @@ export default {
                 Room_Campus: this.room.Room_Campus,
                 Room_Location: this.room.Room_Location,
                 Room_State: this.room.Room_State,
-                Room_Category: this.room.Room_Category
-            }
+                Room_Category: this.room.Room_Category,
+            },
+            newReserveData: {
+                id_room: this.room.id_room,
+                id_user: 1, // this.userData.token.id_user
+                Title: "",
+                Description: "",
+                start_time: "",
+                end_time: "",
+            },
         };
     },
     beforeMount() {
@@ -138,7 +172,7 @@ export default {
         // Modal methods
         openModal(reference: string) {
             (this.$refs[reference] as any).open();
-            console.log('Modal opened openModal');
+            console.log("Modal opened openModal");
         },
         openModalDetails(reference: string) {
             (this.$refs[reference] as any).open();
@@ -148,15 +182,20 @@ export default {
         },
         editRoom() {
             try {
-                const response = axios.put(`http://localhost:3000/rooms/${this.room.id_room}`, this.currentRoomData, {
-                    withCredentials: true, headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                        'Content-Type': 'application/json'
+                axios.put(
+                    `http://localhost:3000/rooms/${this.room.id_room}`,
+                    this.currentRoomData,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
                     }
-                });
+                );
                 alert("Room infos successfully edited.");
-                this.$emit('roomListUpdated');
-                this.$emit('close');
+                this.$emit("roomListUpdated");
+                this.$emit("close");
             } catch (e) {
                 alert("Error while updating room");
             }
@@ -165,22 +204,43 @@ export default {
             if (confirm("Are you sure you want to delete this room ?")) {
                 try {
                     console.log("this.room", this.room);
-                    const response = axios.delete(`http://localhost:3000/rooms/${this.room.id_room}`, {
-                        withCredentials: true, headers: {
-                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                            'Content-Type': 'application/json'
+                    axios.delete(
+                        `http://localhost:3000/rooms/${this.room.id_room}`,
+                        {
+                            withCredentials: true,
+                            headers: {
+                                "Access-Control-Allow-Origin": "http://localhost:5173/",
+                                "Content-Type": "application/json",
+                            },
                         }
-                    });
+                    );
                     alert("Room successfully deleted.");
                     (this.$refs.modalRoomDetails as any).close();
-                    this.$emit('close');
-                    this.$emit('roomListUpdated');
-                } catch (e) {
-
-                }
+                    this.$emit("close");
+                    this.$emit("roomListUpdated");
+                } catch (e) { }
             }
-        }
-    }
+        },
+        async reserveRoom() {
+            try {
+                axios.post(
+                    `http://localhost:3000/reserve`,
+                    this.newReserveData,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                alert("Room successfully reserved.");
+                (this.$refs.ReserveRoom as any).close();
+                this.$emit("close");
+                this.$emit("roomListUpdated");
+            } catch (e) { }
+        },
+    },
 };
 </script>
 
@@ -521,6 +581,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 1rem;
     outline: none;
+    resize: none;
 }
 
 .form-input input {

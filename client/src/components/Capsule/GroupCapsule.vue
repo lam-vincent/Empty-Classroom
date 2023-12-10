@@ -51,7 +51,8 @@
         <template v-slot:form-input-3>
             <label for="form-input-3">Status</label>
             <select v-model="currentGroupData.Group_State">
-                <option value="private" :selected="currentGroupData.Group_State === 'private' ? true : false">private</option>
+                <option value="private" :selected="currentGroupData.Group_State === 'private' ? true : false">private
+                </option>
                 <option value="public" :selected="currentGroupData.Group_State === 'public' ? true : false">public</option>
             </select>
         </template>
@@ -83,12 +84,12 @@ export default {
     },
     data() {
         return {
-            currentGroupData : {
-                Group_Creation:this.group.Group_Creation,
+            currentGroupData: {
+                Group_Creation: this.group.Group_Creation,
                 Group_Password: this.group.Group_Password,
                 Group_Name: this.group.Group_Name,
                 Group_Size: this.group.Group_Size,
-                Group_State:    this.group.Group_State
+                Group_State: this.group.Group_State
             }
         }
     },
@@ -104,38 +105,38 @@ export default {
         closeModal() {
             console.log('Modal closed');
         },
-        editGroup(){
+        editGroup() {
             // console.log(this.currentGroupData);
-            try{
-                const response = axios.put(`http://localhost:3000/groups/${this.group.id_group}`,this.currentGroupData, {
-                      withCredentials: true, headers: {
-                          'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                          'Content-Type': 'application/json'
-                      }
-                  });
+            try {
+                const response = axios.put(`http://localhost:3000/groups/${this.group.id_group}`, this.currentGroupData, {
+                    withCredentials: true, headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        'Content-Type': 'application/json'
+                    }
+                });
                 alert("group Infos successfully edited.");
                 this.$emit('groupListUpdated');
                 // this.roomData.fetchedRooms = response.data;
-            }catch(e){
+            } catch (e) {
                 alert("Error while updating group");
             }
         },
-        deleteGroup(){
-                if(confirm("Are you sure you want to delete this group ?")){
-                    try{
-                        const response = axios.delete(`http://localhost:3000/groups/${this.group.id_group}`, {
+        deleteGroup() {
+            if (confirm("Are you sure you want to delete this group ?")) {
+                try {
+                    const response = axios.delete(`http://localhost:3000/groups/${this.group.id_group}`, {
                         withCredentials: true, headers: {
                             'Access-Control-Allow-Origin': 'http://localhost:5173/',
                             'Content-Type': 'application/json'
                         }
-                        });
-                        alert("Group successfully deleted.");
-                        this.$emit('close');
-                        this.$emit('groupListUpdated');
-                    }catch(e){
-                        
-                    }
-                }           
+                    });
+                    alert("Group successfully deleted.");
+                    this.$emit('close');
+                    this.$emit('groupListUpdated');
+                } catch (e) {
+
+                }
+            }
         }
     }
 };
@@ -480,6 +481,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 1rem;
     outline: none;
+    resize: none;
 }
 
 .form-input input {
@@ -505,9 +507,8 @@ header {
     outline: none;
 }
 
-.modal-button-negative button{
-    background:var(--red);
+.modal-button-negative button {
+    background: var(--red);
 }
-
 </style>
   
