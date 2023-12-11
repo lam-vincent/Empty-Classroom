@@ -9,11 +9,12 @@
         <template v-slot:form-input-1>
           <div class="profile-image">
             <img :src="currentUserData.User_Picture || '../../public/logo-rounded1.png'">
-            <div class="profile-image-wrapper">
+            <div class="profile-image-wrapper" @click="triggerFileInput">
               Edit picture
               <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path fill-rule="evenodd" d="M1 8a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 018.07 3h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0016.07 6H17a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V8zm13.5 3a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM10 14a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
               </svg> -->
+              <input type="file" ref="fileInput" style="display: none" @change="handleFileUpload">
             </div>
           </div>
         </template>
@@ -147,7 +148,21 @@ export default {
       } catch (error) {
         alert("Failed fetching user infos.");
       }
-    }
+    },
+    triggerFileInput(){
+      this.$refs.fileInput.click();
+    },
+    handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          // Handle the file as needed
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.currentUserData.User_Picture = reader.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      },
   },
   beforeMount(){
     this.fetchUserInfos();
