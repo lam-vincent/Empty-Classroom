@@ -15,7 +15,6 @@
         <a href="/register">Don't have an account? Sign up here.</a>
         <span>Sign In</span>
       </div>
-
       <div class="register-message">
         <h1>Hello, Friend!</h1>
         <p>Register with your personal details to access all site features.</p>
@@ -27,10 +26,6 @@
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" v-model="registrationData.username" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" v-model="registrationData.email" required />
           </div>
           <div class="form-group">
             <label for="password">Password</label>
