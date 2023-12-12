@@ -126,12 +126,24 @@ const joinGroup = async (id_user: string, id_group: string) => {
   });
 };
 
+const checkUserGroup = async (id_user: string, id_group: string) => {
+  const query = "SELECT * FROM Belong WHERE (id_user, id_group) = (?, ?)";
+  return new Promise<any>(async (resolve, reject) => {
+    pool.query(query, [id_user, id_group], async (error, results) => {
+      const myQueryResult = results;
+      // console.log(results);
+      resolve(myQueryResult);
+    });
+  });
+};
+
 export default {
   fetchAllGroups,
   fetchAllBelongings,
   fetchGroupsByUser,
   fetchGroupsByStatus,
   createGroup,
+  checkUserGroup,
   createBelonging,
   updateGroupById,
   deleteGroupById,

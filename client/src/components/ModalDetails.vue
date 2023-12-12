@@ -81,6 +81,16 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="modal-button-second modal-button">
+                                <slot name="modal-button-second">
+                                    <!-- <button>modal button</button> -->
+                                </slot>
+                        </div>
+                        <div class="modal-button-third modal-button">
+                                <slot name="modal-button-third">
+                                    <!-- <button>modal button</button> -->
+                                </slot>
+                        </div>
                     </div>
 
                 </div>
@@ -313,6 +323,14 @@ export default defineComponent({
     font-weight: 600;
     color: white;
     cursor: pointer;
+}
+
+.modal-button-second {
+    margin-top:15px;
+}
+
+.modal-button-third button{
+    background:var(--red);
 }
 
 </style>

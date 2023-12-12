@@ -93,8 +93,16 @@ export const deleteGroupById = async (req: Request, res: Response) => {
 export const joinGroup = async (req: Request, res: Response) => {
   try {
     const { id_user, id_group } = req.body;
-    await groupService.joinGroup(id_user, id_group);
-    res.json({ message: "Joined group successfully" });
+    const userInGroupCheck: any = await groupService.checkUserGroup(
+      id_user,
+      id_group
+    );
+    if (userInGroupCheck.length > 0) {
+      throw new Error("This user already belong to this group.");
+    } else {
+      await groupService.joinGroup(id_user, id_group);
+      res.json({ message: "Group joined successfully" });
+    }
   } catch (error) {
     console.error("Error joining group:", error);
     res.status(500).json({ message: "Error joining group" });
