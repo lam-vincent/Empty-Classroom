@@ -108,8 +108,10 @@ const updateGroupById = async (id: string, groupData: any) => {
   );
 };
 
+// Join to delete belong entries along with the
 const deleteGroupById = async (id: string) => {
-  const query = "DELETE FROM `Groups` WHERE id_group = ?";
+  const query =
+    "DELETE `groups`,belong FROM `groups` INNER JOIN belong WHERE groups.id_group = belong.id_group AND groups.id_group = ?";
   await pool.query(query, [id], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
