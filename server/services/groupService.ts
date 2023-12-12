@@ -108,6 +108,15 @@ const updateGroupById = async (id: string, groupData: any) => {
   );
 };
 
+const deleteBelongingByGroup = async (id: string) => {
+  const query = "DELETE FROM Belong WHERE id_group = ?";
+  await pool.query(query, [id], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
+};
+
 // Join to delete belong entries along with the
 const deleteGroupById = async (id: string) => {
   const query =
@@ -122,6 +131,16 @@ const deleteGroupById = async (id: string) => {
 const joinGroup = async (id_user: string, id_group: string) => {
   const query = "INSERT INTO Belong (id_user, id_group) VALUES (?, ?)";
   await pool.query(query, [id_user, id_group], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
+};
+
+const fetchUsersByGroup = async (id_group: string) => {
+  const query =
+    "SELECT User_Name FROM Users INNER JOIN Belong ON Users.id_user = Belong.id_user WHERE Belong.id_group = ?";
+  await pool.query(query, [id_group], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
