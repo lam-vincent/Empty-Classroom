@@ -6,6 +6,7 @@ import {
   updateGroupById,
   deleteGroupById,
   joinGroup,
+  quitGroup,
   getAllGroups,
 } from "../controllers/groupController";
 import { authMiddleware } from "../middlewares/authMiddleware";
@@ -27,6 +28,9 @@ router.put("/groups/:id", authMiddleware, updateGroupById);
 
 // Route to delete a group by id
 router.delete("/groups/:id", authMiddleware, deleteGroupById);
+
+// Route to delete a belonging
+router.delete("/groups/:userId/:groupId", authMiddleware, quitGroup);
 
 // Route to join a group
 router.put("/groups", authMiddleware, joinGroup);

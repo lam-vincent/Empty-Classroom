@@ -126,6 +126,15 @@ const joinGroup = async (id_user: string, id_group: string) => {
   });
 };
 
+const quitGroup = async (id_user: string, id_group: string) => {
+  const query = "DELETE FROM Belong WHERE id_user = ? AND id_group = ?";
+  await pool.query(query, [id_user, id_group], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
+};
+
 const checkUserGroup = async (id_user: string, id_group: string) => {
   const query = "SELECT * FROM Belong WHERE (id_user, id_group) = (?, ?)";
   return new Promise<any>(async (resolve, reject) => {
@@ -148,4 +157,5 @@ export default {
   updateGroupById,
   deleteGroupById,
   joinGroup,
+  quitGroup,
 };

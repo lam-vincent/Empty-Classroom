@@ -118,15 +118,11 @@ export default {
           const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
             element.Belonging.some((belonging) => belonging.id_user === userId)
           );
-          // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
-          // Ajouter les éléments filtrés au tableau vide
           this.groupData.joinedGroups.push(...elementsFiltres);
-      },
-      isUserInGroup(objet:any) {
-        // Vérifier si l'objet est présent dans groupData.joinedGroups
-        // console.log("Iobjet);
-        return this.groupData.joinedGroups.some((group:any) => group.id_group === objet.id_group);
-      }
+        },
+        isUserInGroup(objet:any) {
+          return this.groupData.joinedGroups.some((group:any) => group.id_group === objet.id_group);
+        }
   },
   components: { GroupCapsule }
 };

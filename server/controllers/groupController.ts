@@ -90,6 +90,18 @@ export const deleteGroupById = async (req: Request, res: Response) => {
   }
 };
 
+export const quitGroup = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const groupId = req.params.groupId;
+    await groupService.quitGroup(userId, groupId);
+    res.json({ message: "Group left successfully" });
+  } catch (error) {
+    console.error("Error leaving group:", error);
+    res.status(500).json({ message: "Error leaving group" });
+  }
+};
+
 export const joinGroup = async (req: Request, res: Response) => {
   try {
     const { id_user, id_group } = req.body;

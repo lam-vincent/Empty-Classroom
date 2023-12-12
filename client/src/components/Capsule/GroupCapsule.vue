@@ -26,7 +26,7 @@
             <button @click="() => joinGroup()" v-if="isUserInGroup == false">Join Group</button>
         </template>
         <template v-slot:modal-button-third>
-            <button @click="() => joinGroup()"  v-if="isUserInGroup == true" style="background-color: var(--red);">Quit Group</button>
+            <button @click="() => quitGroup()"  v-if="isUserInGroup == true" style="background-color: var(--red);">Quit Group</button>
         </template>
         <template v-slot:additonal-information-before-modal-button>
             <p>Click on the button to edit the group.</p>
@@ -172,6 +172,33 @@ export default {
 
                     if (response.status === 200) {
                         alert("Group successfully joined.");
+                        this.$emit('close');
+                        this.$emit('groupListUpdated');
+                    } else {
+                        throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
+                    }
+                } catch (error:any) {
+                console.error(error.message);
+                alert("Failed to join group.");
+                }
+            }
+        },
+        async quitGroup() {
+            if (confirm("Are you sure you want to quit this group?")) {
+                try {
+                const response = await axios.delete(
+                    `http://localhost:3000/groups/${readToken().userId}/${this.group.id_group}`,
+                    {
+                    withCredentials: true,
+                    headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        'Content-Type': 'application/json',
+                    },
+                    }
+                );
+
+                    if (response.status === 200) {
+                        alert("Group successfully left.");
                         this.$emit('close');
                         this.$emit('groupListUpdated');
                     } else {
