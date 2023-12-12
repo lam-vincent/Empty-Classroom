@@ -108,6 +108,15 @@ const updateGroupById = async (id: string, groupData: any) => {
   );
 };
 
+const deleteBelongingByGroup = async (id: string) => {
+  const query = "DELETE FROM Belong WHERE id_group = ?";
+  await pool.query(query, [id], (error, results, fields) => {
+    if (error) throw error;
+    console.log(results);
+    return results;
+  });
+};
+
 const deleteGroupById = async (id: string) => {
   const query = "DELETE FROM `Groups` WHERE id_group = ?";
   await pool.query(query, [id], (error, results, fields) => {
