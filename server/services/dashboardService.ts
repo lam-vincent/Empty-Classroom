@@ -2,7 +2,7 @@ import { pool } from "../config/database";
 import { Equipment } from "../types/types";
 
 const fetchPreferredClassrooms = async (userId: string) => {
-  const query = "SELECT * FROM Prefer WHERE id_user = ?";
+  const query = `SELECT * FROM Rooms WHERE id_room IN (SELECT id_room FROM Prefer WHERE id_user = ?)`;
 
   return new Promise((resolve, reject) => {
     pool.query(query, [userId], async (error, results) => {
@@ -12,36 +12,41 @@ const fetchPreferredClassrooms = async (userId: string) => {
   });
 };
 
-const insertPreferredClassroom = async (userId: string, roomId: string) => {
-  const query = "INSERT INTO Prefer(id_user, id_room) VALUES(?, ?)";
+const insertPreferredClassroom = async (
+  userId: string,
+  Room_Building: string,
+  Room_Name: string
+) => {
+  const query = `INSERT INTO Prefer (id_user, id_room) SELECT ?, (SELECT id_room FROM Rooms WHERE Room_Building = ? AND Room_Name = ?) WHERE NOT EXISTS (SELECT * FROM Prefer WHERE id_user = ? AND id_room = (SELECT id_room FROM Rooms WHERE Room_Building = ? AND Room_Name = ?))`;
 
   return new Promise((resolve, reject) => {
-    pool.query(query, [userId, roomId], async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
-    });
+    pool.query(
+      query,
+      [userId, Room_Building, Room_Name, userId, Room_Building, Room_Name],
+      async (error, results) => {
+        const myQueryResult = results;
+        resolve(myQueryResult);
+      }
+    );
   });
 };
 
-const modifyPreferredClassroom = async (userId: string, roomId: string) => {
-  const query = "UPDATE Prefer SET id_room = ? WHERE id_user = ?";
+const removePreferredClassroom = async (
+  userId: string,
+  Room_Building: string,
+  Room_Name: string
+) => {
+  const query = `DELETE FROM Prefer WHERE id_user = ? AND id_room = (SELECT id_room FROM Rooms WHERE Room_Building = ? AND Room_Name = ?)`;
 
   return new Promise((resolve, reject) => {
-    pool.query(query, [roomId, userId], async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
-    });
-  });
-};
-
-const removePreferredClassroom = async (userId: string, roomId: string) => {
-  const query = "DELETE FROM Prefer WHERE id_user = ? AND id_room = ?";
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, [userId, roomId], async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
-    });
+    pool.query(
+      query,
+      [userId, Room_Building, Room_Name],
+      async (error, results) => {
+        const myQueryResult = results;
+        resolve(myQueryResult);
+      }
+    );
   });
 };
 
@@ -101,7 +106,6 @@ const deleteEquipment = async (id: string) => {
 export default {
   fetchPreferredClassrooms,
   insertPreferredClassroom,
-  modifyPreferredClassroom,
   removePreferredClassroom,
   fetchEquipment,
   addEquipment,

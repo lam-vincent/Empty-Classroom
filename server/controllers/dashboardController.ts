@@ -19,10 +19,14 @@ export const getPreferredClassrooms = async (req: Request, res: Response) => {
 };
 
 export const addPreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
+  const { userId, Room_Building, Room_Name } = req.body;
 
   try {
-    await dashboardService.insertPreferredClassroom(userId, roomId);
+    await dashboardService.insertPreferredClassroom(
+      userId,
+      Room_Building,
+      Room_Name
+    );
 
     res.status(201).json({ message: "Preferred classroom added successfully" });
   } catch (error) {
@@ -31,27 +35,15 @@ export const addPreferredClassroom = async (req: Request, res: Response) => {
   }
 };
 
-// Duplicata du champ roomId dans la table Prefer --> Erreur
-export const updatePreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
-
-  try {
-    await dashboardService.modifyPreferredClassroom(userId, roomId);
-
-    res
-      .status(200)
-      .json({ message: "Preferred classroom updated successfully" });
-  } catch (error) {
-    console.error("Error updating preferred classroom:", error);
-    res.status(500).json({ message: "Error updating preferred classroom" });
-  }
-};
-
 export const deletePreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
+  const { userId, Room_Building, Room_Name } = req.body;
 
   try {
-    await dashboardService.removePreferredClassroom(userId, roomId);
+    await dashboardService.removePreferredClassroom(
+      userId,
+      Room_Building,
+      Room_Name
+    );
 
     res
       .status(200)
