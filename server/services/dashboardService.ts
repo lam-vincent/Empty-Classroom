@@ -63,14 +63,17 @@ const fetchEquipment = async () => {
 };
 
 const addEquipment = async (roomEquipment: any) => {
-  const query =
-    "INSERT INTO Equipments(Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status) VALUES(?, ?, ?, ?, ?)";
+  const query = `INSERT INTO Equipments(Equipment_Name, Equipment_Type, Equipment_Location, Equipment_Description, Equipment_Status) SELECT ?, ?, ?, ?, ? WHERE NOT EXISTS (SELECT * FROM Equipments WHERE Equipment_Name = ?)`;
 
   return new Promise((resolve, reject) => {
-    pool.query(query, Object.values(roomEquipment), async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
-    });
+    pool.query(
+      query,
+      [...Object.values(roomEquipment), roomEquipment.Equipment_Name],
+      async (error, results) => {
+        const myQueryResult = results;
+        resolve(myQueryResult);
+      }
+    );
   });
 };
 
