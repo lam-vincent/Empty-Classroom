@@ -8,7 +8,7 @@
 
       <router-link to="/find" class="go-to-find-card">
         <div class="go-to-find-card-image">
-          <img src="classroom1.jpg" />
+          <img src="computer-room2.jpg" />
         </div>
         <div class="go-to-find-card-content">
           <p>What are you looking for?</p>
@@ -55,7 +55,7 @@ export default {
     RecommendationSection,
     EquipmentSection,
   },
-  
+
 
   beforeMount() {
     verifyToken();
@@ -88,10 +88,14 @@ export default {
 
 .go-to-find-card-image {
   width: 100%;
-  height: 100px;
   overflow: hidden;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+.go-to-find-card-image img {
+  width: 100%;
+  height: 100%;
 }
 
 .go-to-find-card-content {
