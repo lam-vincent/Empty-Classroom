@@ -52,7 +52,6 @@
         </template>
 
     </ModalDetails>
-
     <Modal ref="EditRoom" @close="closeModal">
         <template v-slot:header-title>
             <h3>Edit Room</h3>
@@ -98,7 +97,7 @@
 
     <Modal ref="ReserveRoom" @close="">
         <template v-slot:header-title>
-            <h3>Create a new Reservation</h3>
+            <h3>🕘 New Reservation</h3>
         </template>
         <template v-slot:form-input-1>
             <label for="form-input-1">Title</label>
@@ -107,18 +106,13 @@
         <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
             <textarea v-model="newReserveData.Description" name="form-input-description" id="form-input-description"
-                cols="30" rows="5" placeholder="Write Description Here"></textarea>
+                cols="30" rows="5" placeholder="Tell us more about what you will be doing in this room !"></textarea>
         </template>
         <template v-slot:form-input-3>
-            <label for="form-input-3">Start time</label>
-            <input v-model="newReserveData.start_time" type="text" placeholder="2023-12-30 10:0:00" />
-        </template>
-        <template v-slot:form-input-4>
-            <label for="form-input-4">End time</label>
-            <input v-model="newReserveData.end_time" type="text" placeholder="2023-12-30 12:00:00" />
+            <RoomTimetable :room="room" ref="mainTimetable" @scheduleTimeChanged="setReservationTime" @scheduleDateChanged="setReservationDate" />
         </template>
         <template v-slot:modal-button>
-            <button @click="reserveRoom();">Finalize Reservation</button>
+            <button @click="reserveRoom();">Create Reservation</button>
         </template>
     </Modal>
 </template>
@@ -128,12 +122,15 @@ import { verifyToken, readToken } from "../../utils/authUtils";
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
 import axios from "axios";
+import RoomTimetable from "../RoomTimetable.vue";
+
 
 export default {
     name: "RoomCapsule",
     components: {
         ModalDetails,
         Modal,
+        RoomTimetable
     },
     props: {
         room: {
@@ -156,11 +153,12 @@ export default {
             },
             newReserveData: {
                 id_room: this.room.id_room,
-                id_user: 1, // this.userData.token.id_user
+                id_user: readToken().userId,
                 Title: "",
                 Description: "",
-                start_time: "",
-                end_time: "",
+                Reservation_Date:"",
+                start_time:null,
+                End_Time: "",
             },
         };
     },
@@ -170,6 +168,12 @@ export default {
     },
     methods: {
         // Modal methods
+        setReservationTime(data:any){
+            this.newReserveData.start_time = data;
+        },
+        setReservationDate(data:any){
+            this.newReserveData.Reservation_Date = data;
+        },
         openModal(reference: string) {
             (this.$refs[reference] as any).open();
             console.log("Modal opened openModal");
@@ -179,6 +183,14 @@ export default {
         },
         closeModal() {
             (this.$refs.modalRoomDetails as any).close();
+        },
+        computeNewDate(chaineHeure:string){
+            const dateHeure = new Date(`2000-01-01T${chaineHeure}`);
+            // Ajouter une heure
+            dateHeure.setHours(dateHeure.getHours() + 1);
+            // Formater la nouvelle heure
+            const nouvelleHeure = dateHeure.toTimeString().slice(0, 8);
+            return nouvelleHeure;
         },
         editRoom() {
             try {
@@ -223,20 +235,39 @@ export default {
         },
         async reserveRoom() {
             try {
-                axios.post(
-                    `http://localhost:3000/reserve`,
-                    this.newReserveData,
-                    {
-                        withCredentials: true,
-                        headers: {
-                            "Access-Control-Allow-Origin": "http://localhost:5173/",
-                            "Content-Type": "application/json",
-                        },
+                if(this.newReserveData.start_time.status != "reserved"){
+                    console.log(this.newReserveData);
+                    try{
+                        axios.post(
+                            `http://localhost:3000/reserve`,
+                            {
+                                id_room: this.newReserveData.id_room,
+                                id_user: this.newReserveData.id_user,
+                                Title: this.newReserveData.Title,
+                                Description: this.newReserveData.Description,
+                                Reservation_Date: this.newReserveData.Reservation_Date,
+                                Start_Time: this.newReserveData.start_time.date,
+                                End_Time: this.computeNewDate(this.newReserveData.start_time.date),
+                            },
+                            {
+                                withCredentials: true,
+                                headers: {
+                                    "Access-Control-Allow-Origin": "http://localhost:5173/",
+                                    "Content-Type": "application/json",
+                                },
+                            }
+                        );
+
+                        alert("Room sucessfully reserved.");
+                    } catch(e){
+                        
                     }
-                );
-                alert("Room successfully reserved.");
-                (this.$refs.ReserveRoom as any).close();
-                this.$emit("close");
+                }else{
+                    alert("This room is already reserved.");
+                }
+                (this.$refs.mainTimetable as any).fetchSchedule();
+                // (this.$refs.ReserveRoom as any).close();
+                // this.$emit("close");
                 this.$emit("roomListUpdated");
             } catch (e) { }
         },
@@ -570,7 +601,7 @@ header {
 .form-input-description label,
 .form-input label {
     width: auto;
-    margin-bottom: 5px;
+    margin-bottom: 12px;
     font-size: 14px;
     color: var(--dark-gray);
 }

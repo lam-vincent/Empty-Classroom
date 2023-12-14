@@ -90,6 +90,17 @@ export const deleteGroupById = async (req: Request, res: Response) => {
   }
 };
 
+export const getGroupMembers = async (req: Request, res: Response) => {
+  try {
+    const groupId = req.params.groupId;
+    const groupMembers = await groupService.fetchUsersByGroup(groupId);
+    res.json({ groupMembers });
+  } catch (error) {
+    console.error("Error deleting group:", error);
+    res.status(500).json({ message: "Error deleting group" });
+  }
+};
+
 export const quitGroup = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;

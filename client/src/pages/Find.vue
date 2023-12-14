@@ -73,7 +73,7 @@ export default {
   props: ['category'],
   components: {
     RoomCapsule,
-    Modal
+    Modal,
   },
   data() {
     return {
@@ -100,7 +100,7 @@ export default {
         Room_Location: "",
         Room_State: "",
         Room_Category: ""
-      }
+      },
     };
   },
 
@@ -111,11 +111,11 @@ export default {
   },
 
   // when roomData.currentRooms changes, fetchAllRooms() is called
-  watch: {
-    'roomData.currentRooms': function () {
-      this.fetchAllRooms();
-    }
-  },
+  // watch: {
+  //   'roomData.currentRooms': function () {
+  //     this.fetchAllRooms();
+  //   }
+  // },
 
   methods: {
     resetSearchOptions() {

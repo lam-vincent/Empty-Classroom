@@ -14,7 +14,7 @@ const fetchAllReservations = async () => {
 
 const createReservation = async (reservationData: any) => {
   const query =
-    "INSERT INTO Reserve(id_room, id_user, Title, Description, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?)";
+    "INSERT INTO Reserve(id_room, id_user, Title, Description, Reservation_Date, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?, ?)";
   await pool.query(
     query,
     Object.values(reservationData),
@@ -39,6 +39,16 @@ const fetchReservationByRoom = async (roomId: string) => {
   const query = "SELECT * FROM Reserve WHERE id_room = ?";
   return new Promise<Reserve[]>((resolve, reject) => {
     pool.query(query, [roomId], async (error, results, fields) => {
+      if (error) throw error;
+      resolve(results);
+    });
+  });
+};
+
+const fetchReservationByDate = async (date: string) => {
+  const query = "SELECT * FROM Reserve WHERE Reservation_Date = ?";
+  return new Promise<Reserve[]>((resolve, reject) => {
+    pool.query(query, [date], async (error, results, fields) => {
       if (error) throw error;
       resolve(results);
     });
@@ -72,6 +82,7 @@ export default {
   createReservation,
   fetchReservationByUser,
   fetchReservationByRoom,
+  fetchReservationByDate,
   fetchAllReservations,
   updateReservation,
   deleteReservation,

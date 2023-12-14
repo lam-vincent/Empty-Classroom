@@ -1,5 +1,10 @@
 <template>
     <div class="group-card" @click="() => openModalDetails('modalGroupDetails')">
+        <div class="group-card-members">
+                <ul>
+                    <li v-for="(member) in groupMemberList"><img  class="group-card-member-profile" :src="member.User_Picture" :alt="member.User_Name"/></li>
+                </ul>
+        </div>
         <div class="group-card-image">
             <img src="classroom1.jpg" />
         </div>
@@ -90,7 +95,7 @@ export default {
         },
         isUserInGroup:{
             type: Boolean
-        }
+        },
     },
     data() {
         return {
@@ -101,7 +106,11 @@ export default {
                 Group_Size: this.group.Group_Size,
                 Group_State: this.group.Group_State
             },
+            groupMemberList:[],   
         }
+    },
+    beforeMount(){
+        this.fetchGroupMembers(this.group.id_group);
     },
     methods: {
         // Modal methods
@@ -209,9 +218,32 @@ export default {
                 alert("Failed to join group.");
                 }
             }
+        },
+        async fetchGroupMembers(groupId: string){
+            try { 
+                // debugger;
+                const response = await axios.get(
+                    `http://localhost:3000/groups/users/${groupId}`,
+                    {
+                    withCredentials: true,
+                    headers: {
+                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        'Content-Type': 'application/json',
+                    },
+                    }
+                );
+
+                    if (response.status === 200) {
+                       console.log("Fetched group members of : "+this.group.Group_Name);
+                       this.groupMemberList = response.data.groupMembers;
+                    } else {
+                        throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
+                    }
+
+                } catch (error:any) {
+                console.error(error.message);
+                }
         }
-    },beforeMount(){
-        console.log(this.isUserInGroup);
     }
 };
 </script>
@@ -230,6 +262,7 @@ export default {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     min-width: 200px;
+    /* box-sizing:border-box; */
 }
 
 .group-card-image {
@@ -581,5 +614,43 @@ header {
     outline: none;
 }
 
+.group-card-members{
+    position:absolute;
+    width:250px;
+}
+
+.group-card-members ul{
+    display:flex;
+    flex-direction:row;
+    height:50px;
+    align-items:center;
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:6px;
+    justify-content:right;
+    background:rgba(255,255,255,0.3);
+    overflow-x:scroll;
+    overflow-y:hidden;
+}
+
+.group-card-members ul li{
+    list-style:none;
+    margin:4px;
+    height:30px;
+    width:30px;
+    border-radius:100%;
+    border:2px solid #FFF;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.group-card-member-profile{
+    height:100%;
+    width:100%;
+    border-radius:100%;
+}
 </style>
   
