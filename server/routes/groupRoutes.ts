@@ -8,6 +8,7 @@ import {
   joinGroup,
   quitGroup,
   getAllGroups,
+  getGroupMembers,
 } from "../controllers/groupController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
@@ -16,6 +17,9 @@ const router = express.Router();
 // Route to get groups by user
 router.get("/groups/user/:userId", authMiddleware, getGroupsByUser);
 router.get("/groups", authMiddleware, getAllGroups);
+
+// Route to get user by group
+router.get("/groups/users/:groupId", authMiddleware, getGroupMembers);
 
 // Route to get groups by status
 router.get("/groups/status/:status", authMiddleware, getGroupsByStatus);

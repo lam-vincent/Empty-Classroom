@@ -108,14 +108,14 @@ const updateGroupById = async (id: string, groupData: any) => {
   );
 };
 
-const deleteBelongingByGroup = async (id: string) => {
-  const query = "DELETE FROM Belong WHERE id_group = ?";
-  await pool.query(query, [id], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
-  });
-};
+// const deleteBelongingByGroup = async (id: string) => {
+//   const query = "DELETE FROM Belong WHERE id_group = ?";
+//   await pool.query(query, [id], (error, results, fields) => {
+//     if (error) throw error;
+//     console.log(results);
+//     return results;
+//   });
+// };
 
 // Join to delete belong entries along with the
 const deleteGroupById = async (id: string) => {
@@ -139,11 +139,12 @@ const joinGroup = async (id_user: string, id_group: string) => {
 
 const fetchUsersByGroup = async (id_group: string) => {
   const query =
-    "SELECT User_Name FROM Users INNER JOIN Belong ON Users.id_user = Belong.id_user WHERE Belong.id_group = ?";
-  await pool.query(query, [id_group], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+    "SELECT User_Name,User_Picture FROM Users INNER JOIN Belong ON Users.id_user = Belong.id_user WHERE Belong.id_group = ?";
+  return new Promise(async (resolve, reject) => {
+    pool.query(query, [id_group], async (error, results, fields) => {
+      if (error) throw error;
+      resolve(results);
+    });
   });
 };
 
@@ -172,6 +173,7 @@ export default {
   fetchAllBelongings,
   fetchGroupsByUser,
   fetchGroupsByStatus,
+  fetchUsersByGroup,
   createGroup,
   checkUserGroup,
   createBelonging,
