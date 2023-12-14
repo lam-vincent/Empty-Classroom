@@ -121,9 +121,6 @@ const addIsEquipped = async (
       query,
       [id_room, Equipment_Name, Quantity, Quantity],
       async (error, results) => {
-        console.log("caca");
-        console.log(results);
-        console.log(error);
         resolve(results);
       }
     );

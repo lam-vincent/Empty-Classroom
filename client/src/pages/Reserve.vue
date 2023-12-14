@@ -2,12 +2,6 @@
   <main-layout>
     <div class="reserve-page">
 
-      <div class="booking">
-        <h1>Book a Room</h1>
-        <input type="text" placeholder="Room Name" />
-        <button>Reserve</button>
-      </div>
-
       <div class="booked">
         <h2>Room you Booked</h2>
 
