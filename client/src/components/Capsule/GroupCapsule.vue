@@ -1,9 +1,10 @@
 <template>
     <div class="group-card" @click="() => openModalDetails('modalGroupDetails')">
         <div class="group-card-members">
-                <ul>
-                    <li v-for="(member) in groupMemberList"><img  class="group-card-member-profile" :src="member.User_Picture" :alt="member.User_Name"/></li>
-                </ul>
+            <ul>
+                <li v-for="(member) in groupMemberList"><img class="group-card-member-profile" :src="member.User_Picture"
+                        :alt="member.User_Name" /></li>
+            </ul>
         </div>
         <div class="group-card-image">
             <img src="classroom1.jpg" />
@@ -31,7 +32,8 @@
             <button @click="() => joinGroup()" v-if="isUserInGroup == false">Join Group</button>
         </template>
         <template v-slot:modal-button-third>
-            <button @click="() => quitGroup()"  v-if="isUserInGroup == true" style="background-color: var(--red);">Quit Group</button>
+            <button @click="() => quitGroup()" v-if="isUserInGroup == true" style="background-color: var(--red);">Quit
+                Group</button>
         </template>
         <template v-slot:additonal-information-before-modal-button>
             <p>Click on the button to edit the group.</p>
@@ -93,7 +95,7 @@ export default {
             type: Object,
             required: true,
         },
-        isUserInGroup:{
+        isUserInGroup: {
             type: Boolean
         },
     },
@@ -106,10 +108,10 @@ export default {
                 Group_Size: this.group.Group_Size,
                 Group_State: this.group.Group_State
             },
-            groupMemberList:[],   
+            groupMemberList: [],
         }
     },
-    beforeMount(){
+    beforeMount() {
         this.fetchGroupMembers(this.group.id_group);
     },
     methods: {
@@ -143,41 +145,41 @@ export default {
         async deleteGroup() {
             if (confirm("Are you sure you want to delete this group?")) {
                 try {
-                const response = await axios.delete(`http://localhost:3000/groups/${this.group.id_group}`, {
-                    withCredentials: true,
-                    headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                    'Content-Type': 'application/json'
-                    }
-                });
+                    const response = await axios.delete(`http://localhost:3000/groups/${this.group.id_group}`, {
+                        withCredentials: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-                if (response.status === 200) {
-                    alert("Group successfully deleted.");
-                    this.$emit('close');
-                    this.$emit('groupListUpdated');
-                } else {
-                    throw new Error(`Failed to delete group. Server returned status code: ${response.status}`);
-                }
-                } catch (error:any) {
-                console.error(error.message);
-                alert("Failed to delete group. Please try again later.");
+                    if (response.status === 200) {
+                        alert("Group successfully deleted.");
+                        this.$emit('close');
+                        this.$emit('groupListUpdated');
+                    } else {
+                        throw new Error(`Failed to delete group. Server returned status code: ${response.status}`);
+                    }
+                } catch (error: any) {
+                    console.error(error.message);
+                    alert("Failed to delete group. Please try again later.");
                 }
             }
         },
         async joinGroup() {
             if (confirm("Are you sure you want to join this group?")) {
                 try {
-                const response = await axios.put(
-                    'http://localhost:3000/groups',
-                    { id_user: readToken().userId, id_group: this.group.id_group },
-                    {
-                    withCredentials: true,
-                    headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                        'Content-Type': 'application/json',
-                    },
-                    }
-                );
+                    const response = await axios.put(
+                        'http://localhost:3000/groups',
+                        { id_user: readToken().userId, id_group: this.group.id_group },
+                        {
+                            withCredentials: true,
+                            headers: {
+                                'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
 
                     if (response.status === 200) {
                         alert("Group successfully joined.");
@@ -186,25 +188,25 @@ export default {
                     } else {
                         throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
                     }
-                } catch (error:any) {
-                console.error(error.message);
-                alert("Failed to join group.");
+                } catch (error: any) {
+                    console.error(error.message);
+                    alert("Failed to join group.");
                 }
             }
         },
         async quitGroup() {
             if (confirm("Are you sure you want to quit this group?")) {
                 try {
-                const response = await axios.delete(
-                    `http://localhost:3000/groups/${readToken().userId}/${this.group.id_group}`,
-                    {
-                    withCredentials: true,
-                    headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                        'Content-Type': 'application/json',
-                    },
-                    }
-                );
+                    const response = await axios.delete(
+                        `http://localhost:3000/groups/${readToken().userId}/${this.group.id_group}`,
+                        {
+                            withCredentials: true,
+                            headers: {
+                                'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
 
                     if (response.status === 200) {
                         alert("Group successfully left.");
@@ -213,36 +215,36 @@ export default {
                     } else {
                         throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
                     }
-                } catch (error:any) {
-                console.error(error.message);
-                alert("Failed to join group.");
+                } catch (error: any) {
+                    console.error(error.message);
+                    alert("Failed to join group.");
                 }
             }
         },
-        async fetchGroupMembers(groupId: string){
-            try { 
+        async fetchGroupMembers(groupId: string) {
+            try {
                 // debugger;
                 const response = await axios.get(
                     `http://localhost:3000/groups/users/${groupId}`,
                     {
-                    withCredentials: true,
-                    headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                        'Content-Type': 'application/json',
-                    },
+                        withCredentials: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                            'Content-Type': 'application/json',
+                        },
                     }
                 );
 
-                    if (response.status === 200) {
-                       console.log("Fetched group members of : "+this.group.Group_Name);
-                       this.groupMemberList = response.data.groupMembers;
-                    } else {
-                        throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
-                    }
-
-                } catch (error:any) {
-                console.error(error.message);
+                if (response.status === 200) {
+                    console.log("Fetched group members of : " + this.group.Group_Name);
+                    this.groupMemberList = response.data.groupMembers;
+                } else {
+                    throw new Error(`Failed to join group. Server returned status code: ${response.status}`);
                 }
+
+            } catch (error: any) {
+                console.error(error.message);
+            }
         }
     }
 };
@@ -614,43 +616,43 @@ header {
     outline: none;
 }
 
-.group-card-members{
-    position:absolute;
-    width:250px;
+.group-card-members {
+    position: absolute;
+    width: 250px;
 }
 
-.group-card-members ul{
-    display:flex;
-    flex-direction:row;
-    height:50px;
-    align-items:center;
-    width:80%;
-    margin-left:auto;
-    margin-right:auto;
-    border-radius:6px;
-    justify-content:right;
-    background:rgba(255,255,255,0.3);
-    overflow-x:scroll;
-    overflow-y:hidden;
+.group-card-members ul {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    align-items: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
+    justify-content: right;
+    background: rgba(255, 255, 255, 0.3);
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
-.group-card-members ul li{
-    list-style:none;
-    margin:4px;
-    height:30px;
-    width:30px;
-    border-radius:100%;
-    border:2px solid #FFF;
-    display:flex;
+.group-card-members ul li {
+    list-style: none;
+    margin: 4px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    border: 2px solid #FFF;
+    display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.group-card-member-profile{
-    height:100%;
-    width:100%;
-    border-radius:100%;
+.group-card-member-profile {
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
 }
 </style>
   

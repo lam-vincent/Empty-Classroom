@@ -25,11 +25,11 @@
         <form @submit.prevent="registerUser()">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="registrationData.username" required />
+            <input type="text" id="username" v-model="registrationData.username" required pattern="[a-zA-Z0-9]+" />
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="registrationData.password" required />
+            <input type="password" id="password" v-model="registrationData.password" required pattern="[a-zA-Z0-9]+" />
           </div>
           <div class="form-group">
             <label for="role">Role</label>
