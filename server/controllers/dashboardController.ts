@@ -139,9 +139,12 @@ export const addIsEquipped = async (req: Request, res: Response) => {
 
 export const deleteIsEquipped = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
-    console.log("id", id);
-    const result = await dashboardService.deleteIsEquipped(id);
+    const { id_room, equipmentName } = req.body;
+    console.log("equipmentName fro mdeleteIsEquipped", equipmentName);
+    const result = await dashboardService.deleteIsEquipped(
+      id_room,
+      equipmentName
+    );
     res.json({
       message: "dashboardController.ts: is_equipped deleted successfully",
     });

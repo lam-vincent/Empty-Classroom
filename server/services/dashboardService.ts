@@ -127,11 +127,12 @@ const addIsEquipped = async (
   });
 };
 
-const deleteIsEquipped = async (id: string) => {
-  const query = "DELETE FROM is_equiped WHERE id_equipment = ?";
+const deleteIsEquipped = async (id_room: string, equipmentName: string) => {
+  const query =
+    "DELETE FROM is_equiped WHERE id_equipment = (SELECT id_equipment FROM Equipments WHERE Equipment_Name = ?) AND id_room = ?";
 
   return new Promise((resolve, reject) => {
-    pool.query(query, [id], async (error, results) => {
+    pool.query(query, [equipmentName, id_room], async (error, results) => {
       if (error) reject(error);
       resolve(results);
     });

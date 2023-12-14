@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <ModalDetails ref="modalRoomDetails" @close="closeModal">
+    <ModalDetails ref="modalRoomDetails" @close="">
 
         <template v-slot:title>
             <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
@@ -26,9 +26,17 @@
         </template>
         <template v-slot:capsule-with-blue-svg>
             <div v-for="equipment in equipmentData" :key="equipment.id_equipment">
-                <p>{{ equipment.Equipment_Name }} <span class="badge">{{ equipment.Quantity }}</span></p>
+                <p>{{ equipment.Equipment_Name }} <span class="badge">{{ equipment.Quantity }}</span>
+                    <svg v-if="userData.token.role === 'Admin'" @click="deleteIsEquiped(equipment.Equipment_Name)"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="var(--red)" width="20px" height="20px"
+                        style="margin-left: 0.5rem;">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd" />
+                    </svg>
+
+                </p>
             </div>
-            <!-- a button to add a new equipment to the room -->
             <svg @click="() => openModal('addIsEquiped')" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke-width="1.5" stroke="var(--blue)" width="40px" height="40px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -63,7 +71,7 @@
         </template>
 
     </ModalDetails>
-    <Modal ref="EditRoom" @close="closeModal">
+    <Modal ref="EditRoom" @close="">
         <template v-slot:header-title>
             <h3>Edit Room</h3>
             <h3>for {{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h3>
@@ -102,7 +110,7 @@
             <input v-model="currentRoomData.Room_Category" type="text" placeholder="Classroom" />
         </template>
         <template v-slot:modal-button>
-            <button @click="editRoom(); closeModal();">Save the Changes</button>
+            <button @click="editRoom(); closeModal('EditRoom');">Edit Room</button>
         </template>
     </Modal>
 
@@ -176,9 +184,9 @@ export default {
             type: Object,
             required: true,
         },
-        userGroups:{
+        userGroups: {
             type: Object,
-            required:true,
+            required: true,
         }
     },
     data() {
@@ -187,7 +195,7 @@ export default {
                 token: "",
                 selectedGroup: ""
             },
-            isGroupReservation:false,
+            isGroupReservation: false,
             currentRoomData: {
                 Room_Name: this.room.Room_Name,
                 Room_Building: this.room.Room_Building,
@@ -233,8 +241,8 @@ export default {
         openModalDetails(reference: string) {
             (this.$refs[reference] as any).open();
         },
-        closeModal() {
-            (this.$refs.modalRoomDetails as any).close();
+        closeModal(reference: string) {
+            (this.$refs[reference] as any).close();
         },
         async initializeData() {
             await this.getEquipmentData();
@@ -295,12 +303,12 @@ export default {
                 if (this.newReserveData.start_time.status != "reserved") {
                     console.log(this.newReserveData);
 
-                    if(this.isGroupReservation){
-                            requestURL = `http://localhost:3000/reserve/group/${this.userData.selectedGroup}`;
-                    }else{
-                            requestURL = "http://localhost:3000/reserve";
+                    if (this.isGroupReservation) {
+                        requestURL = `http://localhost:3000/reserve/group/${this.userData.selectedGroup}`;
+                    } else {
+                        requestURL = "http://localhost:3000/reserve";
                     }
-                    
+
                     try {
                         axios.post(
                             requestURL,
@@ -357,8 +365,6 @@ export default {
         },
         async addIsEquiped() {
             try {
-                // debugger;
-                console.log("this.newEquipmentData", this.newEquipmentData);
                 axios.post(
                     `http://localhost:3000/is_equipped`,
                     this.newEquipmentData,
@@ -371,11 +377,36 @@ export default {
                     }
                 );
                 (this.$refs.addIsEquiped as any).close();
-                this.$emit("close");
-                this.$emit("roomListUpdated");
-                //window.location.reload();
+                await this.getEquipmentData();
+                (this.$refs.modalRoomDetails as any).close();
+                (this.$refs.modalRoomDetails as any).open();
             } catch (e) { }
-        }
+        },
+        async deleteIsEquiped(equipmentName: string) {
+            try {
+                const id_room: number = this.room.id_room;
+                await axios.delete(
+                    `http://localhost:3000/is_equipped/`,
+                    {
+                        data: {
+                            id_room: id_room,
+                            equipmentName: equipmentName,
+                        },
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                await this.getEquipmentData();
+                (this.$refs.modalRoomDetails as any).close();
+                (this.$refs.modalRoomDetails as any).open();
+            } catch (e) {
+                console.error("Error deleting equipment:", e);
+            }
+        },
+
     },
 };
 </script>
@@ -546,7 +577,6 @@ export default {
     overflow-x: scroll;
 }
 
-
 .capsule-with-gray-svg p,
 .capsule-with-blue-svg p {
     color: black;
@@ -554,6 +584,8 @@ export default {
     border-radius: 4rem;
     padding: 8px 16px;
     margin-right: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .badge {

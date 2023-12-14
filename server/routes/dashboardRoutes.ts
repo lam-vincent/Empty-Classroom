@@ -58,7 +58,7 @@ router.get(
 );
 router.post("/is_equipped", authMiddleware, isAdminMiddleware, addIsEquipped);
 router.delete(
-  "/is_equipped/:id",
+  "/is_equipped/",
   authMiddleware,
   isAdminMiddleware,
   deleteIsEquipped
