@@ -59,10 +59,12 @@ const createReservationByGroup = async (
 
 const fetchReservationByUser = async (userId: string) => {
   const query = "SELECT * FROM Reserve WHERE id_user = ?";
-  await pool.query(query, [userId], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Reserve[]>(async (resolve, reject) => {
+    await pool.query(query, [userId], (error, results, fields) => {
+      if (error) throw error;
+      // console.log(results);
+      resolve(results);
+    });
   });
 };
 

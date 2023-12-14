@@ -21,7 +21,7 @@
       </div>
       <div class="item-list" ref="itemList">
         <RoomCapsule v-for="(objet) in roomData.currentRooms" :userGroups="userData.userGroups" :room="objet" @roomListUpdated="fetchAllRooms();" />
-      </div>
+      </div> 
     </div>
 
     <Modal ref="createRoom" @close="">

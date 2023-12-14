@@ -1,11 +1,21 @@
 <template>
-    <div class="room-card" @click="() => openModalDetails('modalRoomDetails')">
+    <div v-if="cardPurpose != 'booking'" class="room-card" @click="() => openModalDetails('modalRoomDetails')">
         <div class="room-card-image">
             <img src="/classroom1.jpg" alt="Room Image" />
         </div>
         <div class="room-card-content">
             <h2>{{ room.Room_Building + room.Room_Name }}</h2>
             <p>{{ room.Room_State }}</p>
+        </div>
+    </div>
+
+    <div v-if="cardPurpose == 'booking'" class="room-card" @click="() => openModalDetails('reservationDetails')">
+        <div class="room-card-image">
+            <img src="/classroom1.jpg" alt="Room Image" />
+        </div>
+        <div class="room-card-content">
+            <h2>{{ Room_Name }}</h2>
+            <p>{{ room.Start_Time.substring(0,5) }}</p>
         </div>
     </div>
 
@@ -145,7 +155,41 @@
             <button @click="reserveRoom();">Create Reservation</button>
         </template>
     </Modal>
-
+    <Modal ref="reservationDetails" @close="">
+        <template v-slot:header-title>
+            <h3>Details of this reservation</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Reservation Purpose</label>
+            <input disabled v-model="room.Title" type="text" placeholder="Group Project" />
+        </template>
+        <!-- <template v-slot:form-input-2>
+            <label for="form-input-2">Room</label>
+            <input v-model="" name="form-input-2" type="text" placeholder="Group Project" />
+        </template> -->
+        <!-- <template v-slot:form-input-2>
+            <label for="form-input-2">Group reservation</label>
+            <input v-model="isGroupReservation" name="form-input-2" type="checkbox" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-3 v-if="isGroupReservation">
+            <label for="form-input-3">Reservation for group</label>
+            <select v-model="userData.selectedGroup">
+                <option v-for="(group) in userGroups" :value="group.id_group">{{ group.Group_Name }}</option>
+            </select>
+        </template> -->
+        <template v-slot:form-input-description>
+            <label for="form-input-description">Reservation Description</label>
+            <textarea disabled v-model="room.Description" name="form-input-description" id="form-input-description"
+                cols="30" rows="3" placeholder="Tell us more about what you will be doing in this room !"></textarea>
+        </template>
+        <!-- <template v-slot:form-input-description>
+          <ul>
+            <li>Purpose of the reservation : {{ this.room.Title }}</li>
+            <li>Date of reservation : {{  this.room.Reservation_Date }}</li>
+            <li>Schedule : {{  this.room.Start_Time.subtring(0,5) +" to "+ this.room.End_Time.subtring(0,5)  }}</li>
+          </ul>
+        </template> -->
+    </Modal>
     <Modal ref="addIsEquiped" @close="">
         <template v-slot:header-title>
             <h3>Add Equipment</h3>
@@ -186,8 +230,11 @@ export default {
         },
         userGroups: {
             type: Object,
-            required: true,
+        },
+        cardPurpose:{
+            type: String,
         }
+
     },
     data() {
         return {
@@ -219,11 +266,13 @@ export default {
                 Equipment_Name: "",
                 Quantity: "",
             },
+            Room_Name:""
         };
     },
     beforeMount() {
         verifyToken();
         this.userData.token = readToken();
+        this.fetchRoomNameById(this.room.id_room);
         this.initializeData();
     },
     methods: {
@@ -406,7 +455,25 @@ export default {
                 console.error("Error deleting equipment:", e);
             }
         },
+        async fetchRoomNameById(roomId: string) {
+            try {
+                const response = await axios.get(
+                    `http://localhost:3000/rooms/${roomId}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173", // Ne pas inclure le slash à la fin
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
 
+                this.Room_Name = response.data.Room_Building+""+response.data.Room_Name;
+            } catch (e) {
+                console.error("Error fetching room name:", e);
+                throw e; // Ajout de cette ligne pour propager l'erreur à l'appelant
+            }
+        }
     },
 };
 </script>

@@ -2,30 +2,9 @@
   <main-layout>
     <div class="reserve-page">
 
+      <h2>Rooms you Booked</h2>
       <div class="booked">
-        <h2>Room you Booked</h2>
-
-        <div class="display-case">
-          <div class="room-card">
-            <div class="room-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="room-card-content">
-              <h2>Classroom A101</h2>
-              <p>10h - 12h</p>
-            </div>
-          </div>
-          <div class="room-card">
-            <div class="room-card-image">
-              <img src="classroom1.jpg" />
-            </div>
-            <div class="room-card-content">
-              <h2>Classroom A102</h2>
-              <p>14h - 16h</p>
-            </div>
-          </div>
-        </div>
-
+        <RoomCapsule v-for="(objet) in rooms" :cardPurpose="'booking'" :room="objet" />
       </div>
 
     </div>
@@ -33,6 +12,49 @@
 </template>
   
 <script lang="ts">
+import { verifyToken, readToken } from "../utils/authUtils";
+import RoomCapsule from "../components/Capsule/RoomCapsule.vue";
+import axios from 'axios';
+import Modal from "../components/Modal.vue";
+
+
+export default {
+  components: {
+    RoomCapsule,
+    Modal,
+  },
+  data() {
+    return {
+      rooms: []
+    };
+  },
+  beforeMount(){
+    this.fetchUserReservations();
+    // console.log("pipi");
+    // console.log(this.rooms);
+  },
+  methods:{
+    async fetchUserReservations(){
+      try {
+                  const response:any = await axios.get(
+                      `http://localhost:3000/reserve/${readToken().userId}`,
+                      {
+                          withCredentials: true,
+                          headers: {
+                              "Access-Control-Allow-Origin": "http://localhost:5173/",
+                              "Content-Type": "application/json",
+                          },
+                      }
+                  );
+
+                  this.rooms = response.data;
+
+      } catch (e) {
+          alert("Error while fetching reservations");
+      }
+    }
+  }
+}
 </script>
   
 <style scoped>
@@ -43,6 +65,15 @@
 .display-case {
   display: flex;
   overflow: scroll;
+}
+
+.booked{
+  /* background:red; */
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 .room-card {
