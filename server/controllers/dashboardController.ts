@@ -130,6 +130,8 @@ export const addIsEquipped = async (req: Request, res: Response) => {
       Equipment_Name,
       Quantity
     );
+    console.log("pipi");
+    console.log(result);
     res.json({ message: "is_equipped added successfully" });
   } catch (error) {
     console.error("Error adding is_equipped:", error);

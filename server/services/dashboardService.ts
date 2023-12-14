@@ -115,12 +115,15 @@ const addIsEquipped = async (
   Equipment_Name: string,
   Quantity: string
 ) => {
-  const query = `INSERT INTO is_equiped (id_room, id_equipment, Quantity) VALUES (?, (SELECT id_equipment FROM Equipments WHERE Equipment_Name = ?), ?) ON DUPLICATE KEY UPDATE Quantity = VALUES(?);`;
+  const query = `INSERT INTO is_equiped (id_room, id_equipment, Quantity) VALUES (?, (SELECT id_equipment FROM Equipments WHERE Equipment_Name = ?), ?) ON DUPLICATE KEY UPDATE Quantity = ?`;
   return new Promise((resolve, reject) => {
     pool.query(
       query,
       [id_room, Equipment_Name, Quantity, Quantity],
       async (error, results) => {
+        console.log("caca");
+        console.log(results);
+        console.log(error);
         resolve(results);
       }
     );

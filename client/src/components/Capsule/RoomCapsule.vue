@@ -191,7 +191,7 @@ export default {
                 End_Time: "",
             },
             newEquipmentData: {
-                id_room: 1,
+                id_room: this.room.id_room,
                 Equipment_Name: "",
                 Quantity: "",
             },
@@ -333,7 +333,7 @@ export default {
         },
         async addIsEquiped() {
             try {
-                debugger;
+                // debugger;
                 console.log("this.newEquipmentData", this.newEquipmentData);
                 axios.post(
                     `http://localhost:3000/is_equipped`,
@@ -346,10 +346,10 @@ export default {
                         },
                     }
                 );
-                // (this.$refs.addIsEquiped as any).close();
-                // this.$emit("close");
-                // this.$emit("roomListUpdated");
-                window.location.reload();
+                (this.$refs.addIsEquiped as any).close();
+                this.$emit("close");
+                this.$emit("roomListUpdated");
+                //window.location.reload();
             } catch (e) { }
         },
     },
