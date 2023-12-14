@@ -6,8 +6,7 @@ const fetchPreferredClassrooms = async (userId: string) => {
 
   return new Promise((resolve, reject) => {
     pool.query(query, [userId], async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
+      resolve(results);
     });
   });
 };
@@ -24,8 +23,7 @@ const insertPreferredClassroom = async (
       query,
       [userId, Room_Building, Room_Name, userId, Room_Building, Room_Name],
       async (error, results) => {
-        const myQueryResult = results;
-        resolve(myQueryResult);
+        resolve(results);
       }
     );
   });
@@ -43,8 +41,7 @@ const removePreferredClassroom = async (
       query,
       [userId, Room_Building, Room_Name],
       async (error, results) => {
-        const myQueryResult = results;
-        resolve(myQueryResult);
+        resolve(results);
       }
     );
   });
@@ -56,8 +53,7 @@ const fetchEquipment = async () => {
 
   return new Promise<Equipment[]>((resolve, reject) => {
     pool.query(query, async (error, results) => {
-      const myQueryResult = results;
-      resolve(myQueryResult);
+      resolve(results);
     });
   });
 };
@@ -70,8 +66,7 @@ const addEquipment = async (roomEquipment: any) => {
       query,
       [...Object.values(roomEquipment), roomEquipment.Equipment_Name],
       async (error, results) => {
-        const myQueryResult = results;
-        resolve(myQueryResult);
+        resolve(results);
       }
     );
   });
@@ -87,8 +82,7 @@ const updateEquipment = async (id: string, roomEquipment: any) => {
       query,
       [...Object.values(roomEquipment), id],
       async (error, results) => {
-        const myQueryResult = results;
-        resolve(myQueryResult);
+        resolve(results);
       }
     );
   });
@@ -99,9 +93,47 @@ const deleteEquipment = async (id: string) => {
 
   return new Promise((resolve, reject) => {
     pool.query(query, [id], async (error, results) => {
-      const myQueryResult = results;
       if (error) reject(error);
-      resolve(myQueryResult);
+      resolve(results);
+    });
+  });
+};
+
+// is_equipped methods
+const fetchIsEquipped = async (id: string) => {
+  const query = `SELECT e.Equipment_Name, ie.Quantity FROM Equipments e JOIN Is_Equiped ie ON e.id_equipment = ie.id_equipment WHERE ie.id_room = ?`;
+
+  return new Promise((resolve, reject) => {
+    pool.query(query, [id], async (error, results) => {
+      resolve(results);
+    });
+  });
+};
+
+const addIsEquipped = async (
+  id_room: string,
+  Equipment_Name: string,
+  Quantity: string
+) => {
+  const query = `INSERT INTO is_equiped (id_room, id_equipment, Quantity) VALUES (?, (SELECT id_equipment FROM Equipments WHERE Equipment_Name = ?), ?) ON DUPLICATE KEY UPDATE Quantity = VALUES(?);`;
+  return new Promise((resolve, reject) => {
+    pool.query(
+      query,
+      [id_room, Equipment_Name, Quantity, Quantity],
+      async (error, results) => {
+        resolve(results);
+      }
+    );
+  });
+};
+
+const deleteIsEquipped = async (id: string) => {
+  const query = "DELETE FROM is_equiped WHERE id_equipment = ?";
+
+  return new Promise((resolve, reject) => {
+    pool.query(query, [id], async (error, results) => {
+      if (error) reject(error);
+      resolve(results);
     });
   });
 };
@@ -114,4 +146,7 @@ export default {
   addEquipment,
   updateEquipment,
   deleteEquipment,
+  fetchIsEquipped,
+  addIsEquipped,
+  deleteIsEquipped,
 };

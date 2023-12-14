@@ -7,6 +7,9 @@ import {
   addEquipment,
   updateEquipment,
   deleteEquipment,
+  getIsEquipped,
+  addIsEquipped,
+  deleteIsEquipped,
 } from "../controllers/dashboardController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { isAdminMiddleware } from "../middlewares/isAdminMiddleware";
@@ -44,6 +47,21 @@ router.delete(
   authMiddleware,
   isAdminMiddleware,
   deleteEquipment
+);
+
+// CRD routes for is_equipped. These routes are protected by an admin middleware.
+router.get(
+  "/is_equipped/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  getIsEquipped
+);
+router.post("/is_equipped", authMiddleware, isAdminMiddleware, addIsEquipped);
+router.delete(
+  "/is_equipped/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  deleteIsEquipped
 );
 
 export default router;

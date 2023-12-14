@@ -105,3 +105,48 @@ export const deleteEquipment = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error deleting equipment" });
   }
 };
+
+//CRD routes for is_equipped.
+export const getIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const is_equipped = await dashboardService.fetchIsEquipped(id);
+
+    res.status(200).json({
+      message: "is_equipped fetched",
+      is_equipped: is_equipped,
+    });
+  } catch (error) {
+    console.error("Error fetching is_equipped:", error);
+    res.status(500).json({ message: "Error fetching is_equipped" });
+  }
+};
+
+export const addIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const { id_room, Equipment_Name, Quantity } = req.body;
+    const result = await dashboardService.addIsEquipped(
+      id_room,
+      Equipment_Name,
+      Quantity
+    );
+    res.json({ message: "is_equipped added successfully" });
+  } catch (error) {
+    console.error("Error adding is_equipped:", error);
+    res.status(500).json({ message: "Error adding is_equipped" });
+  }
+};
+
+export const deleteIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    console.log("id", id);
+    const result = await dashboardService.deleteIsEquipped(id);
+    res.json({
+      message: "dashboardController.ts: is_equipped deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting is_equipped:", error);
+    res.status(500).json({ message: "Error deleting is_equipped" });
+  }
+};

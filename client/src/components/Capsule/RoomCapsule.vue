@@ -24,6 +24,17 @@
         <template v-slot:engagement-tag>
             <p>{{ room.Room_State }}</p>
         </template>
+        <template v-slot:capsule-with-blue-svg>
+            <div v-for="equipment in equipmentData" :key="equipment.id_equipment">
+                <p>{{ equipment.Equipment_Name }} <span class="badge">{{ equipment.Quantity }}</span></p>
+            </div>
+            <!-- a button to add a new equipment to the room -->
+            <svg @click="() => openModal('addIsEquiped')" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="var(--blue)" width="40px" height="40px">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+
+        </template>
         <template v-slot:second-title>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 width="16px" height="16px">
@@ -121,6 +132,23 @@
             <button @click="reserveRoom();">Finalize Reservation</button>
         </template>
     </Modal>
+
+    <Modal ref="addIsEquiped" @close="">
+        <template v-slot:header-title>
+            <h3>Add Equipment</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Name</label>
+            <input v-model="newEquipmentData.Equipment_Name" type="text" placeholder="Projector" />
+        </template>
+        <template v-slot:form-input-2>
+            <label for="form-input-2">Quantity</label>
+            <input v-model="newEquipmentData.Quantity" type="text" placeholder="1" />
+        </template>
+        <template v-slot:modal-button>
+            <button @click="addIsEquiped();">Add Equipment</button>
+        </template>
+    </Modal>
 </template>
 
 <script lang="ts">
@@ -154,6 +182,7 @@ export default {
                 Room_State: this.room.Room_State,
                 Room_Category: this.room.Room_Category,
             },
+            equipmentData: [],
             newReserveData: {
                 id_room: this.room.id_room,
                 id_user: 1, // this.userData.token.id_user
@@ -162,11 +191,17 @@ export default {
                 start_time: "",
                 end_time: "",
             },
+            newEquipmentData: {
+                id_room: 1,
+                Equipment_Name: "",
+                Quantity: "",
+            },
         };
     },
     beforeMount() {
         verifyToken();
         this.userData.token = readToken();
+        this.initializeData();
     },
     methods: {
         // Modal methods
@@ -179,6 +214,9 @@ export default {
         },
         closeModal() {
             (this.$refs.modalRoomDetails as any).close();
+        },
+        async initializeData() {
+            await this.getEquipmentData();
         },
         editRoom() {
             try {
@@ -238,6 +276,47 @@ export default {
                 (this.$refs.ReserveRoom as any).close();
                 this.$emit("close");
                 this.$emit("roomListUpdated");
+            } catch (e) { }
+        },
+
+        // is_equiped methods
+        async getEquipmentData() {
+            try {
+                const response = await axios.get(
+                    `http://localhost:3000/is_equipped/${this.room.id_room}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                this.equipmentData = response.data.is_equipped;
+                console.log("equipmentData", this.equipmentData);
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async addIsEquiped() {
+            try {
+                debugger;
+                console.log("this.newEquipmentData", this.newEquipmentData);
+                axios.post(
+                    `http://localhost:3000/is_equipped`,
+                    this.newEquipmentData,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                // (this.$refs.addIsEquiped as any).close();
+                // this.$emit("close");
+                // this.$emit("roomListUpdated");
+                window.location.reload();
             } catch (e) { }
         },
     },
@@ -406,21 +485,33 @@ export default {
 .capsule-with-blue-svg {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     overflow: hidden;
     overflow-x: scroll;
 }
 
-.capsule-with-gray-svg svg,
-.capsule-with-blue-svg svg {
-    margin-right: 10px;
-}
 
 .capsule-with-gray-svg p,
 .capsule-with-blue-svg p {
-    font-size: 14px;
-    font-weight: 400;
     color: black;
+    border: 1px solid var(--dark-gray);
+    border-radius: 4rem;
+    padding: 8px 16px;
+    margin-right: 1rem;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 1rem;
+    background-color: #eff6ff;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--blue);
+    border-width: 1px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-color: var(--blue);
+    margin-left: 1rem;
 }
 
 

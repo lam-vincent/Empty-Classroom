@@ -110,13 +110,6 @@ export default {
     this.fetchAllRooms();
   },
 
-  // when roomData.currentRooms changes, fetchAllRooms() is called
-  watch: {
-    'roomData.currentRooms': function () {
-      this.fetchAllRooms();
-    }
-  },
-
   methods: {
     resetSearchOptions() {
       this.userData.searchOptions.building.length = 0;

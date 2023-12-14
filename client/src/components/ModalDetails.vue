@@ -82,14 +82,14 @@
                             </div>
                         </div>
                         <div class="modal-button-second modal-button">
-                                <slot name="modal-button-second">
-                                    <!-- <button>modal button</button> -->
-                                </slot>
+                            <slot name="modal-button-second">
+                                <!-- <button>modal button</button> -->
+                            </slot>
                         </div>
                         <div class="modal-button-third modal-button">
-                                <slot name="modal-button-third">
-                                    <!-- <button>modal button</button> -->
-                                </slot>
+                            <slot name="modal-button-third">
+                                <!-- <button>modal button</button> -->
+                            </slot>
                         </div>
                     </div>
 
@@ -121,7 +121,6 @@ export default defineComponent({
 </script>
   
 <style scoped>
-
 .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -235,14 +234,8 @@ export default defineComponent({
 .capsule-with-blue-svg {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     overflow: hidden;
     overflow-x: scroll;
-}
-
-.capsule-with-gray-svg svg,
-.capsule-with-blue-svg svg {
-    margin-right: 10px;
 }
 
 .capsule-with-gray-svg p,
@@ -252,6 +245,17 @@ export default defineComponent({
     color: black;
 }
 
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-dark-gray);
+    padding: 8px 16px;
+    border-style: solid;
+    border-radius: 4rem;
+    border-width: 1px;
+    margin-right: 10px;
+}
 
 .description-title h2 {
     font-size: 16px;
@@ -326,12 +330,11 @@ export default defineComponent({
 }
 
 .modal-button-second {
-    margin-top:15px;
+    margin-top: 15px;
 }
 
-.modal-button-third button{
-    background:var(--red);
+.modal-button-third button {
+    background: var(--red);
 }
-
 </style>
   
