@@ -136,8 +136,8 @@ export default {
         openModalDetails(reference: string) {
             (this.$refs[reference] as any).open();
         },
-        closeModal() {
-            (this.$refs.modalEquipmentDetails as any).close();
+        closeModal(reference: string) {
+            (this.$refs[reference] as any).close();
         },
 
         editEquipment() {
@@ -153,7 +153,7 @@ export default {
                     }
                 );
                 this.$emit('equipmentListUpdated');
-                window.location.reload();
+                this.closeModal('EditEquipment')
             } catch (e) {
                 alert("Error while updating equipment");
             }
@@ -173,7 +173,7 @@ export default {
                 if (response.status === 200) {
                     console.log('Equipment deleted successfully');
                     this.$emit('equipmentListUpdated');
-                    window.location.reload();
+                    this.closeModal('modalEquipmentDetails')
                 } else {
                     console.error(`Unexpected status code: ${response.status}`);
                 }

@@ -31,24 +31,25 @@
             </template>
             <template v-slot:form-input-1>
                 <label for="form-input-1">Name</label>
-                <input v-model="newEquipmentData.Equipment_Name" type="text" placeholder="Desk" />
+                <input v-model="newEquipmentData.Equipment_Name" type="text" placeholder="Desk" required />
             </template>
             <template v-slot:form-input-2>
                 <label for="form-input-2">Type</label>
-                <input v-model="newEquipmentData.Equipment_Type" type="text" placeholder="Furniture" />
+                <input v-model="newEquipmentData.Equipment_Type" type="text" placeholder="Furniture" required />
             </template>
             <template v-slot:form-input-description>
                 <label for="form-input-description">Description</label>
                 <textarea v-model="newEquipmentData.Equipment_Description" name=" form-input-description"
-                    id="form-input-description" cols="30" rows="5" placeholder="Write the Description here."></textarea>
+                    id="form-input-description" cols="30" rows="5" placeholder="Write the Description here."
+                    required></textarea>
             </template>
             <template v-slot:form-input-3>
                 <label for="form-input-3">Location</label>
-                <input v-model="newEquipmentData.Equipment_Location" type="text" placeholder="On the floor" />
+                <input v-model="newEquipmentData.Equipment_Location" type="text" placeholder="On the floor" required />
             </template>
             <template v-slot:form-input-4>
                 <label for="form-input-4">Status</label>
-                <input v-model="newEquipmentData.Equipment_Status" type="text" placeholder="Operational" />
+                <input v-model="newEquipmentData.Equipment_Status" type="text" placeholder="Operational" required />
             </template>
             <!-- <template v-slot:form-input-5>
                 <label for="form-input-5">Require</label>
@@ -105,10 +106,6 @@ export default {
         }
     },
 
-    mounted() {
-        console.log("EquipmentSection mounted");
-    },
-
     methods: {
         // Axios methods
         handleSuccess(response: any) {
@@ -135,6 +132,7 @@ export default {
         // Equipment methods
         async fetchAllEquipment() {
             try {
+                // debugger;
                 const response = await axios.get('http://localhost:3000/equipment', {
                     withCredentials: true, headers: {
                         'Access-Control-Allow-Origin': 'http://localhost:5173/'
@@ -157,7 +155,7 @@ export default {
                 });
 
                 this.fetchAllEquipment();
-                // window.location.reload();
+                window.location.reload();
 
             } catch (e) {
                 console.log(e);

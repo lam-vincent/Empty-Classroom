@@ -2,7 +2,6 @@ import express from "express";
 import {
   getPreferredClassrooms,
   addPreferredClassroom,
-  updatePreferredClassroom,
   deletePreferredClassroom,
   getEquipment,
   addEquipment,
@@ -22,22 +21,11 @@ router.get(
 );
 
 // post request to add a preferred classroom
-router.post(
-  "/dashboard/recommended/:userId",
-  authMiddleware,
-  addPreferredClassroom
-);
-
-// patch request to update a preferred classroom
-router.put(
-  "/dashboard/recommended/:userId",
-  authMiddleware,
-  updatePreferredClassroom
-);
+router.post("/dashboard/recommended", authMiddleware, addPreferredClassroom);
 
 // delete request to delete a preferred classroom
 router.delete(
-  "/dashboard/recommended/:userId",
+  "/dashboard/recommended",
   authMiddleware,
   deletePreferredClassroom
 );
