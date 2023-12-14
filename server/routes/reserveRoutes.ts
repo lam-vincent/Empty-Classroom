@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createReservation,
+  createReservationByGroup,
   getReservationByUser,
   updateReservation,
   deleteReservation,
@@ -14,6 +15,11 @@ const router = express.Router();
 
 // Create a reservation
 router.post("/reserve", authMiddleware, createReservation);
+router.post(
+  "/reserve/group/:groupName",
+  authMiddleware,
+  createReservationByGroup
+);
 
 // Get all reservations for a user
 router.get("/reserve/rooms", authMiddleware, getReservations);

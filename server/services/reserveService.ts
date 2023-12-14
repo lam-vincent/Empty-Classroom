@@ -26,6 +26,37 @@ const createReservation = async (reservationData: any) => {
   );
 };
 
+const createReservationByGroup = async (
+  reservationData: any,
+  groupName: any
+) => {
+  // const checkQuery =
+  //   "SELECT users.id_user FROM users JOIN Belong ON Belong.id_user = users.id_user WHERE Belong.id_group = ?";
+  const query = `INSERT INTO Reserve (id_room, id_user, Title, Description, Reservation_Date, Start_Time, End_Time)
+    SELECT ?, users.id_user, ?, ?, ?, ?, ?
+    FROM users
+    JOIN Belong ON Belong.id_user = users.id_user
+    WHERE Belong.id_group = ?;
+    `;
+  await pool.query(
+    query,
+    [
+      reservationData.id_room,
+      reservationData.Title,
+      reservationData.Description,
+      reservationData.Reservation_Date,
+      reservationData.Start_Time,
+      reservationData.End_Time,
+      groupName,
+    ],
+    (error, results, fields) => {
+      if (error) throw error;
+      console.log(results);
+      return results;
+    }
+  );
+};
+
 const fetchReservationByUser = async (userId: string) => {
   const query = "SELECT * FROM Reserve WHERE id_user = ?";
   await pool.query(query, [userId], (error, results, fields) => {
@@ -80,6 +111,7 @@ const deleteReservation = async (id: string) => {
 
 export default {
   createReservation,
+  createReservationByGroup,
   fetchReservationByUser,
   fetchReservationByRoom,
   fetchReservationByDate,

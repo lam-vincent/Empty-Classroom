@@ -114,12 +114,22 @@
             <label for="form-input-1">Title</label>
             <input v-model="newReserveData.Title" type="text" placeholder="Group Project" />
         </template>
+        <template v-slot:form-input-2>
+            <label for="form-input-2">Group reservation</label>
+            <input v-model="isGroupReservation" name="form-input-2" type="checkbox" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-3 v-if="isGroupReservation">
+            <label for="form-input-3">Reservation for group</label>
+            <select v-model="userData.selectedGroup">
+                <option v-for="(group) in userGroups" :value="group.id_group">{{ group.Group_Name }}</option>
+            </select>
+        </template>
         <template v-slot:form-input-description>
             <label for="form-input-description">Description</label>
             <textarea v-model="newReserveData.Description" name="form-input-description" id="form-input-description"
-                cols="30" rows="5" placeholder="Tell us more about what you will be doing in this room !"></textarea>
+                cols="30" rows="3" placeholder="Tell us more about what you will be doing in this room !"></textarea>
         </template>
-        <template v-slot:form-input-3>
+        <template v-slot:form-input-4>
             <RoomTimetable :room="room" ref="mainTimetable" @scheduleTimeChanged="setReservationTime"
                 @scheduleDateChanged="setReservationDate" />
         </template>
@@ -166,12 +176,18 @@ export default {
             type: Object,
             required: true,
         },
+        userGroups:{
+            type: Object,
+            required:true,
+        }
     },
     data() {
         return {
             userData: {
                 token: "",
+                selectedGroup: ""
             },
+            isGroupReservation:false,
             currentRoomData: {
                 Room_Name: this.room.Room_Name,
                 Room_Building: this.room.Room_Building,
@@ -274,12 +290,20 @@ export default {
             }
         },
         async reserveRoom() {
+            let requestURL;
             try {
                 if (this.newReserveData.start_time.status != "reserved") {
                     console.log(this.newReserveData);
+
+                    if(this.isGroupReservation){
+                            requestURL = `http://localhost:3000/reserve/group/${this.userData.selectedGroup}`;
+                    }else{
+                            requestURL = "http://localhost:3000/reserve";
+                    }
+                    
                     try {
                         axios.post(
-                            `http://localhost:3000/reserve`,
+                            requestURL,
                             {
                                 id_room: this.newReserveData.id_room,
                                 id_user: this.newReserveData.id_user,
@@ -351,7 +375,7 @@ export default {
                 this.$emit("roomListUpdated");
                 //window.location.reload();
             } catch (e) { }
-        },
+        }
     },
 };
 </script>

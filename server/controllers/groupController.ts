@@ -25,7 +25,7 @@ export const getAllBelongings = async (req: Request, res: Response) => {
 export const getGroupsByUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    console.log("userId", userId);
+    // console.log("userId", userId);
     const groups = await groupService.fetchGroupsByUser(userId);
     res.json(groups);
   } catch (error) {

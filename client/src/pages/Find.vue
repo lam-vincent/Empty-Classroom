@@ -20,7 +20,7 @@
         </button>
       </div>
       <div class="item-list" ref="itemList">
-        <RoomCapsule v-for="(objet) in roomData.currentRooms" :room="objet" @roomListUpdated="fetchAllRooms();" />
+        <RoomCapsule v-for="(objet) in roomData.currentRooms" :userGroups="userData.userGroups" :room="objet" @roomListUpdated="fetchAllRooms();" />
       </div>
     </div>
 
@@ -79,6 +79,7 @@ export default {
     return {
       userData: {
         token: "",
+        userGroups:[],
         searchInput: "",
         searchOptions: {
           building: [""],
@@ -108,6 +109,7 @@ export default {
     verifyToken();
     this.userData.token = readToken();
     this.fetchAllRooms();
+    this.fetchUserGroups();
   },
 
   // when roomData.currentRooms changes, fetchAllRooms() is called
@@ -214,6 +216,24 @@ export default {
       } catch (e) {
         alert("Error while creating new room.");
       }
+    },
+    async fetchUserGroups(){
+            try {
+                const response = await axios.get(
+                    `http://localhost:3000/groups/user/${readToken().userId}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                this.userData.userGroups = response.data
+                // console.log("equipmentData", this.equipmentData);
+            } catch (e) {
+                console.log(e);
+            }
     },
     handleSuccess(data: never[]) {
       this.roomData.fetchedRooms = data;

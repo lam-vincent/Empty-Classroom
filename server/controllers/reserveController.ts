@@ -12,6 +12,18 @@ export const createReservation = async (req: Request, res: Response) => {
   }
 };
 
+export const createReservationByGroup = async (req: Request, res: Response) => {
+  try {
+    const reservationData = req.body;
+    const groupName = req.params.groupName;
+    await reserveService.createReservationByGroup(reservationData, groupName);
+    res.status(201).json({ message: "Reservation created successfully" });
+  } catch (error) {
+    console.error("Error creating reservation:", error);
+    res.status(500).json({ message: "Error creating reservation" });
+  }
+};
+
 export const getReservations = async (req: Request, res: Response) => {
   try {
     const reservations = await reserveService.fetchAllReservations();

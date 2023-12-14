@@ -53,10 +53,11 @@ const fetchBelongingByGroup = async (groupId: string) => {
 const fetchGroupsByUser = async (userId: string) => {
   const query =
     "SELECT * FROM `Groups` INNER JOIN Belong ON `Groups`.id_group = Belong.id_group WHERE Belong.id_user = ?";
-  await pool.query(query, [userId], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Group[]>(async (resolve, reject) => {
+    pool.query(query, [userId], async (error, results) => {
+      const myQueryResult = results;
+      resolve(myQueryResult);
+    });
   });
 };
 
