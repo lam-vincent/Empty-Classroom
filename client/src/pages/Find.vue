@@ -20,8 +20,9 @@
         </button>
       </div>
       <div class="item-list" ref="itemList">
-        <RoomCapsule v-for="(objet) in roomData.currentRooms" :userGroups="userData.userGroups" :room="objet" @roomListUpdated="fetchAllRooms();" />
-      </div> 
+        <RoomCapsule v-for="(objet) in roomData.currentRooms" :userGroups="userData.userGroups" :room="objet"
+          @roomListUpdated="fetchAllRooms();" />
+      </div>
     </div>
 
     <Modal ref="createRoom" @close="">
@@ -79,7 +80,7 @@ export default {
     return {
       userData: {
         token: "",
-        userGroups:[],
+        userGroups: [],
         searchInput: "",
         searchOptions: {
           building: [""],
@@ -111,13 +112,6 @@ export default {
     this.fetchAllRooms();
     this.fetchUserGroups();
   },
-
-  // when roomData.currentRooms changes, fetchAllRooms() is called
-  // watch: {
-  //   'roomData.currentRooms': function () {
-  //     this.fetchAllRooms();
-  //   }
-  // },
 
   methods: {
     resetSearchOptions() {
@@ -211,29 +205,30 @@ export default {
           }
         });
 
-        this.fetchAllRooms();
+        await this.fetchAllRooms();
+        (this.$refs.createRoom as any).close();
         alert("Room created successfully.");
       } catch (e) {
         alert("Error while creating new room.");
       }
     },
-    async fetchUserGroups(){
-            try {
-                const response = await axios.get(
-                    `http://localhost:3000/groups/user/${readToken().userId}`,
-                    {
-                        withCredentials: true,
-                        headers: {
-                            "Access-Control-Allow-Origin": "http://localhost:5173/",
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                this.userData.userGroups = response.data
-                // console.log("equipmentData", this.equipmentData);
-            } catch (e) {
-                console.log(e);
-            }
+    async fetchUserGroups() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/groups/user/${readToken().userId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173/",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        this.userData.userGroups = response.data
+        // console.log("equipmentData", this.equipmentData);
+      } catch (e) {
+        console.log(e);
+      }
     },
     handleSuccess(data: never[]) {
       this.roomData.fetchedRooms = data;

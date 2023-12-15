@@ -15,7 +15,7 @@
         </div>
         <div class="room-card-content">
             <h2>{{ Room_Name }}</h2>
-            <p>{{ room.Start_Time.substring(0,5) }}</p>
+            <p>{{ room.Start_Time.substring(0, 5) }}</p>
         </div>
     </div>
 
@@ -47,8 +47,9 @@
 
                 </p>
             </div>
-            <svg @click="() => openModal('addIsEquiped')" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="var(--blue)" width="40px" height="40px">
+            <svg v-if="userData.token.role === 'Admin'" @click="() => openModal('addIsEquiped')"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--blue)"
+                width="40px" height="40px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
 
@@ -231,7 +232,7 @@ export default {
         userGroups: {
             type: Object,
         },
-        cardPurpose:{
+        cardPurpose: {
             type: String,
         }
 
@@ -266,7 +267,7 @@ export default {
                 Equipment_Name: "",
                 Quantity: "",
             },
-            Room_Name:""
+            Room_Name: ""
         };
     },
     beforeMount() {
@@ -425,8 +426,8 @@ export default {
                         },
                     }
                 );
-                (this.$refs.addIsEquiped as any).close();
                 await this.getEquipmentData();
+                (this.$refs.addIsEquiped as any).close();
                 (this.$refs.modalRoomDetails as any).close();
                 (this.$refs.modalRoomDetails as any).open();
             } catch (e) { }
@@ -468,7 +469,7 @@ export default {
                     }
                 );
 
-                this.Room_Name = response.data.Room_Building+""+response.data.Room_Name;
+                this.Room_Name = response.data.Room_Building + "" + response.data.Room_Name;
             } catch (e) {
                 console.error("Error fetching room name:", e);
                 throw e; // Ajout de cette ligne pour propager l'erreur à l'appelant
