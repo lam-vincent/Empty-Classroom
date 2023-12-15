@@ -4,8 +4,8 @@
             <!-- <img src="classroom1.jpg" /> -->
             <div class="group-card-members">
                 <ul>
-                    <li v-for="(member) in groupMemberList"><img class="group-card-member-profile" :src="member.User_Picture"
-                            :alt="member.User_Name" /></li>
+                    <li v-for="(member) in groupMemberList"><img class="group-card-member-profile"
+                            :src="member.User_Picture" :alt="member.User_Name" /></li>
                 </ul>
             </div>
             &nbsp;
@@ -142,7 +142,7 @@ export default {
                 });
                 alert("group Infos successfully edited.");
                 this.$emit('groupListUpdated');
-                // this.roomData.fetchedRooms = response.data;
+                (this.$refs.EditGroup as any).close();
             } catch (e) {
                 alert("Error while updating group");
             }
@@ -160,7 +160,8 @@ export default {
 
                     if (response.status === 200) {
                         alert("Group successfully deleted.");
-                        this.$emit('close');
+                        (this.$refs.EditGroup as any).close();
+                        (this.$refs.modalGroupDetails as any).close();
                         this.$emit('groupListUpdated');
                     } else {
                         throw new Error(`Failed to delete group. Server returned status code: ${response.status}`);
@@ -256,12 +257,12 @@ export default {
 </script>
   
 <style scoped>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
 .group-card {
     display: flex;
     flex-direction: column;
@@ -284,13 +285,13 @@ export default {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     overflow: hidden;
-    background:url("../../../public/classroom1.jpg");
-    background-size:cover;
-    background-position:center;
-    height:130px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    background: url("../../../public/classroom1.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .group-card-image img {
@@ -637,11 +638,12 @@ header {
 .group-card-members {
     /* position: absolute; */
     /* margin-top:30px; */
-    display:flex;
-    min-width:40px;
+    display: flex;
+    min-width: 40px;
     justify-content: center;
     align-items: center;
 }
+
 .group-card-members ul {
     display: flex;
     flex-direction: row;
