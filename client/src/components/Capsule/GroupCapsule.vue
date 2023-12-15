@@ -1,13 +1,14 @@
 <template>
     <div class="group-card" @click="() => openModalDetails('modalGroupDetails')">
-        <div class="group-card-members">
-            <ul>
-                <li v-for="(member) in groupMemberList"><img class="group-card-member-profile" :src="member.User_Picture"
-                        :alt="member.User_Name" /></li>
-            </ul>
-        </div>
         <div class="group-card-image">
-            <img src="classroom1.jpg" />
+            <!-- <img src="classroom1.jpg" /> -->
+            <div class="group-card-members">
+                <ul>
+                    <li v-for="(member) in groupMemberList"><img class="group-card-member-profile" :src="member.User_Picture"
+                            :alt="member.User_Name" /></li>
+                </ul>
+            </div>
+            &nbsp;
         </div>
         <div class="group-card-content">
             <h2>{{ group.Group_Name }}</h2>
@@ -251,6 +252,12 @@ export default {
 </script>
   
 <style scoped>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 .group-card {
     display: flex;
     flex-direction: column;
@@ -273,6 +280,13 @@ export default {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     overflow: hidden;
+    background:url("../../../public/classroom1.jpg");
+    background-size:cover;
+    background-position:center;
+    height:130px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .group-card-image img {
@@ -617,18 +631,19 @@ header {
 }
 
 .group-card-members {
-    position: absolute;
-    width: 250px;
+    /* position: absolute; */
+    /* margin-top:30px; */
+    display:flex;
+    min-width:40px;
+    justify-content: center;
+    align-items: center;
 }
-
 .group-card-members ul {
     display: flex;
     flex-direction: row;
     height: 50px;
     align-items: center;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     border-radius: 6px;
     justify-content: right;
     background: rgba(255, 255, 255, 0.3);

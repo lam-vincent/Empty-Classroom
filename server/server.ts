@@ -30,6 +30,6 @@ app.use(findRoutes);
 app.use(groupRoutes);
 app.use(reserveRoutes);
 
-app.listen(port, () => {
+app.listen(port, "192.168.100.205" || "localhost", () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
