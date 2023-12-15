@@ -34,7 +34,7 @@
         <template v-slot:engagement-tag>
             <p>{{ room.Room_State }}</p>
         </template>
-        <template v-slot:capsule-with-blue-svg>
+        <template v-slot:capsule-with-blue-svg  v-if="userData.token.role === 'Admin'">
             <div v-for="equipment in equipmentData" :key="equipment.id_equipment">
                 <p>{{ equipment.Equipment_Name }} <span class="badge">{{ equipment.Quantity }}</span>
                     <svg v-if="userData.token.role === 'Admin'" @click="deleteIsEquiped(equipment.Equipment_Name)"
@@ -51,7 +51,6 @@
                 stroke-width="1.5" stroke="var(--blue)" width="40px" height="40px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-
         </template>
         <template v-slot:second-title>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

@@ -64,7 +64,7 @@
                             </slot>
                         </div>
 
-                        <div class="wrapper">
+                        <div v-if="readToken().role === 'Admin'"  class="wrapper">
                             <!-- additonal information before modal button -->
                             <div class="additonal-information-before-modal-button">
 
@@ -101,6 +101,7 @@
   
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { readToken } from "../utils/authUtils";
 
 export default defineComponent({
     data() {
@@ -116,6 +117,7 @@ export default defineComponent({
             this.show = false;
             this.$emit('close');
         },
+        readToken() {return readToken()}
     },
 });
 </script>

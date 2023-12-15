@@ -36,10 +36,10 @@
             <button @click="() => quitGroup()" v-if="isUserInGroup == true" style="background-color: var(--red);">Quit
                 Group</button>
         </template>
-        <template v-slot:additonal-information-before-modal-button>
+        <template  v-if="userData.token.role === 'Admin'" v-slot:additonal-information-before-modal-button>
             <p>Click on the button to edit the group.</p>
         </template>
-        <template v-slot:modal-button>
+        <template  v-if="userData.token.role === 'Admin'" v-slot:modal-button>
             <button @click="() => openModal('EditGroup')">Edit Group</button>
         </template>
     </ModalDetails>
@@ -110,10 +110,14 @@ export default {
                 Group_State: this.group.Group_State
             },
             groupMemberList: [],
+            userData:{
+                token:""
+            }
         }
     },
     beforeMount() {
         this.fetchGroupMembers(this.group.id_group);
+        this.userData.token = readToken();
     },
     methods: {
         // Modal methods
