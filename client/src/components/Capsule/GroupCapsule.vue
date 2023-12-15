@@ -29,18 +29,18 @@
         <template v-slot:description>
             <p>The Group is {{ group.Group_State }}.</p>
         </template>
-        <template v-slot:modal-button-second>
-            <button @click="() => joinGroup()" v-if="isUserInGroup == false">Join Group</button>
+        <template v-slot:modal-button-second v-if="userData.token.role === 'Admin'" >
+            <button @click="() => openModal('EditGroup')" v-if="isUserInGroup == false">Edit Group</button>
         </template>
         <template v-slot:modal-button-third>
             <button @click="() => quitGroup()" v-if="isUserInGroup == true" style="background-color: var(--red);">Quit
                 Group</button>
         </template>
-        <template  v-if="userData.token.role === 'Admin'" v-slot:additonal-information-before-modal-button>
-            <p>Click on the button to edit the group.</p>
+        <template v-slot:additonal-information-before-modal-button>
+            <p>Click on the following button to join the group.</p>
         </template>
-        <template  v-if="userData.token.role === 'Admin'" v-slot:modal-button>
-            <button @click="() => openModal('EditGroup')">Edit Group</button>
+        <template v-slot:modal-button>
+            <button @click="() => joinGroup()">Join Group</button>
         </template>
     </ModalDetails>
 
@@ -639,7 +639,7 @@ header {
     /* position: absolute; */
     /* margin-top:30px; */
     display: flex;
-    min-width: 40px;
+    min-width: 30px;
     justify-content: center;
     align-items: center;
 }

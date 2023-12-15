@@ -64,7 +64,7 @@
                             </slot>
                         </div>
 
-                        <div v-if="readToken().role === 'Admin'"  class="wrapper">
+                        <div class="wrapper">
                             <!-- additonal information before modal button -->
                             <div class="additonal-information-before-modal-button">
 
