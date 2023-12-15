@@ -17,7 +17,7 @@ const updateUserById = async (id: string, groupData: any) => {
   const query =
     "UPDATE users SET User_Class = ?, User_Description = ?, User_Picture = ?, User_Promo = ?  WHERE id_user = ?";
   console.log(groupData);
-  await pool.query(
+  pool.query(
     query,
     [...Object.values(groupData), id],
     (error, results, fields) => {
