@@ -4,8 +4,8 @@
             <!-- <img src="classroom1.jpg" /> -->
             <div class="group-card-members">
                 <ul>
-                    <li v-for="(member) in groupMemberList"><img class="group-card-member-profile"
-                            :src="member.User_Picture" :alt="member.User_Name" /></li>
+                    <li v-for="(member) in groupMemberList"><img class="group-card-member-profile" :src="member.User_Picture"
+                            :alt="member.User_Name" /></li>
                 </ul>
             </div>
             &nbsp;
@@ -29,18 +29,18 @@
         <template v-slot:description>
             <p>The Group is {{ group.Group_State }}.</p>
         </template>
-        <template v-slot:modal-button-second v-if="userData.token.role === 'Admin'" >
-            <button @click="() => openModal('EditGroup')" v-if="isUserInGroup == false">Edit Group</button>
+        <template v-slot:modal-button-second>
+            <button @click="() => joinGroup()" v-if="isUserInGroup == false">Join Group</button>
         </template>
         <template v-slot:modal-button-third>
             <button @click="() => quitGroup()" v-if="isUserInGroup == true" style="background-color: var(--red);">Quit
                 Group</button>
         </template>
-        <template v-slot:additonal-information-before-modal-button>
-            <p>Click on the following button to join the group.</p>
-        </template>
-        <template v-slot:modal-button>
-            <button @click="() => joinGroup()">Join Group</button>
+        <!-- <template v-slot:additonal-information-before-modal-button>
+            <p>Click on the button to edit the group.</p>
+        </template> -->
+        <template v-slot:modal-button v-if="readToken().role == 'Admin'">
+            <button class="modal-button-container" @click="() => openModal('EditGroup')">Edit Group</button>
         </template>
     </ModalDetails>
 
@@ -70,7 +70,7 @@
                 <option value="public" :selected="currentGroupData.Group_State === 'public' ? true : false">public</option>
             </select>
         </template>
-        <template v-slot:modal-button>
+        <template v-slot:modal-button v-if="readToken().role == 'Admin'">
             <button @click="editGroup();">Edit Group</button>
         </template>
         <template v-slot:modal-button-negative>
@@ -81,7 +81,7 @@
   
 <script lang="ts">
 import { readToken } from "../../utils/authUtils";
-import ModalDetails from "../ModalDetails.vue";
+import ModalDetails from "../ModalDetailsSecond.vue";
 import Modal from "../Modal.vue";
 import axios from "axios";
 
@@ -110,14 +110,10 @@ export default {
                 Group_State: this.group.Group_State
             },
             groupMemberList: [],
-            userData:{
-                token:""
-            }
         }
     },
     beforeMount() {
         this.fetchGroupMembers(this.group.id_group);
-        this.userData.token = readToken();
     },
     methods: {
         // Modal methods
@@ -131,6 +127,7 @@ export default {
         closeModal() {
             console.log('Modal closed');
         },
+        readToken() { return readToken() },
         editGroup() {
             // console.log(this.currentGroupData);
             try {
@@ -142,7 +139,7 @@ export default {
                 });
                 alert("group Infos successfully edited.");
                 this.$emit('groupListUpdated');
-                (this.$refs.EditGroup as any).close();
+                // this.roomData.fetchedRooms = response.data;
             } catch (e) {
                 alert("Error while updating group");
             }
@@ -160,8 +157,7 @@ export default {
 
                     if (response.status === 200) {
                         alert("Group successfully deleted.");
-                        (this.$refs.EditGroup as any).close();
-                        (this.$refs.modalGroupDetails as any).close();
+                        this.$emit('close');
                         this.$emit('groupListUpdated');
                     } else {
                         throw new Error(`Failed to delete group. Server returned status code: ${response.status}`);
@@ -257,12 +253,12 @@ export default {
 </script>
   
 <style scoped>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 .group-card {
     display: flex;
     flex-direction: column;
@@ -285,13 +281,13 @@ export default {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     overflow: hidden;
-    background: url("../../../public/classroom1.jpg");
-    background-size: cover;
-    background-position: center;
-    height: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background:url("../../../public/classroom1.jpg");
+    background-size:cover;
+    background-position:center;
+    height:130px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .group-card-image img {
@@ -635,15 +631,27 @@ header {
     outline: none;
 }
 
+.modal-button-container{
+    background-color: var(--blue);
+    color: #fff;
+    padding: 10px 80px;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    outline: none;
+    width:100%;
+    margin-top:10px;
+    font-weight:bold;
+}
+
 .group-card-members {
     /* position: absolute; */
     /* margin-top:30px; */
-    display: flex;
-    min-width: 30px;
+    display:flex;
+    min-width:40px;
     justify-content: center;
     align-items: center;
 }
-
 .group-card-members ul {
     display: flex;
     flex-direction: row;
