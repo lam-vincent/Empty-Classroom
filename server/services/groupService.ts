@@ -63,7 +63,7 @@ const fetchGroupsByUser = async (userId: string) => {
 
 const fetchGroupsByStatus = async (status: string) => {
   const query = "SELECT * FROM `Groups` WHERE Group_State = ?";
-  await pool.query(query, [status], (error, results, fields) => {
+  pool.query(query, [status], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -88,7 +88,7 @@ const createGroup = async (groupData: any) => {
 
 const createBelonging = async (idUser: any, idGroup: any) => {
   const query = "INSERT INTO `Belong`(id_user,id_group) VALUES(?, ?)";
-  await pool.query(query, [idUser, idGroup], (error, results, fields) => {
+  pool.query(query, [idUser, idGroup], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -98,7 +98,7 @@ const createBelonging = async (idUser: any, idGroup: any) => {
 const updateGroupById = async (id: string, groupData: any) => {
   const query =
     "UPDATE `Groups` SET Group_Creation = ?, Group_Password = ?, Group_Name = ?, Group_Size = ?, Group_State = ? WHERE id_group = ?";
-  await pool.query(
+  pool.query(
     query,
     [...Object.values(groupData), id],
     (error, results, fields) => {
@@ -122,7 +122,7 @@ const updateGroupById = async (id: string, groupData: any) => {
 const deleteGroupById = async (id: string) => {
   const query =
     "DELETE `groups`,belong FROM `groups` INNER JOIN belong WHERE groups.id_group = belong.id_group AND groups.id_group = ?";
-  await pool.query(query, [id], (error, results, fields) => {
+  pool.query(query, [id], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -131,7 +131,7 @@ const deleteGroupById = async (id: string) => {
 
 const joinGroup = async (id_user: string, id_group: string) => {
   const query = "INSERT INTO Belong (id_user, id_group) VALUES (?, ?)";
-  await pool.query(query, [id_user, id_group], (error, results, fields) => {
+  pool.query(query, [id_user, id_group], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -151,7 +151,7 @@ const fetchUsersByGroup = async (id_group: string) => {
 
 const quitGroup = async (id_user: string, id_group: string) => {
   const query = "DELETE FROM Belong WHERE id_user = ? AND id_group = ?";
-  await pool.query(query, [id_user, id_group], (error, results, fields) => {
+  pool.query(query, [id_user, id_group], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;

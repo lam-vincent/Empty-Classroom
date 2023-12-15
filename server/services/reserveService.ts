@@ -15,7 +15,7 @@ const fetchAllReservations = async () => {
 const createReservation = async (reservationData: any) => {
   const query =
     "INSERT INTO Reserve(id_room, id_user, Title, Description, Reservation_Date, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?, ?)";
-  await pool.query(
+  pool.query(
     query,
     Object.values(reservationData),
     (error, results, fields) => {
@@ -38,7 +38,7 @@ const createReservationByGroup = async (
     JOIN Belong ON Belong.id_user = users.id_user
     WHERE Belong.id_group = ?;
     `;
-  await pool.query(
+  pool.query(
     query,
     [
       reservationData.id_room,
@@ -60,7 +60,7 @@ const createReservationByGroup = async (
 const fetchReservationByUser = async (userId: string) => {
   const query = "SELECT * FROM Reserve WHERE id_user = ?";
   return new Promise<Reserve[]>(async (resolve, reject) => {
-    await pool.query(query, [userId], (error, results, fields) => {
+    pool.query(query, [userId], (error, results, fields) => {
       if (error) throw error;
       // console.log(results);
       resolve(results);
@@ -91,7 +91,7 @@ const fetchReservationByDate = async (date: string) => {
 const updateReservation = async (id_reserve: string, reservationData: any) => {
   const query =
     "UPDATE Reserve SET id_room = ?, id_user = ?, Title = ?, Description = ?, Start_Time = ?, End_Time = ? WHERE id_reserve = ?";
-  await pool.query(
+  pool.query(
     query,
     [...Object.values(reservationData), id_reserve],
     (error, results, fields) => {
@@ -104,7 +104,7 @@ const updateReservation = async (id_reserve: string, reservationData: any) => {
 
 const deleteReservation = async (id: string) => {
   const query = "DELETE FROM Reserve WHERE id_reserve = ?";
-  await pool.query(query, [id], (error, results, fields) => {
+  pool.query(query, [id], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
