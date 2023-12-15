@@ -20,7 +20,8 @@
         </button>
       </div>
       <div class="item-list" ref="itemList">
-        <RoomCapsule v-for="(objet) in roomData.currentRooms" :room="objet" @roomListUpdated="fetchAllRooms();" />
+        <RoomCapsule v-for="(objet) in roomData.currentRooms" :userGroups="userData.userGroups" :room="objet"
+          @roomListUpdated="fetchAllRooms();" />
       </div>
     </div>
 
@@ -73,12 +74,13 @@ export default {
   props: ['category'],
   components: {
     RoomCapsule,
-    Modal
+    Modal,
   },
   data() {
     return {
       userData: {
         token: "",
+        userGroups: [],
         searchInput: "",
         searchOptions: {
           building: [""],
@@ -100,7 +102,7 @@ export default {
         Room_Location: "",
         Room_State: "",
         Room_Category: ""
-      }
+      },
     };
   },
 
@@ -108,13 +110,7 @@ export default {
     verifyToken();
     this.userData.token = readToken();
     this.fetchAllRooms();
-  },
-
-  // when roomData.currentRooms changes, fetchAllRooms() is called
-  watch: {
-    'roomData.currentRooms': function () {
-      this.fetchAllRooms();
-    }
+    this.fetchUserGroups();
   },
 
   methods: {
@@ -209,10 +205,29 @@ export default {
           }
         });
 
-        this.fetchAllRooms();
+        await this.fetchAllRooms();
+        (this.$refs.createRoom as any).close();
         alert("Room created successfully.");
       } catch (e) {
         alert("Error while creating new room.");
+      }
+    },
+    async fetchUserGroups() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/groups/user/${readToken().userId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173/",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        this.userData.userGroups = response.data
+        // console.log("equipmentData", this.equipmentData);
+      } catch (e) {
+        console.log(e);
       }
     },
     handleSuccess(data: never[]) {

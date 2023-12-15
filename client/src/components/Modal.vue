@@ -203,6 +203,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 1rem;
     outline: none;
+    resize: none;
 }
 
 .form-input input {

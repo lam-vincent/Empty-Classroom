@@ -1,5 +1,5 @@
 <template>
-    <div class="room-card" @click="() => openModalDetails('modalRoomDetails')">
+    <div v-if="cardPurpose != 'booking'" class="room-card" @click="() => openModalDetails('modalRoomDetails')">
         <div class="room-card-image">
             <img src="/classroom1.jpg" alt="Room Image" />
         </div>
@@ -9,7 +9,17 @@
         </div>
     </div>
 
-    <ModalDetails ref="modalRoomDetails" @close="closeModal">
+    <div v-if="cardPurpose == 'booking'" class="room-card" @click="() => openModalDetails('reservationDetails')">
+        <div class="room-card-image">
+            <img src="/classroom1.jpg" alt="Room Image" />
+        </div>
+        <div class="room-card-content">
+            <h2>{{ Room_Name }}</h2>
+            <p>{{ room.Start_Time.substring(0, 5) }}</p>
+        </div>
+    </div>
+
+    <ModalDetails ref="modalRoomDetails" @close="">
 
         <template v-slot:title>
             <h1>{{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h1>
@@ -23,6 +33,25 @@
         </template>
         <template v-slot:engagement-tag>
             <p>{{ room.Room_State }}</p>
+        </template>
+        <template v-slot:capsule-with-blue-svg  v-if="userData.token.role === 'Admin'">
+            <div v-for="equipment in equipmentData" :key="equipment.id_equipment">
+                <p>{{ equipment.Equipment_Name }} <span class="badge">{{ equipment.Quantity }}</span>
+                    <svg v-if="userData.token.role === 'Admin'" @click="deleteIsEquiped(equipment.Equipment_Name)"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="var(--red)" width="20px" height="20px"
+                        style="margin-left: 0.5rem;">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd" />
+                    </svg>
+
+                </p>
+            </div>
+            <svg v-if="userData.token.role === 'Admin'" @click="() => openModal('addIsEquiped')"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--blue)"
+                width="40px" height="40px">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
         </template>
         <template v-slot:second-title>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -43,7 +72,7 @@
                 timestamp there.</p>
         </template>
         <template v-slot:modal-button>
-            <button>Reserve Now</button>
+            <button @click="() => openModal('ReserveRoom')">Reserve Now</button>
 
             <button @click="deleteRoom()" v-if="userData.token.role === 'Admin'"
                 style="margin-top: 1rem; background-color: var(--red);">Delete
@@ -52,8 +81,7 @@
         </template>
 
     </ModalDetails>
-
-    <Modal ref="EditRoom" @close="closeModal">
+    <Modal ref="EditRoom" @close="">
         <template v-slot:header-title>
             <h3>Edit Room</h3>
             <h3>for {{ room.Room_Category }} {{ room.Room_Building + room.Room_Name }}</h3>
@@ -92,71 +120,207 @@
             <input v-model="currentRoomData.Room_Category" type="text" placeholder="Classroom" />
         </template>
         <template v-slot:modal-button>
-            <button @click="editRoom(); closeModal();">Save the Changes</button>
+            <button @click="editRoom(); closeModal('EditRoom');">Edit Room</button>
+        </template>
+    </Modal>
+
+    <Modal ref="ReserveRoom" @close="">
+        <template v-slot:header-title>
+            <h3>🕘 New Reservation</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Title</label>
+            <input v-model="newReserveData.Title" type="text" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-2>
+            <label for="form-input-2">Group reservation</label>
+            <input v-model="isGroupReservation" name="form-input-2" type="checkbox" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-3 v-if="isGroupReservation">
+            <label for="form-input-3">Reservation for group</label>
+            <select v-model="userData.selectedGroup">
+                <option v-for="(group) in userGroups" :value="group.id_group">{{ group.Group_Name }}</option>
+            </select>
+        </template>
+        <template v-slot:form-input-description>
+            <label for="form-input-description">Description</label>
+            <textarea v-model="newReserveData.Description" name="form-input-description" id="form-input-description"
+                cols="30" rows="3" placeholder="Tell us more about what you will be doing in this room !"></textarea>
+        </template>
+        <template v-slot:form-input-4>
+            <RoomTimetable :room="room" ref="mainTimetable" @scheduleTimeChanged="setReservationTime"
+                @scheduleDateChanged="setReservationDate" />
+        </template>
+        <template v-slot:modal-button>
+            <button @click="reserveRoom();">Create Reservation</button>
+        </template>
+    </Modal>
+    <Modal ref="reservationDetails" @close="">
+        <template v-slot:header-title>
+            <h3>Details of this reservation</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Reservation Purpose</label>
+            <input disabled v-model="room.Title" type="text" placeholder="Group Project" />
+        </template>
+        <!-- <template v-slot:form-input-2>
+            <label for="form-input-2">Room</label>
+            <input v-model="" name="form-input-2" type="text" placeholder="Group Project" />
+        </template> -->
+        <!-- <template v-slot:form-input-2>
+            <label for="form-input-2">Group reservation</label>
+            <input v-model="isGroupReservation" name="form-input-2" type="checkbox" placeholder="Group Project" />
+        </template>
+        <template v-slot:form-input-3 v-if="isGroupReservation">
+            <label for="form-input-3">Reservation for group</label>
+            <select v-model="userData.selectedGroup">
+                <option v-for="(group) in userGroups" :value="group.id_group">{{ group.Group_Name }}</option>
+            </select>
+        </template> -->
+        <template v-slot:form-input-description>
+            <label for="form-input-description">Reservation Description</label>
+            <textarea disabled v-model="room.Description" name="form-input-description" id="form-input-description"
+                cols="30" rows="3" placeholder="Tell us more about what you will be doing in this room !"></textarea>
+        </template>
+        <!-- <template v-slot:form-input-description>
+          <ul>
+            <li>Purpose of the reservation : {{ this.room.Title }}</li>
+            <li>Date of reservation : {{  this.room.Reservation_Date }}</li>
+            <li>Schedule : {{  this.room.Start_Time.subtring(0,5) +" to "+ this.room.End_Time.subtring(0,5)  }}</li>
+          </ul>
+        </template> -->
+    </Modal>
+    <Modal ref="addIsEquiped" @close="">
+        <template v-slot:header-title>
+            <h3>Add Equipment</h3>
+        </template>
+        <template v-slot:form-input-1>
+            <label for="form-input-1">Name</label>
+            <input v-model="newEquipmentData.Equipment_Name" type="text" placeholder="Projector" />
+        </template>
+        <template v-slot:form-input-2>
+            <label for="form-input-2">Quantity</label>
+            <input v-model="newEquipmentData.Quantity" type="text" placeholder="1" />
+        </template>
+        <template v-slot:modal-button>
+            <button @click="addIsEquiped();">Add Equipment</button>
         </template>
     </Modal>
 </template>
-  
+
 <script lang="ts">
 import { verifyToken, readToken } from "../../utils/authUtils";
 import ModalDetails from "../ModalDetails.vue";
 import Modal from "../Modal.vue";
-import axios from "axios"
+import axios from "axios";
+import RoomTimetable from "../RoomTimetable.vue";
+
 
 export default {
     name: "RoomCapsule",
     components: {
         ModalDetails,
         Modal,
+        RoomTimetable
     },
     props: {
         room: {
             type: Object,
             required: true,
         },
+        userGroups: {
+            type: Object,
+        },
+        cardPurpose: {
+            type: String,
+        }
+
     },
     data() {
         return {
             userData: {
                 token: "",
+                selectedGroup: ""
             },
+            isGroupReservation: false,
             currentRoomData: {
                 Room_Name: this.room.Room_Name,
                 Room_Building: this.room.Room_Building,
                 Room_Campus: this.room.Room_Campus,
                 Room_Location: this.room.Room_Location,
                 Room_State: this.room.Room_State,
-                Room_Category: this.room.Room_Category
-            }
+                Room_Category: this.room.Room_Category,
+            },
+            equipmentData: [],
+            newReserveData: {
+                id_room: this.room.id_room,
+                id_user: readToken().userId,
+                Title: "",
+                Description: "",
+                Reservation_Date: "",
+                start_time: null,
+                End_Time: "",
+            },
+            newEquipmentData: {
+                id_room: this.room.id_room,
+                Equipment_Name: "",
+                Quantity: "",
+            },
+            Room_Name: ""
         };
     },
     beforeMount() {
         verifyToken();
         this.userData.token = readToken();
+        this.fetchRoomNameById(this.room.id_room);
+        this.initializeData();
     },
     methods: {
         // Modal methods
+        setReservationTime(data: any) {
+            this.newReserveData.start_time = data;
+        },
+        setReservationDate(data: any) {
+            this.newReserveData.Reservation_Date = data;
+        },
         openModal(reference: string) {
             (this.$refs[reference] as any).open();
-            console.log('Modal opened openModal');
+            console.log("Modal opened openModal");
         },
         openModalDetails(reference: string) {
             (this.$refs[reference] as any).open();
         },
-        closeModal() {
-            (this.$refs.modalRoomDetails as any).close();
+        closeModal(reference: string) {
+            (this.$refs[reference] as any).close();
         },
+        async initializeData() {
+            await this.getEquipmentData();
+        },
+        computeNewDate(chaineHeure: string) {
+            const dateHeure = new Date(`2000-01-01T${chaineHeure}`);
+            // Ajouter une heure
+            dateHeure.setHours(dateHeure.getHours() + 1);
+            // Formater la nouvelle heure
+            const nouvelleHeure = dateHeure.toTimeString().slice(0, 8);
+            return nouvelleHeure;
+        },
+
         editRoom() {
             try {
-                const response = axios.put(`http://localhost:3000/rooms/${this.room.id_room}`, this.currentRoomData, {
-                    withCredentials: true, headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                        'Content-Type': 'application/json'
+                axios.put(
+                    `http://localhost:3000/rooms/${this.room.id_room}`,
+                    this.currentRoomData,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
                     }
-                });
+                );
                 alert("Room infos successfully edited.");
-                this.$emit('roomListUpdated');
-                this.$emit('close');
+                this.$emit("roomListUpdated");
+                this.$emit("close");
             } catch (e) {
                 alert("Error while updating room");
             }
@@ -165,22 +329,152 @@ export default {
             if (confirm("Are you sure you want to delete this room ?")) {
                 try {
                     console.log("this.room", this.room);
-                    const response = axios.delete(`http://localhost:3000/rooms/${this.room.id_room}`, {
-                        withCredentials: true, headers: {
-                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
-                            'Content-Type': 'application/json'
+                    axios.delete(
+                        `http://localhost:3000/rooms/${this.room.id_room}`,
+                        {
+                            withCredentials: true,
+                            headers: {
+                                "Access-Control-Allow-Origin": "http://localhost:5173/",
+                                "Content-Type": "application/json",
+                            },
                         }
-                    });
+                    );
                     alert("Room successfully deleted.");
                     (this.$refs.modalRoomDetails as any).close();
-                    this.$emit('close');
-                    this.$emit('roomListUpdated');
-                } catch (e) {
+                    this.$emit("close");
+                    this.$emit("roomListUpdated");
+                } catch (e) { }
+            }
+        },
+        async reserveRoom() {
+            let requestURL;
+            try {
+                if (this.newReserveData.start_time.status != "reserved") {
+                    console.log(this.newReserveData);
 
+                    if (this.isGroupReservation) {
+                        requestURL = `http://localhost:3000/reserve/group/${this.userData.selectedGroup}`;
+                    } else {
+                        requestURL = "http://localhost:3000/reserve";
+                    }
+
+                    try {
+                        axios.post(
+                            requestURL,
+                            {
+                                id_room: this.newReserveData.id_room,
+                                id_user: this.newReserveData.id_user,
+                                Title: this.newReserveData.Title,
+                                Description: this.newReserveData.Description,
+                                Reservation_Date: this.newReserveData.Reservation_Date,
+                                Start_Time: this.newReserveData.start_time.date,
+                                End_Time: this.computeNewDate(this.newReserveData.start_time.date),
+                            },
+                            {
+                                withCredentials: true,
+                                headers: {
+                                    "Access-Control-Allow-Origin": "http://localhost:5173/",
+                                    "Content-Type": "application/json",
+                                },
+                            }
+                        );
+
+                        alert("Room sucessfully reserved.");
+                    } catch (e) {
+
+                    }
+                } else {
+                    alert("This room is already reserved.");
                 }
+                (this.$refs.mainTimetable as any).fetchSchedule();
+                // (this.$refs.ReserveRoom as any).close();
+                // this.$emit("close");
+                this.$emit("roomListUpdated");
+            } catch (e) { }
+        },
+
+        // is_equiped methods
+        async getEquipmentData() {
+            try {
+                const response = await axios.get(
+                    `http://localhost:3000/is_equipped/${this.room.id_room}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                this.equipmentData = response.data.is_equipped;
+                console.log("equipmentData", this.equipmentData);
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async addIsEquiped() {
+            try {
+                axios.post(
+                    `http://localhost:3000/is_equipped`,
+                    this.newEquipmentData,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                await this.getEquipmentData();
+                (this.$refs.addIsEquiped as any).close();
+                (this.$refs.modalRoomDetails as any).close();
+                (this.$refs.modalRoomDetails as any).open();
+            } catch (e) { }
+        },
+        async deleteIsEquiped(equipmentName: string) {
+            try {
+                const id_room: number = this.room.id_room;
+                await axios.delete(
+                    `http://localhost:3000/is_equipped/`,
+                    {
+                        data: {
+                            id_room: id_room,
+                            equipmentName: equipmentName,
+                        },
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173/",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                await this.getEquipmentData();
+                (this.$refs.modalRoomDetails as any).close();
+                (this.$refs.modalRoomDetails as any).open();
+            } catch (e) {
+                console.error("Error deleting equipment:", e);
+            }
+        },
+        async fetchRoomNameById(roomId: string) {
+            try {
+                const response = await axios.get(
+                    `http://localhost:3000/rooms/${roomId}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            "Access-Control-Allow-Origin": "http://localhost:5173", // Ne pas inclure le slash à la fin
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+
+                this.Room_Name = response.data.Room_Building + "" + response.data.Room_Name;
+            } catch (e) {
+                console.error("Error fetching room name:", e);
+                throw e; // Ajout de cette ligne pour propager l'erreur à l'appelant
             }
         }
-    }
+    },
 };
 </script>
 
@@ -346,21 +640,34 @@ export default {
 .capsule-with-blue-svg {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     overflow: hidden;
     overflow-x: scroll;
 }
 
-.capsule-with-gray-svg svg,
-.capsule-with-blue-svg svg {
-    margin-right: 10px;
-}
-
 .capsule-with-gray-svg p,
 .capsule-with-blue-svg p {
-    font-size: 14px;
-    font-weight: 400;
     color: black;
+    border: 1px solid var(--dark-gray);
+    border-radius: 4rem;
+    padding: 8px 16px;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 1rem;
+    background-color: #eff6ff;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--blue);
+    border-width: 1px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-color: var(--blue);
+    margin-left: 1rem;
 }
 
 
@@ -510,7 +817,7 @@ header {
 .form-input-description label,
 .form-input label {
     width: auto;
-    margin-bottom: 5px;
+    margin-bottom: 12px;
     font-size: 14px;
     color: var(--dark-gray);
 }
@@ -521,6 +828,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 1rem;
     outline: none;
+    resize: none;
 }
 
 .form-input input {

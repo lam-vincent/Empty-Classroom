@@ -8,7 +8,7 @@
         <h2>Joined Groups</h2>
 
         <div class="display-case">
-          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :group="objet" @groupListUpdated="fetchAllGroups();" />
+          <GroupCapsule v-for="(objet) in groupData.joinedGroups" :isUserInGroup="true" :group="objet" @groupListUpdated="fetchAllGroups();" />
         </div>
 
       </section>
@@ -33,9 +33,8 @@
         <h2>Public Groups to Join</h2>
 
         <div class="display-case">
-          <GroupCapsule v-for="(objet) in groupData.publicGroups" :group="objet" @groupListUpdated="fetchAllGroups();" />
+          <GroupCapsule v-for="(objet) in groupData.publicGroups" :isUserInGroup="isUserInGroup(objet)" :group="objet" @groupListUpdated="fetchAllGroups();" />
         </div>
-
       </section>
 
     </div>
@@ -116,13 +115,14 @@ export default {
           this.groupData.joinedGroups.length = 0;
           const userId = readToken().userId;
 
-      const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
-        element.Belonging.some((belonging) => belonging.id_user === userId)
-      );
-      // console.log(this.groupData.fetchedGroups[0].Belonging.find((belonging) => belonging.id_user === userId))
-      // Ajouter les éléments filtrés au tableau vide
-      this.groupData.joinedGroups.push(...elementsFiltres);
-    }
+          const elementsFiltres = this.groupData.fetchedGroups.filter((element) =>
+            element.Belonging.some((belonging) => belonging.id_user === userId)
+          );
+          this.groupData.joinedGroups.push(...elementsFiltres);
+        },
+        isUserInGroup(objet:any) {
+          return this.groupData.joinedGroups.some((group:any) => group.id_group === objet.id_group);
+        }
   },
   components: { GroupCapsule }
 };

@@ -19,10 +19,14 @@ export const getPreferredClassrooms = async (req: Request, res: Response) => {
 };
 
 export const addPreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
+  const { userId, Room_Building, Room_Name } = req.body;
 
   try {
-    await dashboardService.insertPreferredClassroom(userId, roomId);
+    await dashboardService.insertPreferredClassroom(
+      userId,
+      Room_Building,
+      Room_Name
+    );
 
     res.status(201).json({ message: "Preferred classroom added successfully" });
   } catch (error) {
@@ -31,27 +35,15 @@ export const addPreferredClassroom = async (req: Request, res: Response) => {
   }
 };
 
-// Duplicata du champ roomId dans la table Prefer --> Erreur
-export const updatePreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
-
-  try {
-    await dashboardService.modifyPreferredClassroom(userId, roomId);
-
-    res
-      .status(200)
-      .json({ message: "Preferred classroom updated successfully" });
-  } catch (error) {
-    console.error("Error updating preferred classroom:", error);
-    res.status(500).json({ message: "Error updating preferred classroom" });
-  }
-};
-
 export const deletePreferredClassroom = async (req: Request, res: Response) => {
-  const { userId, roomId } = req.body;
+  const { userId, Room_Building, Room_Name } = req.body;
 
   try {
-    await dashboardService.removePreferredClassroom(userId, roomId);
+    await dashboardService.removePreferredClassroom(
+      userId,
+      Room_Building,
+      Room_Name
+    );
 
     res
       .status(200)
@@ -111,5 +103,53 @@ export const deleteEquipment = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error deleting equipment:", error);
     res.status(500).json({ message: "Error deleting equipment" });
+  }
+};
+
+//CRD routes for is_equipped.
+export const getIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const is_equipped = await dashboardService.fetchIsEquipped(id);
+
+    res.status(200).json({
+      message: "is_equipped fetched",
+      is_equipped: is_equipped,
+    });
+  } catch (error) {
+    console.error("Error fetching is_equipped:", error);
+    res.status(500).json({ message: "Error fetching is_equipped" });
+  }
+};
+
+export const addIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const { id_room, Equipment_Name, Quantity } = req.body;
+    const result = await dashboardService.addIsEquipped(
+      id_room,
+      Equipment_Name,
+      Quantity
+    );
+    res.json({ message: "is_equipped added successfully" });
+  } catch (error) {
+    console.error("Error adding is_equipped:", error);
+    res.status(500).json({ message: "Error adding is_equipped" });
+  }
+};
+
+export const deleteIsEquipped = async (req: Request, res: Response) => {
+  try {
+    const { id_room, equipmentName } = req.body;
+    console.log("equipmentName fro mdeleteIsEquipped", equipmentName);
+    const result = await dashboardService.deleteIsEquipped(
+      id_room,
+      equipmentName
+    );
+    res.json({
+      message: "dashboardController.ts: is_equipped deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting is_equipped:", error);
+    res.status(500).json({ message: "Error deleting is_equipped" });
   }
 };

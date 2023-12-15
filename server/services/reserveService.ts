@@ -14,8 +14,8 @@ const fetchAllReservations = async () => {
 
 const createReservation = async (reservationData: any) => {
   const query =
-    "INSERT INTO Reserve(id_room, id_user, Title, Description, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?)";
-  await pool.query(
+    "INSERT INTO Reserve(id_room, id_user, Title, Description, Reservation_Date, Start_Time, End_Time) VALUES(?, ?, ?, ?, ?, ?, ?)";
+  pool.query(
     query,
     Object.values(reservationData),
     (error, results, fields) => {
@@ -26,12 +26,45 @@ const createReservation = async (reservationData: any) => {
   );
 };
 
+const createReservationByGroup = async (
+  reservationData: any,
+  groupName: any
+) => {
+  // const checkQuery =
+  //   "SELECT users.id_user FROM users JOIN Belong ON Belong.id_user = users.id_user WHERE Belong.id_group = ?";
+  const query = `INSERT INTO Reserve (id_room, id_user, Title, Description, Reservation_Date, Start_Time, End_Time)
+    SELECT ?, users.id_user, ?, ?, ?, ?, ?
+    FROM users
+    JOIN Belong ON Belong.id_user = users.id_user
+    WHERE Belong.id_group = ?;
+    `;
+  pool.query(
+    query,
+    [
+      reservationData.id_room,
+      reservationData.Title,
+      reservationData.Description,
+      reservationData.Reservation_Date,
+      reservationData.Start_Time,
+      reservationData.End_Time,
+      groupName,
+    ],
+    (error, results, fields) => {
+      if (error) throw error;
+      console.log(results);
+      return results;
+    }
+  );
+};
+
 const fetchReservationByUser = async (userId: string) => {
   const query = "SELECT * FROM Reserve WHERE id_user = ?";
-  await pool.query(query, [userId], (error, results, fields) => {
-    if (error) throw error;
-    console.log(results);
-    return results;
+  return new Promise<Reserve[]>(async (resolve, reject) => {
+    pool.query(query, [userId], (error, results, fields) => {
+      if (error) throw error;
+      // console.log(results);
+      resolve(results);
+    });
   });
 };
 
@@ -45,10 +78,20 @@ const fetchReservationByRoom = async (roomId: string) => {
   });
 };
 
+const fetchReservationByDate = async (date: string) => {
+  const query = "SELECT * FROM Reserve WHERE Reservation_Date = ?";
+  return new Promise<Reserve[]>((resolve, reject) => {
+    pool.query(query, [date], async (error, results, fields) => {
+      if (error) throw error;
+      resolve(results);
+    });
+  });
+};
+
 const updateReservation = async (id_reserve: string, reservationData: any) => {
   const query =
     "UPDATE Reserve SET id_room = ?, id_user = ?, Title = ?, Description = ?, Start_Time = ?, End_Time = ? WHERE id_reserve = ?";
-  await pool.query(
+  pool.query(
     query,
     [...Object.values(reservationData), id_reserve],
     (error, results, fields) => {
@@ -61,7 +104,7 @@ const updateReservation = async (id_reserve: string, reservationData: any) => {
 
 const deleteReservation = async (id: string) => {
   const query = "DELETE FROM Reserve WHERE id_reserve = ?";
-  await pool.query(query, [id], (error, results, fields) => {
+  pool.query(query, [id], (error, results, fields) => {
     if (error) throw error;
     console.log(results);
     return results;
@@ -70,8 +113,10 @@ const deleteReservation = async (id: string) => {
 
 export default {
   createReservation,
+  createReservationByGroup,
   fetchReservationByUser,
   fetchReservationByRoom,
+  fetchReservationByDate,
   fetchAllReservations,
   updateReservation,
   deleteReservation,

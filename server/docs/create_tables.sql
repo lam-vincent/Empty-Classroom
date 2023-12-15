@@ -83,6 +83,7 @@ CREATE TABLE Prefer (
 CREATE TABLE Is_Equiped (
     id_room INT,
     id_equipment INT,
+    Quantity INT NOT NULL,
     PRIMARY KEY (id_room, id_equipment),
     FOREIGN KEY (id_room) REFERENCES Rooms (id_room),
     FOREIGN KEY (id_equipment) REFERENCES Equipments (id_equipment)

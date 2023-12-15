@@ -2,12 +2,14 @@ import express from "express";
 import {
   getPreferredClassrooms,
   addPreferredClassroom,
-  updatePreferredClassroom,
   deletePreferredClassroom,
   getEquipment,
   addEquipment,
   updateEquipment,
   deleteEquipment,
+  getIsEquipped,
+  addIsEquipped,
+  deleteIsEquipped,
 } from "../controllers/dashboardController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { isAdminMiddleware } from "../middlewares/isAdminMiddleware";
@@ -22,22 +24,11 @@ router.get(
 );
 
 // post request to add a preferred classroom
-router.post(
-  "/dashboard/recommended/:userId",
-  authMiddleware,
-  addPreferredClassroom
-);
-
-// patch request to update a preferred classroom
-router.put(
-  "/dashboard/recommended/:userId",
-  authMiddleware,
-  updatePreferredClassroom
-);
+router.post("/dashboard/recommended", authMiddleware, addPreferredClassroom);
 
 // delete request to delete a preferred classroom
 router.delete(
-  "/dashboard/recommended/:userId",
+  "/dashboard/recommended",
   authMiddleware,
   deletePreferredClassroom
 );
@@ -56,6 +47,21 @@ router.delete(
   authMiddleware,
   isAdminMiddleware,
   deleteEquipment
+);
+
+// CRD routes for is_equipped. These routes are protected by an admin middleware.
+router.get(
+  "/is_equipped/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  getIsEquipped
+);
+router.post("/is_equipped", authMiddleware, isAdminMiddleware, addIsEquipped);
+router.delete(
+  "/is_equipped/",
+  authMiddleware,
+  isAdminMiddleware,
+  deleteIsEquipped
 );
 
 export default router;

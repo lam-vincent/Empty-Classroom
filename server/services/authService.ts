@@ -35,8 +35,6 @@ const registerUser = async (
   }
 };
 
-//write loginUser mat
-
 const loginUser = (username: string, password: string) => {
   const checkUserQuery = "SELECT * FROM users WHERE User_Name = ?";
   return new Promise<User>((resolve, reject) => {

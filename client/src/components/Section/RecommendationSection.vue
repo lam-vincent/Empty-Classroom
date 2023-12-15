@@ -8,13 +8,15 @@
 
         <div class="display-case">
 
-            <RoomCapsule v-for="(room, index) in recommendedData.currentRecommendedRooms" :key="index" :room="room" />
+            <PreferCapsule v-for="(room, index) in recommendedData.currentRecommendedRooms" :key="index" :room="room" />
 
             <button @click="toggleForm" v-show="!showForm">Add Room</button>
             <form v-show="showForm" @submit.prevent="addRecommendedRoom">
                 <label for="roomName">Room Name:</label>
-                <input type="text" id="roomName" v-model="newRoomName" required />
+                <input type="text" id="roomBuilding" v-model="newRoomName.Room_Building" placeholder="Building" required />
+                <input type="number" id="roomName" v-model="newRoomName.Room_Name" placeholder="Room Number" required />
                 <button type="submit">Save</button>
+                <button type="button" style="color: var(--red);" @click="toggleForm">Cancel</button>
             </form>
 
         </div>
@@ -24,28 +26,23 @@
   
 <script lang="ts">
 import { verifyToken, readToken } from "../../utils/authUtils";
-import RoomCapsule from "../Capsule/RoomCapsule.vue";
+import PreferCapsule from "../Capsule/PreferCapsule.vue";
 import axios from "axios";
 
 export default {
     components: {
-        RoomCapsule,
+        PreferCapsule,
     },
 
     data() {
         return {
             showForm: false,
-            newRoomName: "",
-            roomData: {
-                fetchedRooms: [],
-                currentRooms: [],
-            },
-            preferData: {
-                fetchedPreferRooms: [],
-                currentPreferRooms: [],
+            newRoomName: {
+                Room_Building: "",
+                Room_Name: "",
             },
             recommendedData: {
-                fetchedRecommendedRooms: [],
+                // fetchedRecommendedRooms: [],
                 currentRecommendedRooms: [],
             },
         };
@@ -62,8 +59,6 @@ export default {
     methods: {
         async initializeData() {
             verifyToken();
-
-            await this.fetchAllRooms();
             await this.fetchAllRecommendedRooms();
         },
 
@@ -76,49 +71,24 @@ export default {
             console.log(error);
         },
 
-
         // Recommendation methods
         toggleForm() {
             this.showForm = !this.showForm;
         },
 
-        async fetchAllRooms() {
-            try {
-                const response = await axios.get('http://localhost:3000/rooms', {
-                    withCredentials: true, headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:5173/'
-                    }
-                });
-                this.roomData.fetchedRooms = response.data;
-                this.roomData.currentRooms = [...this.roomData.fetchedRooms];
-                this.handleSuccess(response.data);
-            } catch (error) {
-                this.handleError(error);
-            }
-        },
-
         async fetchAllRecommendedRooms() {
             try {
+                // debugger;
                 const userId: number = readToken().userId;
                 const response = await axios.get(`http://localhost:3000/dashboard/recommended/${userId}`, {
-                    withCredentials: true, headers: {
+                    withCredentials: true,
+                    headers: {
                         'Access-Control-Allow-Origin': 'http://localhost:5173/'
                     }
                 });
 
-                this.preferData.fetchedPreferRooms = response.data.preferredClassrooms;
-                this.preferData.currentPreferRooms = [...this.preferData.fetchedPreferRooms];
-
-                // when id are the same and userId from Prefer table and userId from token are the same, push the room to recommendedData
-                this.preferData.currentPreferRooms.forEach((preferRoom: any) => {
-                    this.roomData.fetchedRooms.forEach((room: any) => {
-                        if (preferRoom.id_room === room.id_room) {
-                            if (preferRoom.id_user === userId) {
-                                this.recommendedData.currentRecommendedRooms.push(room as never);
-                            }
-                        }
-                    });
-                });
+                this.recommendedData.currentRecommendedRooms = response.data.preferredClassrooms;
+                // this.recommendedData.currentRecommendedRooms = [...this.recommendedData.fetchedRecommendedRooms];
 
                 this.handleSuccess(response.data);
             } catch (error) {
@@ -126,27 +96,38 @@ export default {
             }
         },
 
-        addRecommendedRoom() {
-            this.recommendedData.currentRecommendedRooms.push({
-                id: this.recommendedData.currentRecommendedRooms.length + 1,
-                name: this.newRoomName,
-            } as never);
+        async addRecommendedRoom() {
+            try {
+                const userId = readToken().userId;
+                const response = await axios.post(
+                    `http://localhost:3000/dashboard/recommended`,
+                    {
+                        userId: userId,
+                        Room_Building: this.newRoomName.Room_Building,
+                        Room_Name: this.newRoomName.Room_Name,
+                    },
+                    {
+                        withCredentials: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': 'http://localhost:5173/',
+                        },
+                    }
+                );
 
-            const roomId: number = this.newRoomName.length + 1;
+                this.handleSuccess(response.data);
 
-            const userId: number = readToken().userId;
-            axios.post(`http://localhost:3000/dashboard/recommended/${userId}`, {
-                userId: userId,
-                roomId: roomId,
-            }, {
-                withCredentials: true, headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:5173/'
-                }
-            });
-
-            this.newRoomName = "";
-            this.toggleForm();
+                await this.fetchAllRecommendedRooms();
+            } catch (error) {
+                this.handleError(error);
+            } finally {
+                this.newRoomName = {
+                    Room_Building: "",
+                    Room_Name: "",
+                };
+                this.toggleForm();
+            }
         },
+
     },
 };
 </script>
@@ -160,6 +141,11 @@ export default {
 .display-case {
     display: flex;
     overflow: scroll;
+}
+
+.display-case form {
+    display: flex;
+    flex-direction: column;
 }
 
 button {

@@ -81,6 +81,16 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="modal-button-second modal-button">
+                            <slot name="modal-button-second">
+                                <!-- <button>modal button</button> -->
+                            </slot>
+                        </div>
+                        <div class="modal-button-third modal-button">
+                            <slot name="modal-button-third">
+                                <!-- <button>modal button</button> -->
+                            </slot>
+                        </div>
                     </div>
 
                 </div>
@@ -91,6 +101,7 @@
   
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { readToken } from "../utils/authUtils";
 
 export default defineComponent({
     data() {
@@ -106,12 +117,12 @@ export default defineComponent({
             this.show = false;
             this.$emit('close');
         },
+        readToken() {return readToken()}
     },
 });
 </script>
   
 <style scoped>
-
 .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -137,6 +148,8 @@ export default defineComponent({
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .return-button {
@@ -156,7 +169,7 @@ export default defineComponent({
 
 .image {
     width: 100%;
-    height: 200px;
+    height: 150px;
 }
 
 .image img {
@@ -225,14 +238,8 @@ export default defineComponent({
 .capsule-with-blue-svg {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     overflow: hidden;
     overflow-x: scroll;
-}
-
-.capsule-with-gray-svg svg,
-.capsule-with-blue-svg svg {
-    margin-right: 10px;
 }
 
 .capsule-with-gray-svg p,
@@ -242,6 +249,17 @@ export default defineComponent({
     color: black;
 }
 
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-dark-gray);
+    padding: 8px 16px;
+    border-style: solid;
+    border-radius: 4rem;
+    border-width: 1px;
+    margin-right: 10px;
+}
 
 .description-title h2 {
     font-size: 16px;
@@ -315,5 +333,12 @@ export default defineComponent({
     cursor: pointer;
 }
 
+.modal-button-second {
+    margin-top: 15px;
+}
+
+.modal-button-third button {
+    background: var(--red);
+}
 </style>
   

@@ -15,6 +15,7 @@ const readToken = () => {
 };
 
 const logout = () => {
+  // Cette solution est nulle à chier, voir : https://stackoverflow.com/questions/65381965/res-clearcookie-delete-a-jwt-token
   if (document.cookie.includes("auth")) {
     document.cookie = "";
     router.push("/login");
