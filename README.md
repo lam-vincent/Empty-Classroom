@@ -3,8 +3,10 @@
 **Empty Classroom** is a web application designed to help students find and reserve available classrooms within their school's campus.
 
 <div align="center">
-  <img src="./client/public/logo-rounded.png" alt="Empty Classroom Logo" width="80" height="80">
+  <img src="logo-rounded.png" alt="Empty Classroom Logo" width="80" height="80">
 </div>
+
+![Modal_in_ModalDetails](https://github.com/lam-vincent/Empty-Classroom/assets/62343240/6708b344-06d1-4ac4-9fd0-e08cfdb2a326)
 
 ## Table of Contents
 
